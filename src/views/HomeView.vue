@@ -3,8 +3,17 @@ import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
-  <main>
-    Тело
+  <main class="d">
+    <p>
+    Телоfsaaaaaaaaaaaaaaaaaaaaaaaaaaaa Телоfsaaaaaaaaaaaaaaaaaaaaaaaaaa Телоfsaaaaaaaaaaaaaaaaaaaaaaaaaa Телоfsaaaaaaaaaaaaaaaaaaaaaaaaaa
+
     <!--<TheWelcome />-->
+    </p>
   </main>
 </template>
+
+<style scoped>
+  .d {
+        white-space: nowrap;
+  }
+</style>
