@@ -2,10 +2,9 @@
 
 
 #app {
-  min-width: 1300px;
+  min-width: calc(var(--ui-col) * 33);
   width: 100%;
-
-
+  
   font-weight: normal;
 }
 

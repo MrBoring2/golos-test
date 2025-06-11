@@ -4,6 +4,7 @@
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
   --vt-c-blue: #1272E8ff;
+  --vt-c-dark-purple: #07071f;
   --vt-c-light-blue:#4e99f5;
   --vt-c-light-blue-lighter: #84b9fa;
 
@@ -33,12 +34,35 @@
 }
 
 
+:root {
+  --font-size-normal: 1rem;
+  --font-size-normal2: 1.2rem;
+  --font-size-normal3: 1.4rem;
+  --font-size-normal4: 1.6rem;
+  --font-size-mini: calc(var(--font-size-normal) * 0.8);
+  --font-size-micro: calc(var(--font-size-normal) * 0.5);
+  --font-size-large: calc(var(--font-size-normal) * 2);
+  --font-size-large2: calc(var(--font-size-normal) * 2.2);
+  --font-size-large3: calc(var(--font-size-normal) * 2.4);
+  --font-size-large4: calc(var(--font-size-normal) * 2.6);
+  --font-size-extra-large: calc(var(--font-size-normal) * 6);
+  --font-size-icons-normal: var(--font-size-normal);
+  --font-size-icons-normal2: calc(var(--font-size-normal) * 1.2);
+}
+
+
+:root {
+  --ui-col: 40px;
+  --header-heigth: 4.9em
+}
+
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
+ 
 }
 
 body {
@@ -49,7 +73,7 @@ body {
   transition:
     color 0.5s,
     background-color 0.5s;
-  line-height: 1.6;
+
   font-family:
     Inter,
     -apple-system,
@@ -63,7 +87,6 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
