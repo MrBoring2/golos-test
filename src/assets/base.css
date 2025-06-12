@@ -7,12 +7,13 @@
   --vt-c-dark-purple: #07071f;
   --vt-c-light-blue:#4e99f5;
   --vt-c-light-blue-lighter: #84b9fa;
-
+  --vt-c-light-gray: #f3f6fb;
+  --vt-c-gray: #9a9ba9;
   --vt-c-indigo: #2c3e50;
 
   --vt-c-divider-1: rgba(60, 60, 60, 0.29);
   --vt-c-divider-2: rgba(60, 60, 60, 0.12);
-
+  --vt-c-error: #f33f3f;
   --vt-c-text-1: var(--vt-c-black);
   --vt-c-text-2: rgba(60, 60, 60, 0.66);
 }
@@ -53,7 +54,8 @@
 
 :root {
   --ui-col: 40px;
-  --header-heigth: 4.9em
+  --ui-unit: 4px;
+  --header-heigth: 4.9em;
 }
 
 

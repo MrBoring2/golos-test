@@ -41,11 +41,11 @@ export default {
                     <img class="logo" :src="logo" width="150px"></img>
                 </div>
                 <nav class="main-menu">
-                    <div class="ads">
+                    <div class="ipoteca">
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink v-for="(item, index) in menuItems"  :key="index" 
+                    <RouterLink to="/"  v-for="(item, index) in menuItems"  :key="index" 
                         @mouseenter="setActiveSubMenu(index)">{{item.name}}</RouterLink>
                 </nav>  
                 <div class="phone-number">
@@ -55,7 +55,6 @@ export default {
                     <font-awesome-icon class="icon" icon="phone" size="2xl"/>
                     <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
                 </div>   
-   
             </div> 
             <div class="divider">
                 <hr>
@@ -64,17 +63,17 @@ export default {
                 <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub_menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="activeMenuIndex = null">
-                            <RouterLink>Выбор по параметрам</RouterLink>
-                            <RouterLink>Выбор с генплана</RouterLink>
+                            <RouterLink to="/about">Выбор по параметрам</RouterLink>
+                            <RouterLink to="/about">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  
             </Transition>
             <Transition>
                 <div class="wraper-sub-menu"  v-if="activeMenuIndex === 3" >
-                    <nav class="sub-menu" @mouseenter="keepSubMenuOpen(3)"
+                    <nav class="sub_menu" @mouseenter="keepSubMenuOpen(3)"
                         @mouseleave="activeMenuIndex = null">
-                    <RouterLink>О застройщике</RouterLink>
-                    <RouterLink>Контакты</RouterLink>
+                    <RouterLink to="/about">О застройщике</RouterLink>
+                    <RouterLink to="/about">Контакты</RouterLink>
                     </nav> 
                 </div>
             </Transition>
@@ -83,8 +82,6 @@ export default {
 </template>
 
 <style scoped>
-
-
 .wrapper {
   height: var(--header-heigth);
   top:0;
@@ -92,43 +89,9 @@ export default {
   min-width: calc(var(--ui-col) * 33);
   position: sticky;
   background-color: var(--vt-c-blue);
-
 }
-.wraper-sub-menu{
-  position: absolute;
-  width: 100%;
-  min-width: calc(var(--ui-col) * 33);
-  color: var(--vt-c-white);
-  background-color: var(--vt-c-blue);
-
-}
-
-.v-enter-active{
-   transition: all 0.2s ease-out;
-}
-
-.v-leave-active {
-   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.v-enter-from, .v-enter, .v-leave-to {
-    transform: translateY(-20px);
-    opacity: 0;
-}
-
-.divider hr {
-  border-color: var(--vt-c-light-blue);
-}
-
-.sub-menu {
-  justify-content: center;
-   transition: opacity 0.5s linear;
-}
-
 
 .header {
-  padding-left: 10px;
-  padding-right: 10px;
   min-width: calc(var(--ui-col) * 33);  
   display: flex;
   gap: 70px;
@@ -138,49 +101,9 @@ export default {
 
 }
 
-
-
-.phone-number {
-   text-decoration: none;
-    border-bottom: 0 solid var(--vt-c-indigo);
-    transition: 0.2s;
-    margin-left: 10px;
-    font-size: var(--font-size-normal);
-    white-space: nowrap;
-}
-
-.icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
 .logo {
-  left: 0;
-}
-
-
-.ads{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  font-size: var(--font-size-normal);
-  background:  radial-gradient(circle,rgba(31, 86, 157, 1) 0%, rgba(48, 48, 54, 1) 74%);
-  border-radius: 5px;
   padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  transform: rotate(-2deg);
-  transition: 0.2s;
-  white-space: nowrap;
 }
-
-.ads:hover {
-  transform: rotate(-4deg);
-}
-
 
 
 nav {
@@ -194,7 +117,7 @@ nav {
   position: relative;
 }
 
-nav a.router-link-exact-active {
+nav a {
   color: var(--color-text);
   position: relative;
   text-decoration: none;
@@ -203,26 +126,17 @@ nav a.router-link-exact-active {
   transition: 0.2s;
 }
 
-
-.sub-menu a.router-link-exact-active{
-   color: var(--color-text);
-  position: relative;
-  text-decoration: none;
-  transition: 0.2s; 
+nav a:hover:after, nav a:focus:after {
+  width: 100%;
+  left: 0;
 }
 
-.sub-menu a.router-link-exact-active:after{
-  display: block;
-  content: "";
-  height: 3px;
-  width: 0;
-  position: absolute;
-  background-color: var(--vt-c-indigo);;
-  transition: all 0.4s; 
+nav a:hover, .phone-number:hover, .icon:hover {
+  color:var(--vt-c-indigo);
+  transform: all 0.5 easy;
 }
 
-
-.main-menu a.router-link-exact-active:after {
+.main-menu a:after {
   display: block;
   content: "";
   height: 3px;
@@ -233,10 +147,42 @@ nav a.router-link-exact-active {
   transition: all 0.4s;
 }
 
+.ipoteca{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-normal);
+  background:  radial-gradient(circle,rgba(31, 86, 157, 1) 0%, rgba(48, 48, 54, 1) 74%);
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transform: rotate(-2deg);
+  transition: 0.2s;
+  white-space: nowrap;
+}
 
-nav a.router-link-exact-active:hover:after, nav a.router-link-exact-active:focus:after {
-  width: 100%;
-  left: 0;
+
+.ipoteca:hover {
+  transform: rotate(-4deg);
+}
+
+.phone-number {
+  text-decoration: none;
+  border-bottom: 0 solid var(--vt-c-indigo);
+  transition: 0.2s;
+  margin-left: 10px;
+  font-size: var(--font-size-normal);
+  white-space: nowrap;
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-right: 10px;
 }
 
 .icon {
@@ -244,9 +190,52 @@ nav a.router-link-exact-active:hover:after, nav a.router-link-exact-active:focus
      color: var(--vt-c-white);
 }
 
-nav a.router-link-exact-active:hover, .phone-number:hover, .icon:hover {
-  color:var(--vt-c-indigo);
-  transform: all 0.5 easy;
+.divider hr {
+  border-color: var(--vt-c-light-blue);
+}
+
+.wraper-sub-menu{
+  position: absolute;
+  width: 100%;
+  min-width: calc(var(--ui-col) * 33);
+  color: var(--vt-c-white);
+  background-color: var(--vt-c-blue);
+
+}
+
+.sub-menu {
+  justify-content: center;
+   transition: opacity 0.5s linear;
+}
+
+.sub-menu a{
+   color: var(--color-text);
+  position: relative;
+  text-decoration: none;
+  transition: 0.2s; 
+}
+
+.sub-menu a:after{
+  display: block;
+  content: "";
+  height: 3px;
+  width: 0;
+  position: absolute;
+  background-color: var(--vt-c-indigo);;
+  transition: all 0.4s; 
+}
+
+.v-enter-active{
+   transition: all 0.2s ease-out;
+}
+
+.v-leave-active {
+   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.v-enter-from, .v-enter, .v-leave-to {
+    transform: translateY(-20px);
+    opacity: 0;
 }
 
 </style>

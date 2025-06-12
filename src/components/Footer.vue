@@ -40,9 +40,9 @@ export default {
             <div class="footer-components-production">
                 <div class="confidence">
                     <nav class="confidence-content">
-                        <RouterLink>Информированное согласие пользователя сайта</RouterLink>
-                        <RouterLink>Политика в отношении обработки персональных данных</RouterLink>
-                        <RouterLink>Политика конфиденциальности</RouterLink>
+                        <RouterLink to="/">Информированное согласие пользователя сайта</RouterLink>
+                        <RouterLink  to="/">Политика в отношении обработки персональных данных</RouterLink>
+                        <RouterLink  to="/">Политика конфиденциальности</RouterLink>
                     </nav>
                 </div>
                 <div class="copyrite-info">
@@ -80,7 +80,55 @@ footer{
   display: flex;
   flex-direction: column;
   align-items: center;
- 
+}
+
+.footer-media{
+  width: 80%;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: var(--vt-c-white);
+  width: calc(var(--ui-col) * 33);
+  display: flex;
+  align-items: center;
+  gap: 150px;
+  justify-content: space-between;
+   
+}
+
+.golos-info {
+  display: flex;
+  gap: 150px;
+  align-items: center;
+}
+
+.logo {
+  left: 0;
+}
+
+.phone-number-footer {
+  transition: 0.2s;
+}
+
+.phone-number-footer:hover {
+  color: var(--vt-c-light-blue-lighter);
+  transform: all 0.5 easy;
+}
+
+.golos-media{
+  font-size: var(--font-size-icons-normal2);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.footer-icon {
+  transition: 0.2s;
+  color: var(--vt-c-white);
+}
+
+.footer-icon:hover {
+  color: var(--vt-c-light-blue-lighter);
+  transform: all 0.5 easy;
 }
 
 .footer-divider {
@@ -90,10 +138,10 @@ footer{
   position: relative;
 }
 
-
 .footer-divider hr {
   border-color: var(--vt-c-light-blue);
 }
+
 .footer-components-production{
   width: calc(var(--ui-col) * 33);
   padding-left: 10px;
@@ -117,20 +165,6 @@ footer{
   color: var(--vt-c-light-blue-lighter);
   font-size: var(--font-size-mini);
 }
-.copyrite-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-.copyrite{
-  color: var(--vt-c-light-blue-lighter);
-  font-size: var(--font-size-mini);
-  width: 620px;
-}
-
-.developer {
-  color: var(--vt-c-light-blue-lighter);
-}
 
 .confidence-content a {
   text-decoration: none;
@@ -143,53 +177,19 @@ footer{
   transform: all 0.5 easy;
 }
 
-.footer-media{
-    padding-left: 10px;
-  padding-right: 10px;
-  color: var(--vt-c-white);
-  width: calc(var(--ui-col) * 33);
-   display: flex;
-   align-items: center;
-   gap: 150px;
-   justify-content: space-between;
-   
-}
-.golos-info {
+.copyrite-info {
   display: flex;
-  gap: 150px;
-  align-items: center;
-}
-.golos-media{
-
-  font-size: var(--font-size-icons-normal2);
-  display: flex;
-  gap: 20px;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
-.phone-number-footer {
-  transition: 0.2s;
-}
-
-.phone-number-footer:hover {
+.copyrite{
   color: var(--vt-c-light-blue-lighter);
-  transform: all 0.5 easy;
+  font-size: var(--font-size-mini);
+  width: 620px;
 }
 
-
-.footer-icon {
-  transition: 0.2s;
-  color: var(--vt-c-white);
-}
-
-.footer-icon:hover {
+.developer {
   color: var(--vt-c-light-blue-lighter);
-  transform: all 0.5 easy;
 }
-
-.logo {
-  left: 0;
-}
-
-
 </style>
