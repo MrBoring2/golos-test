@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import MainImageTitle from '@/components/HomeView/MainImageTitle.vue'
 import GolosInfo from '@/components/HomeView/GolosInfo.vue'
 import OrderCall from '@/components/HomeView/OrderCall.vue'
+import Features from "@/components/HomeView/Features.vue"
+
 
 export default {
   data() {
@@ -18,7 +20,8 @@ export default {
   components: {
     MainImageTitle,
     GolosInfo,
-    OrderCall
+    OrderCall,
+    Features
   }
 }
 </script>
@@ -28,6 +31,7 @@ export default {
     <MainImageTitle @scroll-to="scrollTo"/>
     <GolosInfo ref="golos-info"/>
     <OrderCall ref="order-call"/>
+    <Features/>
       <div>
       asdasd
     </div>
@@ -48,6 +52,8 @@ export default {
 </template>
 
 <style scoped>
+
+
   .main {
     display: flex;
     flex-direction: column;

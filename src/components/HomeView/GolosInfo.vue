@@ -47,6 +47,9 @@ export default {
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
       </div>
+      <div class="moblive-only-title">
+        <p>О проекте</p>
+      </div>
     </div>
     <Transition>
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
@@ -63,11 +66,13 @@ export default {
 <style scoped>
 
   .main {
-     width: 80%;
+    width: 80%;
     min-width: calc(var(--ui-col) * 33);
+    
   }
 
   .golos-info-container {
+    width: 100%;
     font-size: var(--font-size-normal);
     margin-top: 80px;
     padding-left: 10px;
@@ -107,7 +112,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    position: relative;
+
     border-radius: 30px;
     background-size: cover;
   
@@ -214,6 +219,50 @@ export default {
   .v-enter-from, .v-enter, .v-leave-to {
     transform: translateY(-20px);
     opacity: 0;
+  }
+
+  .moblive-only-title{
+    display: none;
+  }
+
+
+  @media (max-width: 1340px) {
+    .main{
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+
+
+  @media (max-width: 900px) {
+    .main{
+      width: 100%;
+    }
+
+    .moblive-only-title{
+      display: block;
+    }
+
+    .info-text {
+    width: 100%;
+    min-width: 100%;
+    }
+    .golos-info-container{
+      flex-direction: column;
+      flex-flow: column-reverse;
+      width: 100%;
+      min-width: 100%;
+      
+    }
+    .info-text-title{
+      display: none;
+    }
+
+    .info-image-container {
+      min-width: 100%;
+       min-height: calc(var(--ui-unit)*100);
+      background-size: cover;
+    }
   }
 
 </style>

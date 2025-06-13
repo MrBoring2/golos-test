@@ -5,10 +5,15 @@
   --vt-c-white-mute: #f2f2f2;
   --vt-c-blue: #1272E8ff;
   --vt-c-dark-purple: #07071f;
+  --vt-c-black: #000;
   --vt-c-light-blue:#4e99f5;
   --vt-c-light-blue-lighter: #84b9fa;
+  --vt-c-gray-blue: #2e3442;
   --vt-c-light-gray: #f3f6fb;
+  --vt-c-middle-gray: #c2c3c4;
   --vt-c-gray: #9a9ba9;
+  --vt-c-dark-gray: #322c2c;
+  --vt-c-light-dark-fray: #373131;
   --vt-c-indigo: #2c3e50;
 
   --vt-c-divider-1: rgba(60, 60, 60, 0.29);
@@ -92,4 +97,12 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/*для планшетов и меньше*/
+@media (max-width: 900px) {
+  :root {
+     --ui-col: 25px;
+     --header-heigth: 4em;
+  }
 }

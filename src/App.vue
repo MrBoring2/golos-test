@@ -36,6 +36,7 @@ export default {
 
 <style scoped>
 
+
 .divider hr {
   border-color: var(--vt-c-light-blue);
 }
@@ -52,6 +53,14 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+
+  .container {
+    min-width: 100%;
+  }
+
 }
 
 </style>

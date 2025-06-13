@@ -78,9 +78,9 @@ export default{
                             'error-border': !isConfirm && isConfirm != null }"/>
                         <label class="checkbox-text" for="checkbox">
                             <p>Принимаю</p>
-                            <RouterLink>политику конфиденциальности</RouterLink>
+                            <RouterLink to="/about">политику конфиденциальности</RouterLink>
                             <p> и даю согласие на</p>
-                            <RouterLink> обработку персональных данных</RouterLink>
+                            <RouterLink to="/about"> обработку персональных данных</RouterLink>
                         </label>
                     </div>
             </div>
@@ -91,8 +91,12 @@ export default{
 
 <style scoped>
 
+.s {
+    position: absolute;
+}
+
 .main{
-        padding-left: 10px;
+    padding-left: 10px;
     padding-right: 10px;
     margin-top: 100px;
     min-width: calc(var(--ui-col) * 33);
@@ -126,14 +130,14 @@ export default{
 }
 
 .order-call-text {
-   width: calc(var(--ui-unit)* 100);
+   
     
-      font-weight: 500;
+    font-weight: 500;
    font-size: var(--font-size-large2);
 }
 
 .order-call-form {
- 
+    height: 100%;
     width: calc(var(--ui-col)* 15);
     display: flex;
     flex-direction: column;
@@ -146,7 +150,7 @@ export default{
     display: flex;
     font-size: var(--font-size-mini);
     gap: 5px;
-    justify-content: end;
+  
 }
 
 
@@ -155,7 +159,7 @@ export default{
     display: flex;
     justify-content: end;
     gap: 20px;
-    height: calc(var(--ui-unit)*20);
+
 }
 
 .error-message {
@@ -165,7 +169,7 @@ export default{
 
 .order-call-form-content input {
     
-    width: 300px;
+    min-width: 300px;
     height: calc(var(--ui-unit)*12);
     border-radius: 10px;
     text-align: center;
@@ -182,7 +186,7 @@ export default{
 
 .order-call-form-content button {
     border-radius: 10px;
-    width: 300px;
+    min-width: 300px;
     height: calc(var(--ui-unit)*12);
     border-width: 0;
     background-color: var(--vt-c-blue);
@@ -305,6 +309,63 @@ export default{
 
 .input-error {
   animation: shake 0.5s ease-in-out;
+}
+
+ @media (max-width: 1340px) {
+    .main{
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+
+@media (max-width: 900px) {
+
+    .checkbox-text {
+        white-space: nowrap;
+        flex-wrap: wrap;
+    }
+
+    .order-call-text {
+        font-size: var(--font-size-normal3);
+    }
+
+    .order-call-content {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .main {
+        min-width: 100%;
+        flex-direction: column;
+    }
+
+    .order-call-form-content {
+        width: 100%;
+        flex-direction: column;
+       
+    }
+
+    .order-call-form-content input {
+        width: 100%;
+    }
+
+    .order-call-form-content button {
+        min-height: calc(var(--ui-unit)*12);
+    }
+
+    .custom-checkbox-container{
+        align-items: start;
+    }
+
+    .checkbox {
+        margin-top: 2px;
+        min-width: 15px;
+    }
+
+
+    .order-call-form {
+        width: 100%;;
+    }
 }
 
 

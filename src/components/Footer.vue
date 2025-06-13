@@ -186,10 +186,42 @@ footer{
 .copyrite{
   color: var(--vt-c-light-blue-lighter);
   font-size: var(--font-size-mini);
-  width: 620px;
+  width: 60%;
 }
 
 .developer {
   color: var(--vt-c-light-blue-lighter);
 }
+
+
+@media (max-width: 900px) {
+  .footer-media, .footer-components-production {
+    width: 100%;
+  }
+  .footer-media {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+  }
+
+  .golos-info {
+    flex-direction: column;
+     justify-content: start;
+     gap: 20px;
+  }
+
+  .confidence-content {
+    flex-direction: column;
+  }
+
+  .copyrite {
+    width: 100%;
+  }
+
+  .copyrite-info{
+    flex-direction: column;
+  }
+}
+
 </style>

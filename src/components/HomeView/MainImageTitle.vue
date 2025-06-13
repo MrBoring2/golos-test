@@ -21,9 +21,7 @@ export default {
 
 <template>
     <div class="main-title">
-        <div class="img-container">
-            <img :src="new_center_img"></img>
-        </div>
+        <img :src="new_center_img" class="main-title-img"></img>
         <div class="top-title-container">
             <div class="main-title-container">
                 <p>ㅤ</p>
@@ -63,28 +61,21 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    left: 0;
+    
 }
 
-.img-container {
+.main-title-img {
     z-index: -100;
-    width: 100%;
-      min-height: 800px;
-    position: absolute;
-
-}
-
-.img-container img {
-     min-height: 800px;
-    width: 100%;
-    min-width: 1320px;
-    height: 100vh;
+     position: absolute;
     object-fit: cover;
+    width: 100%;
+    height: 100%;
+   
 }
 
 .top-title-container{
  
-    min-width: 80%;
+    
     display: flex;
     gap: 40px;
     flex-direction: column;
@@ -167,5 +158,36 @@ export default {
 .btn-down button:hover {
     background-color: var( --vt-c-blue);
     transform: all 0.5 easy;
+}
+
+@media (max-width: 900px) {
+    .main-title-container{
+        font-size: 15px;
+    }
+
+    .main-title-container, .sub-title-container, .learn-more {
+        min-width: 100%;
+    }
+
+    .main-title {
+        position: relative;
+       align-items: start;
+       min-width: 300px;
+       width: 100%;
+    }
+
+    .img-container {
+        width: 100%;
+        min-width: 100%;
+    }
+    .top-title-container{
+        min-width: 300px;
+        
+    }
+    .bottom-title-container {
+        width: 100%;
+        min-width: 100%;
+        justify-content: space-around;
+    }
 }
 </style>

@@ -12,7 +12,15 @@ export default {
                 {name: "Способы покупки"},
                 {name: "Ход строительства"},
                 {name: "Ещё"}
-            ]
+            ],
+            mobileMenuItems: [
+              {name: "Выбор квартир"},
+              {name: "Способы получения"},
+              {name: "Ход строительства"},
+              {name: "О застройщике"},
+              {name: "Контакты"}
+            ],
+            modileDrawerOpen: false
         }
     },
     methods: {
@@ -28,6 +36,9 @@ export default {
             if(index == 0 || index == 3) {
                 this.activeMenuIndex = index;
             }
+        },
+        openMobileMenuDrawer(){
+          this.modileDrawerOpen = !this.modileDrawerOpen;
         }
     }
 }
@@ -36,7 +47,59 @@ export default {
 <template>
     <div class="wrapper">
         <header>
-            <div class="header">
+          <Transition>
+            <div class="mobile-menu-drawer" v-if="modileDrawerOpen">
+              <div class="mobile-menu-header">
+                <div>
+                    <img class="logo" :src="logo" width="150px"></img>
+                </div>
+                <div class="moblie-menu-header-icons">
+                  <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
+                  <font-awesome-icon class="icon" icon="close" size="2xl" @click="openMobileMenuDrawer"/>  
+                </div>
+              </div>
+              <div class="mobile-menu-content">
+                <div class="ipoteca-moblie-menu">
+                        <font-awesome-icon icon="percent" size="xs"/>
+                        <p>Семейная ипотека 3.5%</p>
+                </div>
+                <nav>
+                      <div class="mobile-menu-nav-item">
+                        <RouterLink to="/">
+                          Выбор квартир
+                        </RouterLink>
+                      </div>
+                      <div class="mobile-menu-nav-item">
+                        <RouterLink to="/">
+                          Способы получения
+                       </RouterLink>
+                        </div>
+                      <div class="mobile-menu-nav-item">
+                           <RouterLink to="/">
+                          Ход строительства
+                      </RouterLink>
+                      </div>
+                     <div class="mobile-menu-nav-item">
+                        <RouterLink to="/">
+                          О застройщике
+                      </RouterLink>  
+                      </div>
+                     <div class="mobile-menu-nav-item">
+                        <RouterLink to="/">
+                          Контакты
+                      </RouterLink>
+                       </div>
+                          
+                </nav>
+              </div>
+              <div class="mobile-menu-footer">
+
+              </div>
+            </div>
+          </Transition>
+          
+
+            <div class="main-menu-container">
                 <div>
                     <img class="logo" :src="logo" width="150px"></img>
                 </div>
@@ -45,8 +108,18 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to="/"  v-for="(item, index) in menuItems"  :key="index" 
-                        @mouseenter="setActiveSubMenu(index)">{{item.name}}</RouterLink>
+                    <RouterLink to="/"  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0 }">
+                          Выбор квартир
+                      </RouterLink>
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(1)">
+                          Способы получения
+                      </RouterLink>
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)">
+                          Ход строительства
+                      </RouterLink>
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3 }">
+                          Ещё
+                      </RouterLink>
                 </nav>  
                 <div class="phone-number">
                     <a>+7 (351) 778-78-00</a>
@@ -54,6 +127,7 @@ export default {
                 <div class="icons">     
                     <font-awesome-icon class="icon" icon="phone" size="2xl"/>
                     <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
+                    <font-awesome-icon class="icon-humberger" icon="bars" size="2xl" @click="openMobileMenuDrawer"/>
                 </div>   
             </div> 
             <div class="divider">
@@ -91,10 +165,11 @@ export default {
   background-color: var(--vt-c-blue);
 }
 
-.header {
+.main-menu-container {
+
   min-width: calc(var(--ui-col) * 33);  
   display: flex;
-  gap: 70px;
+  gap: 60px;
   align-items: center;
   justify-content: center;
   color: var(--vt-c-white);
@@ -102,11 +177,12 @@ export default {
 }
 
 .logo {
-  padding-left: 10px;
+  padding-left: 8px;
 }
 
 
 nav {
+  
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -118,7 +194,7 @@ nav {
 }
 
 nav a {
-  color: var(--color-text);
+  color: var(--vt-c-white);
   position: relative;
   text-decoration: none;
   border-bottom: 0 solid var(--vt-c-indigo);
@@ -131,12 +207,33 @@ nav a:hover:after, nav a:focus:after {
   left: 0;
 }
 
-nav a:hover, .phone-number:hover, .icon:hover {
+nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   color:var(--vt-c-indigo);
   transform: all 0.5 easy;
 }
 
-.main-menu a:after {
+.nav-active{
+  color: var(--vt-c-indigo);
+  position: relative;
+  text-decoration: none;
+  border-bottom: 0 solid var(--vt-c-indigo);
+  line-height: 4.8;
+  transition: 0.2s;
+}
+.nav-active:after {
+  display: block;
+  content: "";
+  height: 5px;
+  width: 0;
+  position: absolute;
+  background-color: var(--vt-c-black);;
+}
+
+.icon-humberger{
+  display: none;
+}
+
+.main-menu a:after{
   display: block;
   content: "";
   height: 3px;
@@ -164,7 +261,7 @@ nav a:hover, .phone-number:hover, .icon:hover {
 }
 
 
-.ipoteca:hover {
+.ipoteca:hover, .ipoteca-moblie-menu:hover {
   transform: rotate(-4deg);
 }
 
@@ -197,7 +294,7 @@ nav a:hover, .phone-number:hover, .icon:hover {
 .wraper-sub-menu{
   position: absolute;
   width: 100%;
-  min-width: calc(var(--ui-col) * 33);
+  min-width: calc(var(--ui-col) * 32);
   color: var(--vt-c-white);
   background-color: var(--vt-c-blue);
 
@@ -237,5 +334,106 @@ nav a:hover, .phone-number:hover, .icon:hover {
     transform: translateY(-20px);
     opacity: 0;
 }
+
+
+.mobile-menu-drawer {
+  position: fixed;
+ ;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: var(--vt-c-dark-gray);
+}
+
+.mobile-menu-header {
+  display: flex;
+  padding: 15px;
+  box-shadow: 0 2px 10px -2px gray;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid;
+  border-width: 1px;
+  border-color: var(--vt-c-gray-blue);
+}
+.moblie-menu-header-icons{
+  display: flex;
+  gap: 10px;
+}
+
+.mobile-menu-nav-item {
+  width: 100%;
+  border-top: solid;
+  border-color: var(--vt-c-gray-blue);
+  border-width: 1px;
+  padding-bottom: 20px;
+   padding-top: 20px;
+
+}
+.mobile-menu-content {
+ 
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.mobile-menu-content nav {
+    display: flex;
+    width: 100%;
+    gap: 0;
+    justify-content: start;
+    flex-direction: column;
+    align-items: start;
+    padding-top: 40px;
+}
+
+.mobile-menu-content nav a {
+    line-height: 1;
+    width: 100%;
+}
+
+.ipoteca-moblie-menu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-normal);
+  background:  radial-gradient(circle,rgba(31, 86, 157, 1) 0%, rgba(48, 48, 54, 1) 74%);
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transform: rotate(-2deg);
+  transition: 0.2s;
+  white-space: nowrap;
+  color: var(--vt-c-white);
+}
+
+/*для планшетов и меньше*/
+
+@media (max-width: 900px) {
+  .icon-humberger {
+    display: block;
+  }
+  .phone-number, .main-menu, .wraper-sub-menu, .divider  {
+    display: none;
+  }
+
+  .wrapper {
+    
+    min-width: 100%;
+  }
+
+  .main-menu-container {
+
+    min-width: auto;
+    justify-content: space-between;
+  }
+
+ 
+}
+
 
 </style>
