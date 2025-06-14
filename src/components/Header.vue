@@ -93,7 +93,33 @@ export default {
                 </nav>
               </div>
               <div class="mobile-menu-footer">
-
+                <div class="mobive-footer-media">
+                    <div class="mobile-phone-number">
+                      <font-awesome-icon class="icon" icon="phone" size="xl"/>
+                      <a>+7 (351) 778-78-00</a>
+                   </div>
+                   <div>
+                    <div class="golos-footer-media">
+                      <div class="footer-icon">
+                        <font-awesome-icon class="icon" icon="fa-brands fa-vk" size="2xl"/>  
+                      </div>
+                      <div class="footer-icon">
+                        <font-awesome-icon class="icon" icon="fa-brands fa-telegram" size="2xl"/>  
+                      </div>
+                      <div class="footer-icon">
+                        <font-awesome-icon class="icon" icon="fa-brands fa-youtube" size="2xl"/>  
+                      </div>
+                </div>
+                   </div>
+                </div>
+                <div class="confidence">
+                  <a>Политика конфиденциальности</a>
+                </div>
+                 <div class="copyrite">
+                  <p>
+                    ЖК «Голос Кашириных», {{new Date().getFullYear()}}
+                  </p>
+                 </div>
               </div>
             </div>
           </Transition>
@@ -411,6 +437,50 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   color: var(--vt-c-white);
 }
 
+.mobile-menu-footer {
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  width: 100%;
+}
+
+.mobile-phone-number {
+     text-decoration: none;
+  border-bottom: 0 solid var(--vt-c-indigo);
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--vt-c-white);
+  font-size: var(--font-size-normal);
+  white-space: nowrap;
+  }
+
+
+  .mobive-footer-media {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .golos-footer-media {
+    display: flex;
+    gap: 15px;
+  }
+
+    .confidence {
+    color: var(--vt-c-white);
+    text-decoration: underline;
+    font-size: var(--font-size-mini);
+  }
+  .copyrite {
+     color: var(--vt-c-gray);
+       font-size: var(--font-size-mini);
+  }
+
+  
 /*для планшетов и меньше*/
 
 @media (max-width: 900px) {
@@ -420,6 +490,8 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   .phone-number, .main-menu, .wraper-sub-menu, .divider  {
     display: none;
   }
+
+  
 
   .wrapper {
     
@@ -431,6 +503,7 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
     min-width: auto;
     justify-content: space-between;
   }
+
 
  
 }

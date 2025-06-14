@@ -20,7 +20,8 @@ export default {
 </script>
 
 <template>
-    <div class="main-title">
+    <div class="main-image-title-container">
+        <div class="main-title-content">
         <img :src="new_center_img" class="main-title-img"></img>
         <div class="top-title-container">
             <div class="main-title-container">
@@ -41,33 +42,40 @@ export default {
                     <font-awesome-icon icon="fa-solid fa-arrow-down" size="xl"/> 
                 </button>
             </div>
-            <AdsCarousel/>
+            <AdsCarousel class="carousel-desktop"/>
         </div>
       </div>
+      <AdsCarousel class="carousel-mobile"/>          
+    </div>
 </template>
 
 <style scoped>
 
-.main-title {
+
+.main-title-content {
+     box-sizing: border-box;
     position: relative;
-    height: 100vh;
-    width: 100%;
-    min-height: 800px;
-    gap: 40px;
+    min-height: calc(100dvh - var(--header-heigth));
+    min-width: 100%;
     display: flex;
     align-items:center;
-    justify-content: space-between;
     flex-direction: column;
+    justify-content: space-between;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     
+}
+.main-image-title-container {
+    width: 100%;
+   
 }
 
 .main-title-img {
     z-index: -100;
      position: absolute;
     object-fit: cover;
+    filter: brightness(70%);
     width: 100%;
     height: 100%;
    
@@ -75,7 +83,8 @@ export default {
 
 .top-title-container{
  
-    
+    width: 80%;
+    min-width: calc(var(--ui-col) * 33);
     display: flex;
     gap: 40px;
     flex-direction: column;
@@ -91,7 +100,7 @@ export default {
     font-weight: bold;
     font-size: var(--font-size-extra-large);
     margin-top: 20px;
-    margin-left: -5px;
+ 
     width: 80%;
     min-width: calc(var(--ui-col) * 33);
     display: flex;
@@ -112,7 +121,7 @@ export default {
 .learn-more {
      padding-left: 10px;
     width: 80%;
-    min-width: calc(var(--ui-col) * 33);
+  
 }
  
 
@@ -132,10 +141,10 @@ export default {
 }
 
 .bottom-title-container {
-    min-width: calc(var(--ui-col) * 33);
     width: 80%;
+    min-width: calc(var(--ui-col) * 33);
     padding-left: 5px;
-    margin-bottom: 100px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: end;
@@ -160,21 +169,38 @@ export default {
     transform: all 0.5 easy;
 }
 
+.carousel-mobile {
+    display: none;
+}
+
+
+
 @media (max-width: 900px) {
     .main-title-container{
-        font-size: 15px;
+        font-size: var(--font-size-normal4);
+    
     }
 
     .main-title-container, .sub-title-container, .learn-more {
         min-width: 100%;
     }
 
-    .main-title {
-        position: relative;
+
+    .main-title-content {
+       position: relative;
        align-items: start;
        min-width: 300px;
        width: 100%;
     }
+    
+    .learn-more {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .learn-more button {
+        width: 100%;
+    }
+
 
     .img-container {
         width: 100%;
@@ -182,12 +208,24 @@ export default {
     }
     .top-title-container{
         min-width: 300px;
-        
+        gap: 20px;
+        width: 100%;
     }
+    .sub-title-container {
+        font-size: var(--font-size-normal);
+    }
+    
     .bottom-title-container {
         width: 100%;
         min-width: 100%;
         justify-content: space-around;
+    }
+    .btn-down, .carousel-desktop {
+        display: none;
+    }
+
+    .carousel-mobile{
+        display: flex;
     }
 }
 </style>

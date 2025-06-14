@@ -29,8 +29,8 @@ export default {
 </script>
 
 <template>
-  <div class="main">
-    <div class="golos-info-container">
+  <div class="golos-info-container">
+    <div class="golos-info-content">
       <div class="info-text">
         <div class="info-text-container">
           <p class="info-text-title">О проекте</p>
@@ -47,7 +47,7 @@ export default {
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
       </div>
-      <div class="moblive-only-title">
+      <div class="mobile-only-title">
         <p>О проекте</p>
       </div>
     </div>
@@ -55,26 +55,25 @@ export default {
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
             <img :src="info_img">   
             </img>
-            <div class="close-full-img"  @click="closeFullSizeImg">
+            <div class="icon-bold"  @click="closeFullSizeImg">
                 <font-awesome-icon class="close-icon" icon="fa-solid fa-close" size="2xl"/> 
             </div>
         </div>
     </Transition>
-    </div>
+  </div>
 </template>
 
 <style scoped>
 
-  .main {
+  .golos-info-container {
     width: 80%;
     min-width: calc(var(--ui-col) * 33);
     
   }
 
-  .golos-info-container {
+  .golos-info-content {
     width: 100%;
     font-size: var(--font-size-normal);
-    margin-top: 80px;
     padding-left: 10px;
     padding-right: 10px;
     display: flex;
@@ -83,7 +82,6 @@ export default {
   }
   .info-text {
     display: flex;
-  
     flex-direction: column;
     justify-content: space-around;
     width: 60%;
@@ -185,26 +183,8 @@ export default {
     object-fit:cover;
   }
   
-  .close-full-img{
-    top: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: var(--vt-c-blue);
-    border: solid;
-    border-width: 1px;
-    transition: 0.2s;
-    color: var(--vt-c-white)
-  }
-
-  .close-full-img:hover {
-    background-color: var(--vt-c-white);
-    color: var(--vt-c-blue);
-    transform: all 0.5 easy;
+  .icon-bold {
+       position: absolute;
   }
 
   
@@ -221,13 +201,13 @@ export default {
     opacity: 0;
   }
 
-  .moblive-only-title{
+  .mobile-only-title{
     display: none;
   }
 
 
   @media (max-width: 1340px) {
-    .main{
+    .golos-info-container{
       width: 100%;
       min-width: 100%;
     }
@@ -235,32 +215,42 @@ export default {
 
 
   @media (max-width: 900px) {
-    .main{
+    .golos-info-container{
       width: 100%;
+    
     }
 
-    .moblive-only-title{
+    .mobile-only-title{
       display: block;
+      font-size: var(--font-size-normal4);
+      font-weight: 500;
+       color: var(--vt-c-dark-indigo);
     }
 
     .info-text {
     width: 100%;
     min-width: 100%;
     }
-    .golos-info-container{
+    .golos-info-content{
       flex-direction: column;
       flex-flow: column-reverse;
       width: 100%;
       min-width: 100%;
+        gap: 20px;
       
     }
     .info-text-title{
       display: none;
     }
 
+    .info-text-content {
+      font-size: var(--font-size-normal-mini);
+      color: var(--vt-c-dark-indigo);
+    }
+
     .info-image-container {
       min-width: 100%;
-       min-height: calc(var(--ui-unit)*100);
+       min-height: calc(var(--ui-unit)*65);
       background-size: cover;
     }
   }

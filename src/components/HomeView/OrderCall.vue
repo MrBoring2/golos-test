@@ -52,7 +52,7 @@ export default{
 </script>
 
 <template>
-    <div class="main">
+    <div class="order-call-container">
         <hr class="order-call-divider"/>
         <div class="order-call-content">
             <div class="order-call-text">
@@ -62,8 +62,8 @@ export default{
             </div>
             <div  class="order-call-form">
                     <div class="order-call-form-content">
-                        <div class="phone-input" :class="{ 'input-error': !isValid && isValid != null }">
-                            <input class="phone-input-value" placeholder="Введите номер телефона" v-model="phoneNumber" @input="formatPhone" maxlength="18"
+                        <div class="validation-input" :class="{ 'input-error': !isValid && isValid != null }">
+                            <input class="input-text" placeholder="Введите номер телефона" v-model="phoneNumber" @input="formatPhone" maxlength="18"
                                 type="tel" @keypress="isNumber($event)" :class="{ 'error-border': !isValid && isValid != null }"></input>
                             <Transition>
                                 <p class="error-message" v-if="!isValid && isValid != null">
@@ -71,7 +71,7 @@ export default{
                                 </p>
                             </Transition>                   
                         </div>
-                        <button :disabled="(!isValid && isValid != null) || (isConfirm == false)" @click="orderPhone">Заказать звонок</button>             
+                        <button class="form-button" :disabled="(!isValid && isValid != null) || (isConfirm == false)" @click="orderPhone">Заказать звонок</button>             
                     </div>
                     <div class="custom-checkbox-container">
                         <input type="checkbox" id="checkbox" class="checkbox" :checked="isConfirm" @change="checkConfirm" :class="{ 'input-error': !isConfirm && isConfirm != null,
@@ -91,21 +91,17 @@ export default{
 
 <style scoped>
 
-.s {
-    position: absolute;
-}
 
-.main{
+.order-call-container{
     padding-left: 10px;
     padding-right: 10px;
-    margin-top: 100px;
     min-width: calc(var(--ui-col) * 33);
     width: 80%;
     display: flex;
     flex-direction: column;
 }
 
-.main hr {
+.order-call-container hr {
     border-color: var(--vt-c-light-gray);
 }
 
@@ -123,14 +119,7 @@ export default{
     width: 100%;
 }
 
-.phone-input {
-    display: flex;;
-    flex-direction: column;
-    align-items: center;
-}
-
 .order-call-text {
-   
     
     font-weight: 500;
    font-size: var(--font-size-large2);
@@ -146,13 +135,6 @@ export default{
 }
 
 
-.checkbox-text {
-    display: flex;
-    font-size: var(--font-size-mini);
-    gap: 5px;
-  
-}
-
 
 .order-call-form-content {
 
@@ -162,118 +144,6 @@ export default{
 
 }
 
-.error-message {
-    color: var(--vt-c-error);
-    font-size: var(--font-size-mini);
-}
-
-.order-call-form-content input {
-    
-    min-width: 300px;
-    height: calc(var(--ui-unit)*12);
-    border-radius: 10px;
-    text-align: center;
-    border-width: 0;
-    background-color: var(--vt-c-light-gray);
-
-}
-
-.order-call-form-content input:focus {
-    outline: none;
-}
-
-
-
-.order-call-form-content button {
-    border-radius: 10px;
-    min-width: 300px;
-    height: calc(var(--ui-unit)*12);
-    border-width: 0;
-    background-color: var(--vt-c-blue);
-    color: var(--vt-c-white);
-    transition: 0.2s;
-}
-
-.order-call-form-content button:hover {
-    background-color: var(--vt-c-light-blue);
-    transform: all 0.5 easy;
-}
-.order-call-form-content button:disabled {
-    background-color: var(--vt-c-light-gray);
-    color: var(--vt-c-black);
-    transform: all 0.5 easy;
-}
-
-
-
-.custom-checkbox-container {
-    gap: 5px;
-    width: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.custom-checkbox-container a {
-    text-decoration: none;
-    color: var(--vt-c-blue);
-}
-
-
-.custom-checkbox-container a {
-    text-decoration: none;
-    color: var(--vt-c-blue);
-}
-
-.custom-checkbox-container a:hover {
-    text-decoration: underline;
-}
-
-.checkbox {
-  appearance: none;
-  position: relative;
-  width: 15px;
-  height: 15px;
-  background: var(--vt-c-white);
-  border-radius: 5px;
-  border: 1px solid var(--vt-c-gray);
-   transition: 0.2s;
-}
-
-.checkbox::after {
-  content: "\2714";
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  width: 0px;
-  height: 0px;
-  font-size: 13px;
-  color: var(--vt-c-white);
-  background-color: var(--vt-c-blue);
-  transition: 0.2s;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.checkbox:checked::after {
-    border-radius: 4px;
-    width: 13px;
-      top: -5px;
-  left: 2px;
-    height: 13px;
-    font-size: 13px;
-    transition: 0.2s;
-}
-
-.checkbox:hover{
-    border-color: var(--vt-c-blue) !important;
-    background-color: var(--vt-c-light-blue-lighter);
-}
-
-.checkbox:active {
-    filter: brightness(90%);
-}
 
 .v-enter-active{
    transition: all 0.1s ease-out;
@@ -289,30 +159,14 @@ export default{
 }
 
 
-.v-enter-active{
-   transition: all 0.1s ease-out;
-}
-
-.v-leave-active {
-   transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
 .error-border {
   border: 1px solid var(--vt-c-error) !important;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
-}
 
-.input-error {
-  animation: shake 0.5s ease-in-out;
-}
 
  @media (max-width: 1340px) {
-    .main{
+    .order-call-container{
       width: 100%;
       min-width: 100%;
     }
@@ -332,17 +186,26 @@ export default{
     .order-call-content {
         width: 100%;
         flex-direction: column;
+         padding-top: 20px;
+        padding-bottom: 25px;
+        gap: 20px;
+           color: var(--vt-c-dark-indigo);
     }
 
-    .main {
+    .order-call-container {
         min-width: 100%;
         flex-direction: column;
     }
 
     .order-call-form-content {
         width: 100%;
+       
         flex-direction: column;
        
+    }
+
+    .order-call-form {
+        gap: 20px;
     }
 
     .order-call-form-content input {
@@ -355,6 +218,7 @@ export default{
 
     .custom-checkbox-container{
         align-items: start;
+      
     }
 
     .checkbox {
@@ -362,6 +226,9 @@ export default{
         min-width: 15px;
     }
 
+    .checkbox-text {
+        font-size: var(--font-size-mini2);
+    }
 
     .order-call-form {
         width: 100%;;
