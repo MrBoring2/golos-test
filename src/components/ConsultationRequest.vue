@@ -3,7 +3,14 @@ export default {
 
     data() {
         return {
-            drawerOpened: false
+            drawerOpened: false,
+            phoneNumber: '',
+            name: '',
+            isValidPhone: null,
+            isValidName: null,
+            isConfirm: null,
+            errorMessageName: 'Имя не должно быть пустым',
+            errorMessagePhone: 'Неверный номер телефона'
         }
     },
     methods: {
@@ -12,13 +19,56 @@ export default {
         },
         closeDrawer(){
             this.drawerOpened = false;
+        },
+        isNumber(evt) {
+        evt = evt || window.event;
+        const charCode = evt.which ? evt.which : evt.keyCode;
+        if ((charCode < 48 || charCode > 57)) {
+            evt.preventDefault();
+        }  else {
+            return true;
+            }
+        },
+        formatPhone(event) {
+            const x = event.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            this.phoneNumber = !x[2] ? '+7' : `+7 (${x[2]}${x[3] ? `) ${x[3]}` : ''}${x[4] ? `-${x[4]}` : ''}${x[5] ? `-${x[5]}` : ''}`;
+            this.validatePhone();
+        },
+        validatePhone(){
+            const cleanPhoneNumber = this.phoneNumber.replace(/\D/g, '');
+            this.isValidPhone = cleanPhoneNumber.length === 11 && cleanPhoneNumber.startsWith('7');
+        },
+        formatName(event) {
+            this.validateName();
+        },
+        validateName() {
+            console.log(this.name == '')
+            this.isValidName = this.name.length > 0 && this.name != '';
+        },
+        checkConfirm(){
+   
+            if(this.isConfirm == null){
+                this.isConfirm = true;
+            }
+            else{
+                this.isConfirm = !this.isConfirm;
+            }
+              console.log(this.isConfirm);
+        },
+        orderConsultation(){
+            if(this.isValidPhone == true && this.isValidName == true && this.isConfirm == true){
+                alert("Консультация заказана")
+            }
+            else{
+                this.validatePhone();
+                this.validateName();
+            }
         }
     },
     created() {
 
         console.log(this.constultationRequestDrawerOpend)
-    },
-    inject: ['constultationRequestDrawerOpend']
+    }
 }
 </script>
 
@@ -36,20 +86,30 @@ export default {
                     </div>                  
                     <form class="constultation-request-form">
                     <div class="inputs-container">
-                        <div class="input-container">
+                         <div class="validation-input" :class="{ 'input-error': !isValidName && isValidName != null }">
                             <label class="input-label">Имя</label>
-                            <input class="input-text" placeholder="Введите имя" v-model="phoneNumber" @input="formatPhone" maxlength="18"
-                                type="tel" @keypress="isNumber($event)" :class="{ 'error-border': !isValid && isValid != null }"></input>
+                            <input class="input-text" placeholder="Введите имя" v-model="name" maxlength="20" @input="formatName"
+                                type="text" :class="{ 'error-border': !isValidName && isValidName != null }"></input>
+                            <Transition>
+                                <p class="error-message" v-if="!isValidName && isValidName != null">
+                                    {{errorMessageName}}
+                                </p>
+                            </Transition>                   
                         </div>
-                        <div class="input-container">
-                        <label class="input-label">Телефон</label>
-                        <input class="input-text" placeholder="Введите номер телефона" v-model="phoneNumber" @input="formatPhone" maxlength="18"
-                                type="tel" @keypress="isNumber($event)" :class="{ 'error-border': !isValid && isValid != null }"></input>
+                         <div class="validation-input" :class="{ 'input-error': !isValidPhone && isValidPhone != null }">
+                            <label class="input-label" >Телефон</label>
+                            <input class="input-text" placeholder="Введите номер телефона" v-model="phoneNumber" @input="formatPhone" maxlength="18"
+                                type="tel" @keypress="isNumber($event)" :class="{ 'error-border': !isValidPhone && isValidPhone != null }"></input>
+                            
+                                <p class="error-message" v-if="!isValidPhone && isValidPhone != null">
+                                    {{errorMessagePhone}}
+                                </p>
+                                           
                         </div>
                     </div>
                     <div class="send-container">
                         <hr/>
-                        <input type="button" class="form-button" :disabled="(!isValid && isValid != null) || (isConfirm == false)" value="Отправить"></input>
+                        <input type="button" class="form-button" @click="orderConsultation" :disabled="(!isValidPhone && isValidPhone != null) || (!isValidName && isValidName != null) || (isConfirm == false)" value="Отправить"></input>
                         <div class="custom-checkbox-container">
                         <input type="checkbox" id="checkbox" class="checkbox" :checked="isConfirm" @change="checkConfirm" :class="{ 'input-error': !isConfirm && isConfirm != null,
                             'error-border': !isConfirm && isConfirm != null }"/>
@@ -74,7 +134,7 @@ export default {
     position: fixed;
     z-index: 10000;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 }
 
 .overlay {
@@ -106,10 +166,6 @@ export default {
     
 }
 
-.close-button {
-
-}
-
 .drawer-content {
   
     display: flex;
@@ -130,9 +186,12 @@ export default {
     height: 100%;
     flex-direction: column;
 }
-.input-container {
+.validation-input {
+    justify-content: start;
+    align-items: start;
+    width: 100%;
     display: flex;
-      flex-direction: column;
+    flex-direction: column;
 }
 
 .drawer-title {
@@ -144,6 +203,7 @@ export default {
 .input-text {
     text-align: start;
     padding-left: 20px;
+    width: 100%;
 }
 
 .input-label{
@@ -208,5 +268,29 @@ export default {
 .v-leave-to .drawer-back {
   transform: translateX(100%);
 }
+
+  @media (max-width: 900px) {
+    .drawer-back {
+        padding: 0;
+        width: 100%;
+        border-radius: 0;
+         min-width: 100%;
+    }
+
+    .drawer {
+        border-radius: 0;
+        padding: 18px 12px;
+    }
+
+    .drawer-title {
+        font-size: var(--font-size-normal2);
+        width: 100%;
+    }
+
+    .icon-hollow {
+        margin-top: 15px;
+        margin-right: 15px;
+    }
+  }
 
 </style>

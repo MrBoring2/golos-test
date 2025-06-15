@@ -52,15 +52,17 @@ export default{
 </script>
 
 <template>
-    <div class="order-call-container">
-        <hr class="order-call-divider"/>
-        <div class="order-call-content">
-            <div class="order-call-text">
-                <p>
-                    Узнай больше о своём будущем доме
-                </p>  
+    <div class="any-questions-container">
+        <div class="any-questions-content">
+            <div class="any-questions-title-container">
+                <p class="any-questions-title">
+                    Остались вопросы?
+                </p>
+                <p class="any-questions-subtitle">
+                    <p>Мы перезвоним и обсудим все детали</p>
+                </p>
             </div>
-            <div  class="order-call-form">
+            <div class="order-call-form">
                     <div class="order-call-form-content">
                         <div class="validation-input" :class="{ 'input-error': !isValid && isValid != null }">
                             <input class="input-text" placeholder="Введите номер телефона" v-model="phoneNumber" @input="formatPhone" maxlength="18"
@@ -74,9 +76,9 @@ export default{
                         <button class="form-button" :disabled="(!isValid && isValid != null) || (isConfirm == false)" @click="orderPhone">Заказать звонок</button>             
                     </div>
                     <div class="custom-checkbox-container">
-                        <input type="checkbox" id="checkbox" class="checkbox" :checked="isConfirm" @change="checkConfirm" :class="{ 'input-error': !isConfirm && isConfirm != null,
+                        <input type="checkbox" id="checkbox_bottom" class="checkbox" :checked="isConfirm" @change="checkConfirm" :class="{ 'input-error': !isConfirm && isConfirm != null,
                             'error-border': !isConfirm && isConfirm != null }"/>
-                        <label class="checkbox-text" for="checkbox">
+                        <label class="checkbox-text" for="checkbox_bottom">
                             <p>Принимаю</p>
                             <RouterLink to="/about">политику конфиденциальности</RouterLink>
                             <p> и даю согласие на</p>
@@ -85,151 +87,79 @@ export default{
                     </div>
             </div>
         </div>
-        <hr class="order-call-divider"/>
     </div>
 </template>
 
 <style scoped>
-
-
-.order-call-container{
-    padding-left: 10px;
-    padding-right: 10px;
-    min-width: calc(var(--ui-col) * 33);
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-}
-
-.order-call-container hr {
-    border-color: var(--vt-c-light-gray);
-}
-
-.order-call-divider {
+.any-questions-container {
     width: 100%;
-}
-
-.order-call-content {
-
-    padding-top: 40px;
-    padding-bottom: 40px;
+    background-color: var(--vt-c-blue);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.order-call-text {
-    
-    font-weight: 500;
-   font-size: var(--font-size-large2);
-}
-
-.order-call-form {
-    height: 100%;
-    width: calc(var(--ui-col)* 15);
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
   
 }
+.any-questions-title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
 
+.any-questions-title {
+    font-size: var( --font-size-large4);
+    font-weight: 500;
+}
+.any-questions-subtitle {
+    color: var(--vt-c-middle-gray);
+}
 
+.any-questions-content {
+    min-width: calc(var(--ui-col) * 32.5);
+    width: 80%;
+    background-color: var(--vt-c-white);
+    padding: 60px 40px;
+    margin: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    gap: 40px;
+}
+
+.order-call-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
 
 .order-call-form-content {
-
     display: flex;
-    justify-content: end;
+    flex-direction: row;
     gap: 20px;
-
 }
 
-
-.v-enter-active{
-   transition: all 0.1s ease-out;
-}
-
-.v-leave-active {
-   transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.v-enter-from, .v-enter, .v-leave-to {
-    transform: translateY(-20px);
-    opacity: 0;
-}
-
-
-
-
- @media (max-width: 1340px) {
-    .order-call-container{
-      width: 100%;
-      min-width: 100%;
+ @media (max-width: 900px) {
+    .any-questions-content{
+           min-width: 90%;
+           width: 90%;
     }
-  }
-
-@media (max-width: 900px) {
-
+    .order-call-form-content {
+        flex-direction: column;
+    }
     .checkbox-text {
-        white-space: nowrap;
+        display: flex;
         flex-wrap: wrap;
     }
-
-    .order-call-text {
-        font-size: var(--font-size-normal3);
+    .any-questions-title {
+        font-size: var(--font-size-normal4);
     }
-
-    .order-call-content {
-        width: 100%;
-        flex-direction: column;
-         padding-top: 20px;
-        padding-bottom: 25px;
-        gap: 20px;
-           color: var(--vt-c-dark-indigo);
-    }
-
-    .order-call-container {
-        min-width: 100%;
-        flex-direction: column;
-    }
-
-    .order-call-form-content {
-        width: 100%;
-       
-        flex-direction: column;
-       
-    }
-
-    .order-call-form {
-        gap: 20px;
-    }
-
-    .order-call-form-content input {
-        width: 100%;
-    }
-
-    .order-call-form-content button {
-        min-height: calc(var(--ui-unit)*12);
-    }
-
-    .custom-checkbox-container{
-        align-items: start;
-      
-    }
-
-    .checkbox {
-        margin-top: 2px;
-        min-width: 15px;
-    }
-
     .checkbox-text {
         font-size: var(--font-size-mini2);
     }
-
-    .order-call-form {
-        width: 100%;;
+    .checkbox {
+        margin-top: -15px;
     }
-}
-
-
+ }
 </style>

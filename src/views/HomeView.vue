@@ -5,6 +5,9 @@ import GolosInfo from '@/components/HomeView/GolosInfo.vue'
 import OrderCall from '@/components/HomeView/OrderCall.vue'
 import Advanteges from "@/components/HomeView/Advanteges.vue"
 import Slider from "@/components/Slider.vue"
+import PreFinishing from '@/components/HomeView/PreFinishing.vue'
+import AboutTheBuilder from '@/components/HomeView/AboutTheBuilder.vue'
+import AnyQuestions from '@/components/HomeView/AnyQuestions.vue'
 
 import architecture from './../assets/images/slider-images/architecture.png'
 import bulvar from './../assets/images/slider-images/bulvar.png'
@@ -94,7 +97,10 @@ export default {
     GolosInfo,
     OrderCall,
     Slider,
-    Advanteges
+    Advanteges,
+    PreFinishing,
+    AboutTheBuilder,
+    AnyQuestions
   }
 }
 </script>
@@ -106,23 +112,10 @@ export default {
     <OrderCall ref="order-call"/>
     <Slider :title="sliderFeaturesTitle" :content="sliderFeaturesContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"  :canOpenConsultationDrawer="true"/>
     <Advanteges/>
+    <PreFinishing ref="pre-finishing"/>
+    <AboutTheBuilder ref="about-the-builder"/>
     <Slider :title="sliderProjectsTitle" :content="sliderProjectsContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"/>
-  
-      <div>
-      asdasd
-    </div>
-      <div>
-      asdasd
-    </div>
-      <div>
-      asdasd
-    </div>
-      <div>
-      asdasd
-    </div>
-      <div>
-      asdasd
-    </div>
+    <AnyQuestions/>
   </main>
   
 </template>

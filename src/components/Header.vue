@@ -39,6 +39,14 @@ export default {
         },
         openMobileMenuDrawer(){
           this.modileDrawerOpen = !this.modileDrawerOpen;
+        },
+        scrollToElement(sectionId) {
+          const element = document.getElementById(sectionId);
+          if (element) {
+           element.scrollIntoView({ behavior: 'smooth' });
+          }
+          if(this.modileDrawerOpen) this.modileDrawerOpen = false;
+
         }
     }
 }
@@ -59,33 +67,33 @@ export default {
                 </div>
               </div>
               <div class="mobile-menu-content">
-                <div class="ipoteca-moblie-menu">
+                <div class="ipoteca-moblie-phone">
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                 </div>
                 <nav>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="">
                           Выбор квартир
                         </RouterLink>
                       </div>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="">
                           Способы получения
                        </RouterLink>
                         </div>
                       <div class="mobile-menu-nav-item">
-                           <RouterLink to="/">
+                           <RouterLink to="">
                           Ход строительства
                       </RouterLink>
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="" @click="scrollToElement('about-the-builder')">
                           О застройщике
                       </RouterLink>  
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="">
                           Контакты
                       </RouterLink>
                        </div>
@@ -134,16 +142,16 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to="/"  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0 }">
+                    <RouterLink to=""  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0 }">
                           Выбор квартир
                       </RouterLink>
-                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(1)">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(1)">
                           Способы получения
                       </RouterLink>
-                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(2)">
                           Ход строительства
                       </RouterLink>
-                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3 }">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3 }">
                           Ещё
                       </RouterLink>
                 </nav>  
@@ -163,8 +171,8 @@ export default {
                 <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub_menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="activeMenuIndex = null">
-                            <RouterLink to="/about">Выбор по параметрам</RouterLink>
-                            <RouterLink to="/about">Выбор с генплана</RouterLink>
+                            <RouterLink to="">Выбор по параметрам</RouterLink>
+                            <RouterLink to="">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  
             </Transition>
@@ -172,8 +180,8 @@ export default {
                 <div class="wraper-sub-menu"  v-if="activeMenuIndex === 3" >
                     <nav class="sub_menu" @mouseenter="keepSubMenuOpen(3)"
                         @mouseleave="activeMenuIndex = null">
-                    <RouterLink to="/about">О застройщике</RouterLink>
-                    <RouterLink to="/about">Контакты</RouterLink>
+                    <RouterLink to="" @click="scrollToElement('about-the-builder')">О застройщике</RouterLink>
+                    <RouterLink to="">Контакты</RouterLink>
                     </nav> 
                 </div>
             </Transition>
@@ -287,7 +295,7 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
 }
 
 
-.ipoteca:hover, .ipoteca-moblie-menu:hover {
+.ipoteca:hover, .ipoteca-moblie-phone:hover {
   transform: rotate(-4deg);
 }
 
@@ -420,7 +428,7 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
     width: 100%;
 }
 
-.ipoteca-moblie-menu {
+.ipoteca-moblie-phone {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -499,13 +507,18 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   }
 
   .main-menu-container {
-
     min-width: auto;
     justify-content: space-between;
   }
 
 
  
+}
+
+@media (max-height: 450px) {
+  .mobile-menu-content nav {
+    flex-direction: row;
+  }
 }
 
 

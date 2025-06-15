@@ -11,6 +11,9 @@ export default {
     methods: {
         moveToGolosInfo() {
             this.$emit('scroll-to', 'golos-info')
+        },
+        moveToPreFinishing() {
+            this.$emit('scroll-to', 'pre-finishing')
         }
     },
     components: {
@@ -33,7 +36,7 @@ export default {
                 <p>Квартиры с предчистовой отделкой</p>
             </div>
             <div class="learn-more">
-                <button>Узнать бодробнее</button>
+                <button @click="moveToPreFinishing">Узнать бодробнее</button>
             </div>
         </div>
         <div class="bottom-title-container">

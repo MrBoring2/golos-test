@@ -1,14 +1,14 @@
 <script>
-import info from './../../assets/images/info.png'
+import pre_finihing from './../../assets/images/pre-finishing.png'
 
 export default {
   data() {
     return{
-      info_img: info,
+      pre_finihing_img: pre_finihing,
       fullImgSizeDisplay: false
     }
   },
-
+ inject: ['openConsultationRequestDrawer'],
   methods: {
     openFullSizeImg(){
       this.fullImgSizeDisplay = true
@@ -23,37 +23,56 @@ export default {
         this.closeFullSizeImg();
       }
       document.removeEventListener('keydown', this.handleKeyDown)
+    },
+    openDrawer() {
+      this.openConsultationRequestDrawer();
     }
   }
 }
 </script>
 
 <template>
-  <div class="golos-info-container">
-    <div class="golos-info-content">
-      <div class="info-text">
-        <div class="info-text-container">
-          <p class="info-text-title">О проекте</p>
-          <p class="info-text-content">«Голос Кашириных» — это жилой квартал комфорт-класса с корпусами переменной этажности, готовой инфраструктурой и архитектурой, 
-            характерной для старинных районов европейских городов. Здания комплекса расположены близко друг к другу и выполнены в разных стилях.</p>
-          <p  class="info-text-content">
-            Для придания уюта, как на европейских улочках, на ряде секций создан эффект разделения фасада по высоте на два объёма -
-             на верхних этажах как будто выделяется мансарда. В квартирах на верхних этажах предусмотрены террасы с видом на прогулочные зоны и внутренние дворы.
-          </p>
-        </div>
-      </div>
-      <div class="info-image-container" :style="{ backgroundImage: `url(${info_img})` }" @click="openFullSizeImg">
+    <div class="pre-finishing-container">
+        <div class="pre-finishing-content">
+            <div class="pre-finishing-image-container" :style="{ backgroundImage: `url(${pre_finihing_img})` }" @click="openFullSizeImg">
         <div class="size-icon-container">
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
       </div>
-      <div class="mobile-only-title">
-        <p>О проекте</p>
+      <div class="pre-finishing-text">
+        <div class="pre-finishing-text-container">
+          <p class="pre-finishing-text-title">Предчистовая отделка</p>
+          <div class="mobile-only-title">
+          <p>Предчистовая отделка</p>
+          </div>
+          <div class="pre-finishing-text-content">
+            <p>
+                Перчень отделочных работ
+            </p>
+            <ul>
+                <li>разводка электрической проводки до мест расположения выключателей, розеток, осветительных приборов; без оконечных устройств;</li>
+                <li>вывод кабеля в санузлах под зеркало с подсветкой;</li>
+                <li>выравнивание стен (гипсовая штукатурка/шпатлёвка);</li>
+                <li>Оштукатуривание цементно-песчаным раствором стен в санузлах.</li>
+            </ul>
+            <p>
+
+            </p>
+            <p>
+                Предчистовая отделка распространяется на квартиры площадью более 40 кв. м. Не суммируется с иными программами и акциями.
+            </p>
+          </div>
+        </div>
+        <div class="learn-more-button-container">
+            <button @click="openDrawer">Узнать подробнее</button>
+        </div>
       </div>
+      
+     
     </div>
     <Transition>
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
-            <img :src="info_img">   
+            <img :src="pre_finihing_img">   
             </img>
             <div class="icon-bold"  @click="closeFullSizeImg">
                 <font-awesome-icon class="close-icon" icon="fa-solid fa-close" size="2xl"/> 
@@ -64,14 +83,13 @@ export default {
 </template>
 
 <style scoped>
-
-  .golos-info-container {
+  .pre-finishing-container {
     width: 80%;
     min-width: calc(var(--ui-col) * 33);
     
   }
 
-  .golos-info-content {
+  .pre-finishing-content {
     width: 100%;
     font-size: var(--font-size-normal);
     padding-left: 10px;
@@ -80,14 +98,15 @@ export default {
     justify-content: space-between;
     gap: 50px;
   }
-  .info-text {
+  .pre-finishing-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: start;
+    gap: 40px;
     width: 60%;
   }
 
-  .info-text-container {
+  .pre-finishing-text-container {
     position: relative;
     width: 100%;
     display: flex;
@@ -95,17 +114,28 @@ export default {
     gap: 30px;
   }
 
-  .info-text-title {
+  .pre-finishing-text-title {
     font-size: var(--font-size-large2);
     font-weight: 500;
   }
 
-  .info-text-content {
-    
+  .pre-finishing-text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     font-size: var(--font-size-normal2);
+      text-align: start;
+         color: var(--vt-c-middle-gray);
   }
+  .pre-finishing-text-content ul {
+    list-style: outside;
+    padding: 0 0 0 20px;
+    text-align: start;
 
-  .info-image-container {
+  }
+  
+
+  .pre-finishing-image-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -120,7 +150,7 @@ export default {
   
   }
 
-  .info-image-container:hover .size-icon-container {
+  .pre-finishing-image-container:hover .size-icon-container {
     display: flex;
     opacity: 1;
     transform: all 0.5 easy;
@@ -178,6 +208,22 @@ export default {
     padding-bottom: 40px;
   }
 
+  .learn-more-button-container button{
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: var(--vt-c-blue);
+    border-width: 0;
+    color: var(--vt-c-white);
+    font-size: var(--font-size-normal);
+    transition: 0.2s;
+  }
+
+  .learn-more-button-container button:hover {
+    background-color: var(--vt-c-light-blue);
+    transform: all 0.5 easy;
+  }
+
   .img-full-size img {
     height: 100%;
     object-fit:cover;
@@ -207,7 +253,7 @@ export default {
 
 
   @media (max-width: 1340px) {
-    .golos-info-container{
+    .pre-finishing-container{
       width: 100%;
       min-width: 100%;
     }
@@ -215,7 +261,7 @@ export default {
 
 
   @media (max-width: 900px) {
-    .golos-info-container{
+    .pre-finishing-container{
       width: 100%;
     
     }
@@ -227,30 +273,30 @@ export default {
        color: var(--vt-c-dark-indigo);
     }
 
-    .info-text {
+    .pre-finishing-text {
     width: 100%;
     min-width: 100%;
     }
-    .golos-info-content{
+    .pre-finishing-content{
       flex-direction: column;
-      flex-flow: column-reverse;
+
       width: 100%;
       min-width: 100%;
         gap: 20px;
       
     }
-    .info-text-title{
+    .pre-finishing-text-title{
       display: none;
     }
 
-    .info-text-content {
+    .pre-finishing-text-content {
       font-size: var(--font-size-normal-mini);
-      color: var(--vt-c-dark-indigo);
+   
     }
 
-    .info-image-container {
+    .pre-finishing-image-container {
       min-width: 100%;
-       min-height: calc(var(--ui-unit)*80);
+      min-height: calc(var(--ui-unit)*80);
       background-size: cover;
     }
   }

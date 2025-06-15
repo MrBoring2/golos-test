@@ -81,7 +81,7 @@ export default {
         <p class="promo-acousel-item-title">Удвоим материнский капитал</p>
         <RouterLink  to="/" class="promo-carousel-item-more">
           <p>Подробнее</p>
-          <font-awesome-icon class="promo-carousel-item-icon" icon="fa-solid fa-chevron-right" />
+            
         </RouterLink>
       </div>
       <div class="promo-carousel-item">

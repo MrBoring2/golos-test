@@ -24,7 +24,7 @@ export default {
       RouterLink,
       RouterView,
       CookieAgree,
-      ConsultationRequest
+      ConsultationRequest,
     },
     methods: {
       proceedCookies() {

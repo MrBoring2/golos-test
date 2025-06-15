@@ -39,6 +39,7 @@ export default {
       dragStartX: 0,
       offsetX : 0,
       isDragging: 0,
+      isDragged: false,
       preventHref: false,
       mediaQuery: null
     }
@@ -92,7 +93,7 @@ export default {
     },
     handleDragMove(e) {
         if(!this.isDragging) return;
-        
+        this.isDragged = true;
         const dragX = e.clientX || e.touches[0].clientX;
         this.offsetX = dragX - this.dragStartX;
 
@@ -165,7 +166,15 @@ export default {
     <div class="slider-content" @touchstart="handleDragStart" @touchmove="handleDragMove" @touchend="handleDragEnd"
                                     @mousedown="handleDragStart" @mousemove="handleDragMove" @mouseup="handleDragEnd" @mouseleave="handleDragEnd" >
         <div class="slider" ref="sliderWindow">
-        <div class="slider-inner" :style="{ transform: `translateX(-${currentIndex * (100 / currentVisibleItems)}%)`}">
+           <Transition>
+            <div class="silder-item-icon-container" v-if="!isDragged">
+                <div class="silder-item-icon-container-inner">
+                    <font-awesome-icon class="silder-item-icon" icon="fa-solid fa-arrows-h"/>
+                </div>
+            </div>
+            </Transition>
+            
+            <div class="slider-inner" :style="{ transform: `translateX(-${currentIndex * (100 / currentVisibleItems)}%)`}">
             <div class="slider-item" v-for="(slide, index) in content" :key="index" @click="canOpenConsultationDrawer ? openDrawer() : navigate(slide.href, true)">      
                 <div class="slider-item-container">
                 <img class="slider-image" :src="slide.image"/>
@@ -211,6 +220,7 @@ export default {
 
 .slider {
   overflow: hidden;
+  position: relative;
   border-radius: 20px;
   padding-bottom: 15px;
    user-select: none;
@@ -226,6 +236,47 @@ export default {
 .slider-controls{
     display: flex;
     gap: 10px;
+}
+
+.silder-item-icon-container {
+    position: fixed;
+   position: absolute;
+   right: 0;
+   top: 45%;
+   z-index: 1000;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   display: none;  
+}
+
+.silder-item-icon-container-inner {
+    background-color: var(--vt-c-blue);
+    width: 50px;
+    height: 50px;   
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.silder-item-icon {
+    font-size: var(--font-size-normal4);
+    color: var(--vt-c-white);
+    animation: updown 2s ease infinite;
+}
+
+@keyframes updown {
+  0% {
+    transform: translateX(-30%);
+  }
+
+  50% {
+    transform: translateX(30%);
+  }
+
+  100% {
+    transform: translateX(-30%);
+  }
 }
 
 .slider-controls button {
@@ -325,7 +376,7 @@ export default {
 }
 
 .slider-item-description{
-    color: var(--vt-c-middle-gray);
+    color: var(--vt-c-light-gray2);
     font-size: var(--font-size-mini);
     padding-bottom: 40px;
   
@@ -343,7 +394,7 @@ export default {
 
 .slider-item:hover .slider-image {
     scale: 1.2;
-    transform: all 0.5 easy;
+    transform: all 0.3 easy;
 }
 
 .slider-image {
@@ -357,6 +408,7 @@ export default {
     -webkit-user-select: none;
     -ms-user-select: none;
     transition: 0.2s;
+    opacity: 0.8;
 }
 
 .slider-item-link {
@@ -368,6 +420,18 @@ export default {
     -ms-user-select: none;
       display: inline-block;
 }
+ .v-enter-active{
+   transition: all 0.2s ease-out;
+    }
+
+  .v-leave-active {
+   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .v-enter-from, .v-enter, .v-leave-to {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
 
 @media (max-width: 900px) {
 
@@ -390,7 +454,10 @@ export default {
         font-size: var(--font-size-normal3);
         
     }
-
+ 
+    .silder-item-icon-container {
+        display: block;
+    }
     .slider-controls {
         justify-content: end;
         margin-right: 10px;

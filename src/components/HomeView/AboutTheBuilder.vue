@@ -1,10 +1,10 @@
 <script>
-import info from './../../assets/images/info.png'
+import new_center from './../../assets/images/new_center.png'
 
 export default {
   data() {
     return{
-      info_img: info,
+      new_center_img: new_center,
       fullImgSizeDisplay: false
     }
   },
@@ -28,32 +28,40 @@ export default {
 }
 </script>
 
+
 <template>
-  <div class="golos-info-container">
-    <div class="golos-info-content">
-      <div class="info-text">
-        <div class="info-text-container">
-          <p class="info-text-title">О проекте</p>
-          <p class="info-text-content">«Голос Кашириных» — это жилой квартал комфорт-класса с корпусами переменной этажности, готовой инфраструктурой и архитектурой, 
-            характерной для старинных районов европейских городов. Здания комплекса расположены близко друг к другу и выполнены в разных стилях.</p>
-          <p  class="info-text-content">
-            Для придания уюта, как на европейских улочках, на ряде секций создан эффект разделения фасада по высоте на два объёма -
-             на верхних этажах как будто выделяется мансарда. В квартирах на верхних этажах предусмотрены террасы с видом на прогулочные зоны и внутренние дворы.
+  <div id="about-the-builder" class="about-the-builder-container">
+    <div class="about-the-builder-content">
+      <div class="about-the-builder-text">
+        <div class="about-the-builder-text-container">
+          <p class="about-the-builder-text-title">О застройщике</p>
+          <p class="about-the-builder-text-content">«Группа Голос» – крупная девелоперская компания Южного Урала, в портфеле которой более 1 млн м² жилой недвижимости комфорт-класса, бизнес-класса и коммерческого сектора.</p>
+          <p class="about-the-builder-text-content">
+            Строительный холдинг, обеспечивающий полный жизненный цикл возводимых объектов: от проектирования и строительства до эксплуатации жилых комплексов. Компания располагает проектным институтом, собственным парком техники, подрядными организациями, управляющей компанией и производством, которое обеспечивает потребности застройщика.
           </p>
+          <div class="more">
+            <p>Ещё</p>
+          </div>
+          
+          <div class="go-to-site-button-container">
+            <a href="https://golos.click/" target="_blank">
+                <button>Перейти на сайт</button>
+            </a>    
+        </div>
         </div>
       </div>
-      <div class="info-image-container" :style="{ backgroundImage: `url(${info_img})` }" @click="openFullSizeImg">
+      <div class="about-the-builder-image-container" :style="{ backgroundImage: `url(${new_center_img})` }" @click="openFullSizeImg">
         <div class="size-icon-container">
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
       </div>
       <div class="mobile-only-title">
-        <p>О проекте</p>
+        <p>О застройщике</p>
       </div>
     </div>
     <Transition>
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
-            <img :src="info_img">   
+            <img :src="new_center_img">   
             </img>
             <div class="icon-bold"  @click="closeFullSizeImg">
                 <font-awesome-icon class="close-icon" icon="fa-solid fa-close" size="2xl"/> 
@@ -65,13 +73,13 @@ export default {
 
 <style scoped>
 
-  .golos-info-container {
+  .about-the-builder-container {
     width: 80%;
     min-width: calc(var(--ui-col) * 33);
     
   }
 
-  .golos-info-content {
+  .about-the-builder-content {
     width: 100%;
     font-size: var(--font-size-normal);
     padding-left: 10px;
@@ -80,14 +88,14 @@ export default {
     justify-content: space-between;
     gap: 50px;
   }
-  .info-text {
+  .about-the-builder-text {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     width: 60%;
   }
 
-  .info-text-container {
+  .about-the-builder-text-container {
     position: relative;
     width: 100%;
     display: flex;
@@ -95,23 +103,42 @@ export default {
     gap: 30px;
   }
 
-  .info-text-title {
+  .about-the-builder-text-title {
     font-size: var(--font-size-large2);
     font-weight: 500;
   }
 
-  .info-text-content {
+  .show-more-text {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-height: 150px;
+    overflow: hidden;
+  }
+
+  .show-more-text::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: calc(var(--ui-unit)* 8);
+    pointer-events: none;
+  }
+
+  .about-the-builder-text-content {
     
     font-size: var(--font-size-normal2);
   }
 
-  .info-image-container {
+  .about-the-builder-image-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 
     border-radius: 30px;
+    background-position: center;
     background-size: cover;
   
     height: 100%;
@@ -120,7 +147,7 @@ export default {
   
   }
 
-  .info-image-container:hover .size-icon-container {
+  .about-the-builder-image-container:hover .size-icon-container {
     display: flex;
     opacity: 1;
     transform: all 0.5 easy;
@@ -178,9 +205,29 @@ export default {
     padding-bottom: 40px;
   }
 
+  .go-to-site-button-container button {
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: var(--vt-c-blue);
+    border-width: 0;
+    color: var(--vt-c-white);
+    font-size: var(--font-size-normal);
+    transition: 0.2s;
+  }
+
+  .go-to-site-button-container button:hover {
+    background-color: var(--vt-c-light-blue);
+    transform: all 0.5 easy;
+  }
+
   .img-full-size img {
     height: 100%;
     object-fit:cover;
+  }
+
+  .more {
+    display: none;
   }
   
   .icon-bold {
@@ -207,7 +254,7 @@ export default {
 
 
   @media (max-width: 1340px) {
-    .golos-info-container{
+    .about-the-builder-container{
       width: 100%;
       min-width: 100%;
     }
@@ -215,7 +262,7 @@ export default {
 
 
   @media (max-width: 900px) {
-    .golos-info-container{
+    .about-the-builder-container{
       width: 100%;
     
     }
@@ -227,11 +274,11 @@ export default {
        color: var(--vt-c-dark-indigo);
     }
 
-    .info-text {
+    .about-the-builder-text {
     width: 100%;
     min-width: 100%;
     }
-    .golos-info-content{
+    .about-the-builder-content{
       flex-direction: column;
       flex-flow: column-reverse;
       width: 100%;
@@ -239,16 +286,16 @@ export default {
         gap: 20px;
       
     }
-    .info-text-title{
+    .about-the-builder-text-title{
       display: none;
     }
 
-    .info-text-content {
+    .about-the-builder-text-content {
       font-size: var(--font-size-normal-mini);
       color: var(--vt-c-dark-indigo);
     }
 
-    .info-image-container {
+    .about-the-builder-image-container {
       min-width: 100%;
        min-height: calc(var(--ui-unit)*80);
       background-size: cover;
