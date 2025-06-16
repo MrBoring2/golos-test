@@ -56,8 +56,8 @@ body {
 .checkbox {
   appearance: none;
   position: relative;
-  min-width: 15px;
-  height: 15px;
+  min-width: 1rem;
+  height: 1rem;
   background: var(--vt-c-white);
   border-radius: 5px;
   border: 1px solid var(--vt-c-gray);
@@ -67,6 +67,7 @@ body {
     display: flex;
     font-size: var(--font-size-mini);
     gap: 5px;
+    flex-wrap: wrap;
   
 }
 .validation-input {
@@ -91,7 +92,7 @@ body {
   text-align: center;
   width: 0px;
   height: 0px;
-  font-size: 13px;
+  font-size: 1rem;
   color: var(--vt-c-white);
   background-color: var(--vt-c-blue);
   transition: 0.2s;
@@ -101,10 +102,10 @@ body {
 
 .checkbox:checked::after {
     border-radius: 4px;
-    width: 13px;
-      top: -5px;
-  left: 2px;
-    height: 13px;
+    width: 0.9rem;
+    top: -5px;
+    left: 2px;
+    height: 0.9rem;
     font-size: 13px;
     transition: 0.2s;
 }
@@ -120,12 +121,13 @@ body {
 
 .input-text {
     
-    min-width: 300px;
-    height: calc(var(--ui-unit)*12);
+    width: 19rem;
+     height: 3rem;
     border-radius: 10px;
     text-align: center;
     border-width: 0;
     background-color: var(--vt-c-light-gray);
+    font-size: var(--font-size-mini);
 
 }
 
@@ -140,12 +142,13 @@ body {
 
 .form-button {
     border-radius: 10px;
-    min-width: 300px;
-    height: calc(var(--ui-unit)*12);
+     width: 19rem;
+     height: 3rem;
     border-width: 0;
     background-color: var(--vt-c-blue);
     color: var(--vt-c-white);
     transition: 0.2s;
+    font-size: var(--font-size-mini);
 }
 
 .form-button:hover {

@@ -125,7 +125,7 @@ export default {
   margin-right: 10px;
   background-color: var( --vt-c-blue);
   border-radius: 20px;
-  width: 400px;
+  width: 20rem;
   padding-bottom: 15px;
 }
 
@@ -150,7 +150,7 @@ export default {
 }
 
 .promo-acousel-item-title {
- font-size: var(--font-size-large3);
+  font-size: var(--font-size-large);
   line-height: 1;
 }
 
@@ -187,6 +187,7 @@ export default {
 
 .promo-carousel-controls button {
   background-color: transparent;
+    font-size: var(--font-size-mini);
   border-width: 0;
   transition: 0.2s;
 }

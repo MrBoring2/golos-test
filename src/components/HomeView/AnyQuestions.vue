@@ -116,7 +116,7 @@ export default{
 
 .any-questions-content {
     min-width: calc(var(--ui-col) * 32.5);
-    width: 80%;
+    width: 60%;
     background-color: var(--vt-c-white);
     padding: 60px 40px;
     margin: 40px;

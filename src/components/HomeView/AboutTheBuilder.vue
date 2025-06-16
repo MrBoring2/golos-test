@@ -74,7 +74,7 @@ export default {
 <style scoped>
 
   .about-the-builder-container {
-    width: 80%;
+    width: 60%;
     min-width: calc(var(--ui-col) * 33);
     
   }

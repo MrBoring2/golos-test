@@ -86,7 +86,7 @@ export default {
 
 .top-title-container{
  
-    width: 80%;
+    width: 60%;
     min-width: calc(var(--ui-col) * 33);
     display: flex;
     gap: 40px;
@@ -103,8 +103,6 @@ export default {
     font-weight: bold;
     font-size: var(--font-size-extra-large);
     margin-top: 20px;
- 
-    width: 80%;
     min-width: calc(var(--ui-col) * 33);
     display: flex;
     flex-direction: column;
@@ -117,19 +115,19 @@ export default {
     color: var(--vt-c-white);
     font-size: var(--font-size-normal2);
     font-weight: bold;
-    width: 80%;
     min-width: calc(var(--ui-col) * 33);
 }
 
 .learn-more {
      padding-left: 10px;
-    width: 80%;
+    width: 60%;
   
 }
  
 
 .learn-more button {
-     width: 200px;
+     font-size: var(--font-size-normal);
+     width: 12em;
      height: 50px;
      border-radius: 10px;
      border-width: 0;
@@ -144,9 +142,10 @@ export default {
 }
 
 .bottom-title-container {
-    width: 80%;
+    width: 60%;
     min-width: calc(var(--ui-col) * 33);
     padding-left: 5px;
+    padding-bottom: 25px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
@@ -157,8 +156,8 @@ export default {
 .btn-down button{
     color: var( --vt-c-white);
     background-color: var(--vt-c-dark-purple);
-    height: 60px;
-    width: 60px;
+    height: 3rem;
+    width: 3rem;
     border-radius: 40px;
     border-width: 0;
     font-size: var(--font-size-normal);

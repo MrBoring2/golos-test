@@ -63,7 +63,7 @@
         padding-right: 10px;
         display: flex;
         min-width: calc(var(--ui-col) * 33);
-        width: 80%;
+        width: 60%;
         gap: 130px;
         justify-content: space-between;
         align-items: start;

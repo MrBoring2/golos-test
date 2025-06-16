@@ -96,7 +96,7 @@ export default{
     padding-left: 10px;
     padding-right: 10px;
     min-width: calc(var(--ui-col) * 33);
-    width: 80%;
+    width: 60%;
     display: flex;
     flex-direction: column;
 }
@@ -116,21 +116,21 @@ export default{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+
 }
 
 .order-call-text {
-    
-    font-weight: 500;
+   width: 40%;
+   font-weight: 500;
    font-size: var(--font-size-large2);
 }
 
 .order-call-form {
-    height: 100%;
-    width: calc(var(--ui-col)* 15);
+
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: start;
   
 }
 

@@ -45,9 +45,9 @@
 
 :root {
   --font-size-normal: 1rem;
-  --font-size-normal2: 1.2rem;
-  --font-size-normal3: 1.4rem;
-  --font-size-normal4: 1.6rem;
+  --font-size-normal2: calc(var(--font-size-normal) * 1.2);
+  --font-size-normal3:  calc(var(--font-size-normal) * 1.4);
+  --font-size-normal4:  calc(var(--font-size-normal) * 1.6);
   --font-size-normal-mini: calc(var(--font-size-normal) * 0.9);
   --font-size-mini: calc(var(--font-size-normal) * 0.8);
   --font-size-mini2: calc(var(--font-size-normal) * 0.7);
@@ -67,7 +67,7 @@
 :root {
   --ui-col: 40px;
   --ui-unit: 4px;
-  --header-heigth: 4.9em;
+  --header-heigth: 4.9rem;
 }
 
 
@@ -114,3 +114,10 @@ body {
   }
 }
 
+@media screen and (min-width: 1921px) {
+
+html {
+       font-size: clamp(16px, 0.8vw, 41.33px);
+   }
+
+}

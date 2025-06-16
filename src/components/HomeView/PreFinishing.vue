@@ -84,7 +84,7 @@ export default {
 
 <style scoped>
   .pre-finishing-container {
-    width: 80%;
+    width: 60%;
     min-width: calc(var(--ui-col) * 33);
     
   }

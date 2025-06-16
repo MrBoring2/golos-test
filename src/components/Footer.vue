@@ -69,6 +69,7 @@ export default {
 footer{
   width: 100%;
   align-items: center;
+  display: flex;
   justify-content: center;
   bottom: 0px;
   background-color: var(--vt-c-blue);
@@ -76,18 +77,21 @@ footer{
 
 .footer-container {
   padding-top: 20px;
+  
   padding-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  width: 100%;
 }
 
 .footer-media{
-  width: 80%;
   padding-left: 10px;
   padding-right: 10px;
   color: var(--vt-c-white);
-  width: calc(var(--ui-col) * 33);
+  width: 60%;
+  min-width: calc(var(--ui-col) * 33);
   display: flex;
   align-items: center;
   gap: 150px;
@@ -132,6 +136,7 @@ footer{
 }
 
 .footer-divider {
+  min-width: 100%;
   width: 100%;
   padding-top: 50px;
   padding-bottom: 50px;
@@ -140,10 +145,12 @@ footer{
 
 .footer-divider hr {
   border-color: var(--vt-c-light-blue);
+  
 }
 
 .footer-components-production{
-  width: calc(var(--ui-col) * 33);
+  width: 60%;
+  min-width: calc(var(--ui-col) * 33);
   padding-left: 10px;
   padding-right: 10px;
   display: flex;

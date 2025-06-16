@@ -59,7 +59,7 @@ export default {
             <div class="mobile-menu-drawer" v-if="modileDrawerOpen">
               <div class="mobile-menu-header">
                 <div>
-                    <img class="logo" :src="logo" width="150px"></img>
+                    <img class="logo" :src="logo" height="30px"></img>
                 </div>
                 <div class="moblie-menu-header-icons">
                   <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
@@ -131,8 +131,6 @@ export default {
               </div>
             </div>
           </Transition>
-          
-
             <div class="main-menu-container">
                 <div>
                     <img class="logo" :src="logo" width="150px"></img>
@@ -154,21 +152,25 @@ export default {
                       <RouterLink to=""  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3 }">
                           Ещё
                       </RouterLink>
-                </nav>  
-                <div class="phone-number">
+                </nav> 
+                <div class="header-media">
+                  <div class="phone-number">
                     <a>+7 (351) 778-78-00</a>
-                </div>
-                <div class="icons">     
-                    <font-awesome-icon class="icon" icon="phone" size="2xl"/>
-                    <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
+                  </div>
+                  <div class="icons">     
+                    <font-awesome-icon class="icon" icon="phone" size="xl"/>
+                    <font-awesome-icon class="icon" icon="heart" size="xl"/>  
                     <font-awesome-icon class="icon-humberger" icon="bars" size="2xl" @click="openMobileMenuDrawer"/>
+                  </div>   
                 </div>   
             </div> 
-            <div class="divider">
-                <hr>
-            </div>
-            <Transition >
-                <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
+            
+        </header> 
+        <div class="divider">
+           <hr>
+        </div>
+        <Transition >
+            <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub_menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="activeMenuIndex = null">
                             <RouterLink to="">Выбор по параметрам</RouterLink>
@@ -185,33 +187,51 @@ export default {
                     </nav> 
                 </div>
             </Transition>
-        </header> 
     </div>
 </template>
 
 <style scoped>
 .wrapper {
+  
   height: var(--header-heigth);
   top:0;
   z-index: 1000;
-  min-width: calc(var(--ui-col) * 33);
   position: sticky;
   background-color: var(--vt-c-blue);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+
+}
+
+header {
+    min-width: calc(var(--ui-col)* 33);
+    height: var(--header-heigth);
+    display: flex;
+    width: 60%;
+    justify-content: center;
+   
 }
 
 .main-menu-container {
-
-  min-width: calc(var(--ui-col) * 33);  
+   min-width: calc(var(--ui-col)* 33);
+   width: 100%;
+  padding: 12px 12px 12px 12px;
   display: flex;
-  gap: 60px;
+
+  gap: 2rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  
   color: var(--vt-c-white);
 
 }
 
 .logo {
-  padding-left: 8px;
+  min-height: 50px;
+  height: 3.5rem;
+  width: auto;
 }
 
 
@@ -219,10 +239,11 @@ nav {
   
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 2rem;
   flex-wrap: nowrap;
   white-space: nowrap;
   align-items: center;
+  justify-content: center;
   font-size: var(--font-size-normal);
   position: relative;
 }
@@ -232,7 +253,7 @@ nav a {
   position: relative;
   text-decoration: none;
   border-bottom: 0 solid var(--vt-c-indigo);
-  line-height: 4.8;
+
   transition: 0.2s;
 }
 
@@ -251,7 +272,7 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   position: relative;
   text-decoration: none;
   border-bottom: 0 solid var(--vt-c-indigo);
-  line-height: 4.8;
+
   transition: 0.2s;
 }
 .nav-active:after {
@@ -261,6 +282,13 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   width: 0;
   position: absolute;
   background-color: var(--vt-c-black);;
+}
+
+.header-media {
+  gap: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .icon-humberger{
@@ -273,6 +301,7 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   height: 3px;
   left: 50%;
   width: 0;
+
   position: absolute;
   background-color: var(--vt-c-indigo);;
   transition: all 0.4s;
@@ -313,7 +342,6 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-right: 10px;
 }
 
 .icon {
@@ -323,12 +351,21 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
 
 .divider hr {
   border-color: var(--vt-c-light-blue);
+  width: 100%;
+  z-index: 1001;
+  position: absolute;
+  left: 0;
 }
 
 .wraper-sub-menu{
+  margin-top: var(--header-heigth);
+  height: var(--header-heigth);
   position: absolute;
   width: 100%;
   min-width: calc(var(--ui-col) * 32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--vt-c-white);
   background-color: var(--vt-c-blue);
 
@@ -336,7 +373,8 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
 
 .sub-menu {
   justify-content: center;
-   transition: opacity 0.5s linear;
+  height: 100%;
+  transition: opacity 0.5s linear;
 }
 
 .sub-menu a{

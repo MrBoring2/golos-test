@@ -30,10 +30,8 @@ export default {
   ,
   data() {
     return{
-      max_items: this.content.length,
-      max_visible_items: 4,
-      currentVisibleItems: this.max_visible_items,
-      min_visible_items: 1,
+      maxItems: this.content.length,
+      currentVisibleItems: this.maxVisibleItems,
       progress_value: 1,
       currentIndex: 0,
       dragStartX: 0,
@@ -41,14 +39,18 @@ export default {
       isDragging: 0,
       isDragged: false,
       preventHref: false,
-      mediaQuery: null
+      mediaQuery: null,
+      startTranslateX: 0,
+      currentTranslateX: 0,
+      sensetivity: 3,
+      step: 0,
     }
   },
   mounted() {
-    //не знаю, вредит ли
     this.mediaQuery = window.matchMedia("(max-width: 900px)");
     const handleMediaChange = (e) => {
-        this.currentVisibleItems = e.matches == true ? this.min_visible_items : this.max_visible_items
+        this.currentVisibleItems = e.matches == true ? this.minVisibleItems : this.maxVisibleItems;
+        this.sensetivity = e.matches == true ? 1 : 3;
         if(e.matches == false){
             this.currentIndex = 0;
         }
@@ -74,21 +76,29 @@ export default {
             }
         }
         return styles;
-      }
+      },
+      getSliderItemWidth(){
+          return this.$refs.sliderWindow.offsetWidth  / this.currentVisibleItems;
+      },
+      maxAllowedIndex() {
+    return Math.max(0, this.content.length - this.currentVisibleItems);
+  }
     },
       inject: ['openConsultationRequestDrawer'],
   methods: {
     next() {
-      this.currentIndex = this.currentIndex < (this.max_items - this.currentVisibleItems) ? this.currentIndex += 1 : 0;
+        this.currentIndex = this.currentIndex < this.maxAllowedIndex ? this.currentIndex+=1 : 0;
+    
     },
     prev() {
-      this.currentIndex = this.currentIndex > 0 ? this.currentIndex-=1 : this.currentIndex = this.max_items - this.currentVisibleItems;
+      this.currentIndex = this.currentIndex > 0 ? this.currentIndex-=1 : this.maxAllowedIndex;
     },
     handleDragStart(e) {
-      
         this.isDragging = true,
         this.dragStartX = e.clientX || e.touches[0].clientX
+        this.startTranslateX = this.currentIndex * (100 / this.currentVisibleItems);
         this.offsetX = 0;
+        this.$refs.sliderInner.style.transition = 'none';
  
     },
     handleDragMove(e) {
@@ -96,29 +106,42 @@ export default {
         this.isDragged = true;
         const dragX = e.clientX || e.touches[0].clientX;
         this.offsetX = dragX - this.dragStartX;
+      
+        const slidesMoved = this.offsetX / this.getSliderItemWidth;
 
-        const maxOffset = this.$refs.sliderWindow.offsetWidth / 2;
-        if(Math.abs(this.offsetX) > maxOffset) {
-            this.offsetX = this.offsetX > 0 ? maxOffset: -maxOffset;
-        }
+        this.currentTranslateX = (this.startTranslateX - (slidesMoved * 100 / this.currentVisibleItems));
+
+        const maxTranslate = this.maxAllowedIndex * (100 / this.currentVisibleItems);
+        this.currentTranslateX = Math.max(0, Math.min(this.currentTranslateX, maxTranslate));
+        this.$refs.sliderInner.style.transform = `translateX(-${this.currentTranslateX}%`;
         this.preventHref = true;
-       
-
             
     },
     handleDragEnd(e) {
         if(!this.isDragging) return;
-        
 
         this.isDragging = false;
-        const theshold = this.$refs.sliderWindow.offsetWidth * 0.1;
+        this.$refs.sliderInner.style.transition = 'transform 0.7s ease';
+        const threshold = this.$refs.sliderWindow.offsetWidth * 0.1;
+        const pxPerPercent = this.$refs.sliderWindow.offsetWidth / 100;
+        const translateXPercent = this.offsetX / pxPerPercent;
+        
+        const sliderStep = Math.floor(Math.abs(this.offsetX / this.getSliderItemWidth));
+        const remains = this.offsetX % this.getSliderItemWidth;
+        const delta = Math.round(Math.abs(remains) / this.getSliderItemWidth);
 
-        if(this.offsetX > theshold) {
-            this.prev()
+        if (Math.abs(this.offsetX) > threshold) {
+            if (this.offsetX > 0) {
+                this.currentIndex = this.currentIndex > sliderStep + delta  ? this.currentIndex - sliderStep - delta : 0;
+            } else {
+                const predictedIndex = this.currentIndex + sliderStep + delta;
+                this.currentIndex =  predictedIndex > this.maxAllowedIndex ? this.maxAllowedIndex : predictedIndex;
+            
+            }
         }
-        else if (this.offsetX < -theshold){
-            this.next()
-        }
+        this.currentTranslateX = this.currentIndex * (100 / this.currentVisibleItems);
+        this.$refs.sliderInner.style.transform = `translateX(-${this.currentTranslateX}%)`;
+
         if(this.offsetX != 0){
               this.preventHref = true;
         }
@@ -126,8 +149,7 @@ export default {
               this.preventHref = false;
         }
 
-        this.offsetX = 0;
-          
+        this.offsetX = 0;       
     },
     navigate(href, targetBlank){
         let target = '';
@@ -154,7 +176,7 @@ export default {
                 {{title}}
             </p>
         </div>
-        <div class="slider-controls" v-if="max_items > currentVisibleItems">
+        <div class="slider-controls" v-if="maxItems > currentVisibleItems">
             <button @click="prev">
                  <font-awesome-icon class="button-icon"  icon="fa-solid fa-chevron-left" />
             </button>
@@ -174,8 +196,8 @@ export default {
             </div>
             </Transition>
             
-            <div class="slider-inner" :style="{ transform: `translateX(-${currentIndex * (100 / currentVisibleItems)}%)`}">
-            <div class="slider-item" v-for="(slide, index) in content" :key="index" @click="canOpenConsultationDrawer ? openDrawer() : navigate(slide.href, true)">      
+            <div class="slider-inner" ref="sliderInner" :style="{ transform: `translateX(-${currentIndex * (100 / currentVisibleItems)}%)`}">
+            <div class="slider-item" v-for="(slide, index) in content" :key="index" @click="canOpenConsultationDrawer ? openDrawer() : navigate(slide.href, true)" :style="{minWidth: `${100 / currentVisibleItems}%`}">      
                 <div class="slider-item-container">
                 <img class="slider-image" :src="slide.image"/>
                 <div class="slider-item-title-anim">
@@ -200,7 +222,7 @@ export default {
     padding-left: 10px;
     padding-right: 10px;
     min-width: calc(var(--ui-col) * 33);
-    width: 80%;
+    width: 60%;
     gap: 40px;
     display: flex;
     flex-direction: column;
@@ -319,8 +341,6 @@ export default {
   line-height: 1;
   flex-direction: column;
   justify-content: center;
-
-  min-width: calc(100% / 4);
   font-weight:500;
   box-sizing: border-box;
   text-align: left;

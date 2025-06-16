@@ -66,7 +66,7 @@ export default {
 <style scoped>
 
   .golos-info-container {
-    width: 80%;
+    width: 60%;
     min-width: calc(var(--ui-col) * 33);
     
   }
@@ -74,8 +74,8 @@ export default {
   .golos-info-content {
     width: 100%;
     font-size: var(--font-size-normal);
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
     display: flex;
     justify-content: space-between;
     gap: 50px;

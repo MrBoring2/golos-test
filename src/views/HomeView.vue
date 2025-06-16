@@ -110,11 +110,11 @@ export default {
     <MainImageTitle @scroll-to="scrollTo"/>
     <GolosInfo ref="golos-info"/>
     <OrderCall ref="order-call"/>
-    <Slider :title="sliderFeaturesTitle" :content="sliderFeaturesContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"  :canOpenConsultationDrawer="true"/>
+    <Slider class="slider" :title="sliderFeaturesTitle" :content="sliderFeaturesContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"  :canOpenConsultationDrawer="true"/>
     <Advanteges/>
     <PreFinishing ref="pre-finishing"/>
     <AboutTheBuilder ref="about-the-builder"/>
-    <Slider :title="sliderProjectsTitle" :content="sliderProjectsContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"/>
+    <Slider class="slider"  :title="sliderProjectsTitle" :content="sliderProjectsContent" :maxVisibleItems="sliderMaxVisibleItems" :minVisibleItems="sliderMinVisibleItems"/>
     <AnyQuestions/>
   </main>
   
@@ -129,6 +129,10 @@ export default {
     justify-content: start;
     align-items: center;   
     gap: 80px; 
+    
+}
+.slider {
+  width: 60%;
 }
 
 </style>
