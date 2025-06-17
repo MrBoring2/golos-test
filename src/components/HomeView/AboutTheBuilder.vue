@@ -30,7 +30,7 @@ export default {
 
 
 <template>
-  <div id="about-the-builder" class="about-the-builder-container">
+  <div class="about-the-builder-container">
     <div class="about-the-builder-content">
       <div class="about-the-builder-text">
         <div class="about-the-builder-text-container">
@@ -86,7 +86,7 @@ export default {
     padding-right: 10px;
     display: flex;
     justify-content: space-between;
-    gap: 50px;
+    gap: 3rem;
   }
   .about-the-builder-text {
     display: flex;
@@ -128,7 +128,7 @@ export default {
 
   .about-the-builder-text-content {
     
-    font-size: var(--font-size-normal2);
+    font-size: var(--font-size-normal);
   }
 
   .about-the-builder-image-container {
@@ -142,8 +142,8 @@ export default {
     background-size: cover;
   
     height: 100%;
-    min-width: calc(var(--ui-unit)*152);
-    min-height: calc(var(--ui-unit)*132);
+    min-width: 39rem;
+    min-height: 35rem;
   
   }
 
@@ -159,8 +159,8 @@ export default {
     align-items: center;
     justify-content: space-around;
     background-color: var(--vt-c-white);
-    width: 50px;
-    height: 50px;
+    width: 3rem;
+    height: 3rem;
     border-radius: 10px;
     border: solid;
     border-width: 1px;
@@ -206,8 +206,8 @@ export default {
   }
 
   .go-to-site-button-container button {
-    width: 200px;
-    height: 50px;
+    width: 15rem;
+    height: 3rem;
     border-radius: 10px;
     background-color: var(--vt-c-blue);
     border-width: 0;
@@ -222,7 +222,7 @@ export default {
   }
 
   .img-full-size img {
-    height: 100%;
+    height: 95%;
     object-fit:cover;
   }
 
@@ -232,6 +232,8 @@ export default {
   
   .icon-bold {
        position: absolute;
+       width: 2.5rem;
+       height: 2.5rem;
   }
 
   
@@ -299,6 +301,18 @@ export default {
       min-width: 100%;
        min-height: calc(var(--ui-unit)*80);
       background-size: cover;
+    }
+     .img-full-size {
+      justify-content: start;
+    }
+
+    .img-full-size img {
+    width: 100%;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+   
+    object-fit:cover;
     }
   }
 

@@ -1,4 +1,5 @@
 <script>
+import { computed } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 
 export default {
@@ -10,6 +11,7 @@ export default {
       dragStartX: 0,
       offsetX : 0,
       isDragging: 0,
+      carouselWidth: 0
     }
   },
   inject: ['openConsultationRequestDrawer'],
@@ -22,41 +24,72 @@ export default {
       this.currentIndex = (this.currentIndex - 1 + 3) % 3;
       this.progress_value = this.currentIndex + 1;
     },
+    
     handleDragStart(e) {
       
         this.isDragging = true,
         this.dragStartX = e.clientX || e.touches[0].clientX
+        this.startTranslateX = this.currentIndex * (100 / 1);
         this.offsetX = 0;
+        
+        this.$refs.carouselInner.style.transition = 'none';
  
     },
     handleDragMove(e) {
         if(!this.isDragging) return;
-        
         const dragX = e.clientX || e.touches[0].clientX;
         this.offsetX = dragX - this.dragStartX;
+       // console.log(this.offsetX)
+         console.log(this.getCarouselItemWidth)
+        const slidesMoved = this.offsetX / this.getCarouselItemWidth;
 
-        const maxOffset = this.$refs.carouselWindow.offsetWidth / 2;
-        if(Math.abs(this.offsetX) > maxOffset) {
-            this.offsetX = this.offsetX > 0 ? maxOffset: -maxOffset;
-        }
-        this.preventHref = true;
+        this.currentTranslateX = (this.startTranslateX - (slidesMoved * 100 / 1));
+      
+        const maxTranslate = this.maxAllowedIndex * (100 / 1);
+        this.currentTranslateX = Math.max(0, Math.min(this.currentTranslateX, maxTranslate));
        
-
-            
+        this.$refs.carouselInner.style.transform = `translateX(-${this.currentTranslateX}%`;
+        this.preventHref = true;
     },
     handleDragEnd(e) {
         if(!this.isDragging) return;
-        
 
         this.isDragging = false;
-        const theshold = this.$refs.carouselWindow.offsetWidth * 0.1;
+        this.$refs.carouselInner.style.transition = 'transform 0.7s ease';
+        const threshold = this.$refs.carouselWindow.offsetWidth * 0.1;
+        
+        const sliderStep = Math.floor(Math.abs(this.offsetX / this.getCarouselItemWidth));
+        const remains = this.offsetX % this.getCarouselItemWidth;
+        const delta = Math.round(Math.abs(remains) / this.getCarouselItemWidth);
 
-        if(this.offsetX > theshold) {
-            this.prev()
+        if (Math.abs(this.offsetX) > threshold) {
+            if (this.offsetX > 0) {
+             
+              if(this.currentIndex > sliderStep + delta){
+                this.currentIndex = this.currentIndex - sliderStep - delta
+                this.progress_value = this.currentIndex + 1; 
+             
+              }
+              else {
+                this.currentIndex = 0;
+                this.progress_value = 1;
+              }              
+            } else {
+             
+                const predictedIndex = this.currentIndex + sliderStep + delta;
+                if( predictedIndex > this.maxAllowedIndex){
+                  this.currentIndex = this.maxAllowedIndex;
+                  this.progress_value = 3; 
+                }
+                else {
+                  this.currentIndex = predictedIndex;
+                  this.progress_value = this.currentIndex + 1;
+                } 
+            }
         }
-        else if (this.offsetX < -theshold){
-            this.next()
-        }
+        this.currentTranslateX = this.currentIndex * (100 / 1);
+        this.$refs.carouselInner.style.transform = `translateX(-${this.currentTranslateX}%)`;
+
         if(this.offsetX != 0){
               this.preventHref = true;
         }
@@ -69,13 +102,22 @@ export default {
     },
     openDrawer() {
       this.openConsultationRequestDrawer();
+    },
+    
+  },
+  computed: {
+      getCarouselItemWidth(){
+          return this.$refs.carouselWindow.offsetWidth  / 1;
+      },
+      maxAllowedIndex() {
+        return Math.max(0, 2);
+      },
     }
-  }
 }
 </script>
 <template>
-  <div class="promo-carousel">
-    <div class="promo-carousel-inner" ref="carouselWindow" :style="{ transform: `translateX(-${currentIndex * 100}%)` }" @touchstart="handleDragStart" @touchmove="handleDragMove" @touchend="handleDragEnd"
+  <div class="promo-carousel" ref="carouselWindow">
+    <div class="promo-carousel-inner" ref="carouselInner" :style="{ transform: `translateX(-${currentIndex * 100}%)` }" @touchstart="handleDragStart" @touchmove="handleDragMove" @touchend="handleDragEnd"
                                     @mousedown="handleDragStart" @mousemove="handleDragMove" @mouseup="handleDragEnd" @mouseleave="handleDragEnd" >
       <div class="promo-carousel-item">
         <p class="promo-acousel-item-title">Удвоим материнский капитал</p>
@@ -124,7 +166,7 @@ export default {
 
   margin-right: 10px;
   background-color: var( --vt-c-blue);
-  border-radius: 20px;
+  border-radius: 1rem;
   width: 20rem;
   padding-bottom: 15px;
 }
@@ -142,7 +184,7 @@ export default {
   justify-content: start;
   align-items: flex-start;
   min-width: 100%;
-  padding: 20px;
+  padding: 1rem;
   gap: 20px;
   font-weight:500;
   box-sizing: border-box;

@@ -96,14 +96,13 @@ export default {
     padding-right: 10px;
     display: flex;
     justify-content: space-between;
-    gap: 50px;
+    gap: 3rem;
   }
   .pre-finishing-text {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    gap: 40px;
-    width: 60%;
+    gap: 3rem;
   }
 
   .pre-finishing-text-container {
@@ -111,7 +110,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 2rem;
   }
 
   .pre-finishing-text-title {
@@ -122,14 +121,14 @@ export default {
   .pre-finishing-text-content {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    font-size: var(--font-size-normal2);
+    gap: 2.5rem;
+    font-size: var(--font-size-normal);
       text-align: start;
          color: var(--vt-c-middle-gray);
   }
   .pre-finishing-text-content ul {
     list-style: outside;
-    padding: 0 0 0 20px;
+    padding: 0 0 0 1.4rem;
     text-align: start;
 
   }
@@ -143,10 +142,10 @@ export default {
 
     border-radius: 30px;
     background-size: cover;
-  
+    background-position: center;
     height: 100%;
-    min-width: calc(var(--ui-unit)*152);
-    min-height: calc(var(--ui-unit)*132);
+    min-width: 40rem;
+    min-height: 40rem;
   
   }
 
@@ -162,8 +161,8 @@ export default {
     align-items: center;
     justify-content: space-around;
     background-color: var(--vt-c-white);
-    width: 50px;
-    height: 50px;
+    width: 3rem;
+    height: 3rem;
     border-radius: 10px;
     border: solid;
     border-width: 1px;
@@ -209,8 +208,8 @@ export default {
   }
 
   .learn-more-button-container button{
-    width: 200px;
-    height: 50px;
+    width: 15rem;
+    height: 3rem;
     border-radius: 10px;
     background-color: var(--vt-c-blue);
     border-width: 0;
@@ -225,12 +224,14 @@ export default {
   }
 
   .img-full-size img {
-    height: 100%;
+    height: 95%;
     object-fit:cover;
   }
   
   .icon-bold {
        position: absolute;
+       width: 2.5rem;
+       height: 2.5rem;
   }
 
   
@@ -299,6 +300,19 @@ export default {
       min-height: calc(var(--ui-unit)*80);
       background-size: cover;
     }
+
+    .img-full-size {
+      justify-content: start;
+    }
+
+    .img-full-size img {
+    width: 100%;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+   
+    object-fit:cover;
+  }
   }
 
 </style>

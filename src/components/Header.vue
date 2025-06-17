@@ -1,5 +1,6 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
+import eventBus from '@/scripts/event-bus'
 import logo from './../assets/images/logo.png'
 export default {
     data() {
@@ -20,8 +21,12 @@ export default {
               {name: "О застройщике"},
               {name: "Контакты"}
             ],
-            modileDrawerOpen: false
+            mobileDrawerOpen: false,
+            activeLink: null
         }
+    },
+    mounted() {
+         console.log('Available refs:', Object.keys(this.$refs));
     },
     methods: {
         setActiveSubMenu(index) {
@@ -33,20 +38,26 @@ export default {
             }
         },
         keepSubMenuOpen(index) {
-            if(index == 0 || index == 3) {
+            if(this.activeMenuIndex == index &&  (index == 0 || index == 3)) {
                 this.activeMenuIndex = index;
             }
         },
         openMobileMenuDrawer(){
-          this.modileDrawerOpen = !this.modileDrawerOpen;
+          this.mobileDrawerOpen = !this.mobileDrawerOpen;
         },
-        scrollToElement(sectionId) {
-          const element = document.getElementById(sectionId);
-          if (element) {
-           element.scrollIntoView({ behavior: 'smooth' });
-          }
-          if(this.modileDrawerOpen) this.modileDrawerOpen = false;
+          scrollToElement(sectionId) {
+             eventBus.$emit('scroll-to', sectionId)
+             if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false;
 
+        },
+        closeSubMenu(){
+          console.log('act')
+          this.activeMenuIndex = null
+        },
+        
+        
+        setLinkActive(link){
+          this.activeLink = link
         }
     }
 }
@@ -56,7 +67,7 @@ export default {
     <div class="wrapper">
         <header>
           <Transition>
-            <div class="mobile-menu-drawer" v-if="modileDrawerOpen">
+            <div class="mobile-menu-drawer" v-if="mobileDrawerOpen">
               <div class="mobile-menu-header">
                 <div>
                     <img class="logo" :src="logo" height="30px"></img>
@@ -73,7 +84,7 @@ export default {
                 </div>
                 <nav>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="">
+                        <RouterLink to="/">
                           Выбор квартир
                         </RouterLink>
                       </div>
@@ -88,7 +99,7 @@ export default {
                       </RouterLink>
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="" @click="scrollToElement('about-the-builder')">
+                        <RouterLink to="/"  @click="scrollToElement('about-the-builder')">
                           О застройщике
                       </RouterLink>  
                       </div>
@@ -140,16 +151,16 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to=""  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0 }">
+                    <RouterLink to=""  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0}">
                           Выбор квартир
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(1)">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'sposobi'}" @mousedown="setLinkActive('sposobi')">
                           Способы получения
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(2)">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == 'building-plan'}" @mousedown="setLinkActive('building-plan')">
                           Ход строительства
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3 }">
+                      <RouterLink to=""  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3}">
                           Ещё
                       </RouterLink>
                 </nav> 
@@ -171,19 +182,19 @@ export default {
         </div>
         <Transition >
             <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
-                    <nav class="sub_menu" @mouseenter="keepSubMenuOpen(0)"
-                        @mouseleave="activeMenuIndex = null">
-                            <RouterLink to="">Выбор по параметрам</RouterLink>
-                            <RouterLink to="">Выбор с генплана</RouterLink>
+                    <nav class="sub-menu" @mouseenter="keepSubMenuOpen(0)"
+                        @mouseleave="closeSubMenu">
+                            <RouterLink to="/">Выбор по параметрам</RouterLink>
+                            <RouterLink to="/">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  
             </Transition>
             <Transition>
                 <div class="wraper-sub-menu"  v-if="activeMenuIndex === 3" >
-                    <nav class="sub_menu" @mouseenter="keepSubMenuOpen(3)"
-                        @mouseleave="activeMenuIndex = null">
-                    <RouterLink to="" @click="scrollToElement('about-the-builder')">О застройщике</RouterLink>
-                    <RouterLink to="">Контакты</RouterLink>
+                    <nav class="sub-menu" @mouseenter="keepSubMenuOpen(3)"
+                        @mouseleave="closeSubMenu">
+                    <RouterLink to="/" @click="scrollToElement('about-the-builder')" @mousedown="setLinkActive('about-the-builder')" :class="{ 'active': activeLink == 'about-the-builder'}">О застройщике</RouterLink>
+                    <RouterLink to="/" :class="{ 'active': activeLink == 'contacts'}" >Контакты</RouterLink>
                     </nav> 
                 </div>
             </Transition>
@@ -234,9 +245,7 @@ header {
   width: auto;
 }
 
-
 nav {
-  
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -257,10 +266,11 @@ nav a {
   transition: 0.2s;
 }
 
-nav a:hover:after, nav a:focus:after {
+nav a:hover:after, nav a:after {
   width: 100%;
   left: 0;
 }
+
 
 nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   color:var(--vt-c-indigo);
@@ -295,13 +305,35 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
   display: none;
 }
 
+.active {
+  color: var(--vt-c-indigo);
+  position: relative;
+  text-decoration: none;
+  border-bottom: 0 solid var(--vt-c-indigo);
+
+  transition: 0.2s;
+}
+.active:after {
+  display: block;
+  content: "";
+  height: 3px;
+  width: 100% !important; /* Фиксированная ширина (вместо 0) */
+  left: 0 !important; /* Выравнивание по левому краю (вместо 50%) */
+  position: absolute;
+  bottom: calc(var(--header-heigth) / -2 + 0.5em);
+  background-color: var(--vt-c-indigo);
+  transition: none; /* Убираем анимацию, если нужно статичное подчёркивание */
+}
+
+
 .main-menu a:after{
   display: block;
   content: "";
   height: 3px;
   left: 50%;
   width: 0;
-
+  z-index: 1002;
+  bottom: calc(var(--header-heigth) / -2 + 0.5em);
   position: absolute;
   background-color: var(--vt-c-indigo);;
   transition: all 0.4s;
@@ -372,26 +404,13 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
 }
 
 .sub-menu {
-  justify-content: center;
+  width: 100%;
   height: 100%;
-  transition: opacity 0.5s linear;
-}
-
-.sub-menu a{
-   color: var(--color-text);
-  position: relative;
-  text-decoration: none;
-  transition: 0.2s; 
 }
 
 .sub-menu a:after{
-  display: block;
-  content: "";
-  height: 3px;
-  width: 0;
-  position: absolute;
-  background-color: var(--vt-c-indigo);;
-  transition: all 0.4s; 
+  width: 0% !important;
+  left: 0;
 }
 
 .v-enter-active{
@@ -537,11 +556,20 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
     display: none;
   }
 
+  header {
+     min-width: 100%;
+  }
+
+  .icons {
+    font-size: var(--font-size-normal-mini);
+  }
+
   
 
   .wrapper {
-    
+
     min-width: 100%;
+
   }
 
   .main-menu-container {

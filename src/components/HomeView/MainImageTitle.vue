@@ -1,4 +1,5 @@
 <script>
+import eventBus from '@/scripts/event-bus'
 import new_center from './../../assets/images/new_center.png'
 import AdsCarousel from '@/components/HomeView/PromoCarousel.vue'
 
@@ -10,10 +11,10 @@ export default {
     },
     methods: {
         moveToGolosInfo() {
-            this.$emit('scroll-to', 'golos-info')
+            eventBus.$emit('scroll-to', 'golos-info')
         },
         moveToPreFinishing() {
-            this.$emit('scroll-to', 'pre-finishing')
+            eventBus.$emit('scroll-to', 'pre-finishing')
         }
     },
     components: {
@@ -56,7 +57,7 @@ export default {
 
 
 .main-title-content {
-     box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
     min-height: calc(100dvh - var(--header-heigth));
     min-width: 100%;
@@ -66,17 +67,15 @@ export default {
     justify-content: space-between;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
-    
+    background-position: center;  
 }
 .main-image-title-container {
     width: 100%;
-   
 }
 
 .main-title-img {
     z-index: -100;
-     position: absolute;
+    position: absolute;
     object-fit: cover;
     filter: brightness(70%);
     width: 100%;
@@ -85,13 +84,11 @@ export default {
 }
 
 .top-title-container{
- 
     width: 60%;
     min-width: calc(var(--ui-col) * 33);
     display: flex;
     gap: 40px;
     flex-direction: column;
-   
 }
 
   
@@ -119,7 +116,7 @@ export default {
 }
 
 .learn-more {
-     padding-left: 10px;
+    padding-left: 10px;
     width: 60%;
   
 }
@@ -127,9 +124,9 @@ export default {
 
 .learn-more button {
      font-size: var(--font-size-normal);
-     width: 12em;
-     height: 50px;
-     border-radius: 10px;
+     width: 12rem;
+     height: 3rem;
+     border-radius: 0.5rem;
      border-width: 0;
      background-color: var(--vt-c-white);
      transition: 0.2s;
@@ -158,7 +155,7 @@ export default {
     background-color: var(--vt-c-dark-purple);
     height: 3rem;
     width: 3rem;
-    border-radius: 40px;
+    border-radius: 2rem;
     border-width: 0;
     font-size: var(--font-size-normal);
     text-align: center;
@@ -182,7 +179,7 @@ export default {
         font-size: var(--font-size-normal4);
     
     }
-
+  
     .main-title-container, .sub-title-container, .learn-more {
         min-width: 100%;
     }
@@ -197,7 +194,7 @@ export default {
     
     .learn-more {
         width: 100%;
-        padding: 0 10px;
+        padding-right: 10px;
     }
     .learn-more button {
         width: 100%;

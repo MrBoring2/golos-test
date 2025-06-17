@@ -10,7 +10,7 @@
                 <p class="description">Одним из преимуществ локации является отличная транспортная доступность, благодаря которой есть возможность добраться в любую часть города. Рядом с кварталом есть остановки общественного транспорта, магазины, рестораны, фитнес-центры, детские сады, школы, больницы.</p>
             </div>
         </aside>
-        <div class="advantege-box-containver">
+        <div class="advantege-box-container">
             <div class="advantage-box">
                 <div class="advantage-box-title-container">
                     <p class="advantage-box-title-top">1</p>
@@ -64,7 +64,8 @@
         display: flex;
         min-width: calc(var(--ui-col) * 33);
         width: 60%;
-        gap: 130px;
+         margin-bottom: 20px;
+        position: relative;
         justify-content: space-between;
         align-items: start;
     }
@@ -74,7 +75,7 @@
         top: calc(var( --header-heigth) + 20px);
         position: sticky;
         min-height: 2em;
-        width: calc(var(--ui-unit)*100);
+        width: 25rem;
      
         flex-shrink: 0;
          justify-content: start;
@@ -100,8 +101,9 @@
         flex-direction: column;
     }
 
-    .advantege-box-containver {
+    .advantege-box-container {
         display: grid;
+        max-width: 70%;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(2, 1fr);
         gap: 15px;
@@ -115,8 +117,8 @@
        align-items: center;
        gap: 30px;
        padding: 30px;
-       width: auto;
-       height: 250px;
+       width:  15rem;
+       height: 15rem;
        border-radius: 20px;
     }
 
@@ -159,19 +161,36 @@
           
           
          }
+
+         .advantage-box-title-top {
+        font-size: var(--font-size-large4);
+                }
+            .advantage-box-title-bottom {
+                font-size: var(--font-size-mini);
+            }
+
+            .advantage-box-title-description {
+                 font-size: var(--font-size-mini);
+            }
+
          .text-container-inner {
               gap: 20px;
          }
 
-         .advantege-box-containver {
+         .advantage-box {
+            width: 100%;
+            height: auto;
+            padding: 15px;
+         }
+
+         .advantege-box-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(3, 1fr);
          }
-         .advantage-box {
-            min-width: 50%;
-             width: auto;
-         }
-
+       
          .title {
             font-size: var(--font-size-normal4);
          }

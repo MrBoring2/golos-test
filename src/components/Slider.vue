@@ -123,8 +123,6 @@ export default {
         this.isDragging = false;
         this.$refs.sliderInner.style.transition = 'transform 0.7s ease';
         const threshold = this.$refs.sliderWindow.offsetWidth * 0.1;
-        const pxPerPercent = this.$refs.sliderWindow.offsetWidth / 100;
-        const translateXPercent = this.offsetX / pxPerPercent;
         
         const sliderStep = Math.floor(Math.abs(this.offsetX / this.getSliderItemWidth));
         const remains = this.offsetX % this.getSliderItemWidth;
@@ -135,8 +133,7 @@ export default {
                 this.currentIndex = this.currentIndex > sliderStep + delta  ? this.currentIndex - sliderStep - delta : 0;
             } else {
                 const predictedIndex = this.currentIndex + sliderStep + delta;
-                this.currentIndex =  predictedIndex > this.maxAllowedIndex ? this.maxAllowedIndex : predictedIndex;
-            
+                this.currentIndex =  predictedIndex > this.maxAllowedIndex ? this.maxAllowedIndex : predictedIndex;   
             }
         }
         this.currentTranslateX = this.currentIndex * (100 / this.currentVisibleItems);
@@ -244,7 +241,6 @@ export default {
   overflow: hidden;
   position: relative;
   border-radius: 20px;
-  padding-bottom: 15px;
    user-select: none;
    flex-grow: 1;
   
@@ -302,14 +298,15 @@ export default {
 }
 
 .slider-controls button {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
     border-color:  var(--vt-c-blue);
     border-width: 1px;
     background: var(--vt-c-white);
     color: var(--vt-c-blue);
     transition: 0.2s;
+    font-size: var(--font-size-normal);
 }
 
 .slider-controls button:hover {
@@ -362,7 +359,7 @@ export default {
     background-position: left;
     background-repeat: no-repeat;
     background-position: center;
-    height: calc(var(--ui-unit) * 100);
+    height: 25rem;
     background-color: var(--vt-c-black);
     display: flex;
     align-items: center;
@@ -458,6 +455,7 @@ export default {
     .slider-container {
         min-width: 100%;
         gap: 10px;
+       margin: 0;
     }
     .slider-header{
        justify-content: space-between;
@@ -467,6 +465,7 @@ export default {
 
     .slider {
         margin-top: 10px;
+       
     }
     
     .slider-title {

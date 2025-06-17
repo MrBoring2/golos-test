@@ -80,9 +80,9 @@ export default{
                             'error-border': !isConfirm && isConfirm != null }"/>
                         <label class="checkbox-text" for="checkbox_bottom">
                             <p>Принимаю</p>
-                            <RouterLink to="/about">политику конфиденциальности</RouterLink>
+                            <RouterLink to="/">политику конфиденциальности</RouterLink>
                             <p> и даю согласие на</p>
-                            <RouterLink to="/about"> обработку персональных данных</RouterLink>
+                            <RouterLink to="/"> обработку персональных данных</RouterLink>
                         </label>
                     </div>
             </div>
@@ -93,6 +93,7 @@ export default{
 <style scoped>
 .any-questions-container {
     width: 100%;
+
     background-color: var(--vt-c-blue);
     display: flex;
     align-items: center;
@@ -142,8 +143,14 @@ export default{
 
  @media (max-width: 900px) {
     .any-questions-content{
-           min-width: 90%;
-           width: 90%;
+           min-width: 100%;
+           width: 100%;     
+    }
+    .any-questions-container {
+        padding: 0 10px;
+    }
+    .any-questions-subtitle {
+        font-size: var(--font-size-mini);
     }
     .order-call-form-content {
         flex-direction: column;

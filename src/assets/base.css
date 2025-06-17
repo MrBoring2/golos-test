@@ -4,11 +4,14 @@
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
   --vt-c-blue: #1272E8ff;
+  --vt-c-dark-blue: #1166d1;
   --vt-c-dark-purple: #07071f;
   --vt-c-black: #000;
   --vt-c-light-blue:#4e99f5;
   --vt-c-light-blue-lighter: #84b9fa;
-  --vt-c-white-blue: #f3f6fb;
+
+  --vt-c-white-blue: #cee1f8;
+  --vt-c-white-blue2: #f3f6fb;
   --vt-c-gray-blue: #2e3442;
   --vt-c-light-gray: #f3f6fb;
   --vt-c-light-gray2: #dfdfe2;

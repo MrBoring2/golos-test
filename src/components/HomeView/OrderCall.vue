@@ -78,9 +78,9 @@ export default{
                             'error-border': !isConfirm && isConfirm != null }"/>
                         <label class="checkbox-text" for="checkbox">
                             <p>Принимаю</p>
-                            <RouterLink to="/about">политику конфиденциальности</RouterLink>
+                            <RouterLink to="/">политику конфиденциальности</RouterLink>
                             <p> и даю согласие на</p>
-                            <RouterLink to="/about"> обработку персональных данных</RouterLink>
+                            <RouterLink to="/"> обработку персональных данных</RouterLink>
                         </label>
                     </div>
             </div>
@@ -141,6 +141,7 @@ export default{
     display: flex;
     justify-content: end;
     gap: 20px;
+    padding-bottom: 2rem;
 
 }
 
@@ -177,6 +178,7 @@ export default{
 
     .order-call-text {
         font-size: var(--font-size-normal3);
+        width: 80%;
     }
 
     .order-call-content {
@@ -202,14 +204,12 @@ export default{
 
     .order-call-form {
         gap: 20px;
+        padding-bottom: 0;
+         width: 100%;;
     }
 
-    .order-call-form-content input {
+    .order-call-form-content input, .order-call-form-content button {
         width: 100%;
-    }
-
-    .order-call-form-content button {
-        min-height: calc(var(--ui-unit)*12);
     }
 
     .custom-checkbox-container{
@@ -222,12 +222,8 @@ export default{
         min-width: 15px;
     }
 
-    .checkbox-text {
-        font-size: var(--font-size-mini2);
-    }
-
-    .order-call-form {
-        width: 100%;;
+    .order-call-form-content {
+       padding-bottom: 0;
     }
 }
 

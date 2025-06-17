@@ -115,9 +115,9 @@ export default {
                             'error-border': !isConfirm && isConfirm != null }"/>
                         <label class="checkbox-text" for="checkbox">
                             <p>Принимаю</p>
-                            <RouterLink to="/about">политику конфиденциальности</RouterLink>
+                            <RouterLink to="/">политику конфиденциальности</RouterLink>
                             <p> и даю согласие на</p>
-                            <RouterLink to="/about"> обработку персональных данных</RouterLink>
+                            <RouterLink to="/"> обработку персональных данных</RouterLink>
                         </label>
                     </div>
                     </div>
@@ -246,6 +246,9 @@ export default {
     right: 0;
     top: 0;
     margin-top: 50px;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
     margin-right: 50px;
 }
 

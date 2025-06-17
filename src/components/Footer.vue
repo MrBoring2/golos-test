@@ -1,5 +1,6 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
+import eventBus from '@/scripts/event-bus'
 import logo from './../assets/images/logo.png'
 export default {
     data() {
@@ -7,6 +8,11 @@ export default {
             logo: logo
         }
     },
+    methods: {
+       scrollToElement() {
+             eventBus.$emit('scroll-to', 'golos-test')
+        }
+    }
 }
 </script>
 
@@ -40,7 +46,7 @@ export default {
             <div class="footer-components-production">
                 <div class="confidence">
                     <nav class="confidence-content">
-                        <RouterLink to="/">Информированное согласие пользователя сайта</RouterLink>
+                        <RouterLink to="/" @click="scrollToElement">Информированное согласие пользователя сайта</RouterLink>
                         <RouterLink  to="/">Политика в отношении обработки персональных данных</RouterLink>
                         <RouterLink  to="/">Политика конфиденциальности</RouterLink>
                     </nav>
@@ -210,6 +216,11 @@ footer{
     justify-content: start;
     align-items: start;
     gap: 20px;
+    min-width: 100%;
+  }
+
+  .footer-components-production {
+     min-width: 100%;
   }
 
   .golos-info {
