@@ -64,12 +64,13 @@
         display: flex;
         min-width: calc(var(--ui-col) * 33);
         width: 60%;
-         margin-bottom: 20px;
+        margin-bottom: 20px;
         position: relative;
         justify-content: space-between;
         align-items: start;
     }
     .text-container {
+        
         min-height: 100%;
         display: flex;
         top: calc(var( --header-heigth) + 20px);
@@ -92,7 +93,6 @@
     }
 
     .text-container-inner{
-        position: sticky;
         top:10px;
         height: 100%;
         gap: 40px;
@@ -110,7 +110,7 @@
     }
 
     .advantage-box {
-       background-color: var(--vt-c-white-blue);
+       background-color: var(--vt-c-white-blue2);
        display: flex;
        flex-direction: column;
        justify-content: center;

@@ -1,12 +1,15 @@
 <script>
 import eventBus from '@/scripts/event-bus'
-import new_center from './../../assets/images/new_center.png'
+import new_center from './../../assets/images/new_center.webp'
+import new_center_blur from './../../assets/images/new_center-blur.webp'
 import AdsCarousel from '@/components/HomeView/PromoCarousel.vue'
+import LazyImage from '../LazyImage.vue'
 
 export default {
     data() {
         return {
-            new_center_img: new_center
+            new_center_img: new_center,
+            new_center_blurImg: new_center_blur
         }
     },
     methods: {
@@ -18,7 +21,8 @@ export default {
         }
     },
     components: {
-        AdsCarousel
+        AdsCarousel,
+        LazyImage
     }
 }
 </script>
@@ -26,7 +30,7 @@ export default {
 <template>
     <div class="main-image-title-container">
         <div class="main-title-content">
-        <img :src="new_center_img" class="main-title-img"></img>
+        <LazyImage :src="new_center_blurImg" :lazy-src="new_center_img" class="main-title-img"/>
         <div class="top-title-container">
             <div class="main-title-container">
                 <p>ㅤ</p>
@@ -37,14 +41,18 @@ export default {
                 <p>Квартиры с предчистовой отделкой</p>
             </div>
             <div class="learn-more">
-                <button @click="moveToPreFinishing">Узнать бодробнее</button>
+                <RouterLink :to="{ path: '/', hash: '#pre-finishing' }">
+                    <button>Узнать бодробнее</button>
+                </RouterLink>             
             </div>
         </div>
         <div class="bottom-title-container">
             <div class="btn-down">
-                <button @click="moveToGolosInfo">
-                    <font-awesome-icon icon="fa-solid fa-arrow-down" size="xl"/> 
-                </button>
+                <RouterLink :to="{ path: '/', hash: '#golos-info' }">
+                    <button @click="moveToGolosInfo">
+                        <font-awesome-icon icon="fa-solid fa-arrow-down" size="xl"/> 
+                    </button>
+                </RouterLink>
             </div>
             <AdsCarousel class="carousel-desktop"/>
         </div>

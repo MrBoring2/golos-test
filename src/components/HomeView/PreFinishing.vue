@@ -26,6 +26,9 @@ export default {
     },
     openDrawer() {
       this.openConsultationRequestDrawer();
+    },
+    load() {
+      console.log('ss')
     }
   }
 }
@@ -34,7 +37,9 @@ export default {
 <template>
     <div class="pre-finishing-container">
         <div class="pre-finishing-content">
-            <div class="pre-finishing-image-container" :style="{ backgroundImage: `url(${pre_finihing_img})` }" @click="openFullSizeImg">
+            <div class="pre-finishing-image-container" @click="openFullSizeImg">
+              
+              <img :src="pre_finihing_img"/>
         <div class="size-icon-container">
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
@@ -66,9 +71,7 @@ export default {
         <div class="learn-more-button-container">
             <button @click="openDrawer">Узнать подробнее</button>
         </div>
-      </div>
-      
-     
+      </div>   
     </div>
     <Transition>
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
@@ -139,19 +142,26 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
-    border-radius: 30px;
-    background-size: cover;
-    background-position: center;
+    position: relative;
     height: 100%;
     min-width: 40rem;
     min-height: 40rem;
   
   }
 
+    .pre-finishing-image-container img{
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 2rem;
+    height: 100%;
+    position: absolute;
+  }
+
   .pre-finishing-image-container:hover .size-icon-container {
-    display: flex;
+      display: flex;
     opacity: 1;
+    z-index: 1;
     transform: all 0.5 easy;
   }
 
@@ -312,7 +322,7 @@ export default {
     padding-right: 10px;
    
     object-fit:cover;
-  }
+    }
   }
 
 </style>

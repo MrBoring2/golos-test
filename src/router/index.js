@@ -10,6 +10,23 @@ const router = createRouter({
       component: HomeView,
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+  if (to.hash) {
+    return {
+      el: to.hash,
+      behavior: 'smooth',
+      top: 100 // ваш отступ
+    };
+  }
+  if (savedPosition) {
+    return {
+      ...savedPosition,
+      behavior: 'smooth'
+  }
+  }
+  
+  return false;
+  },
 })
 
 export default router

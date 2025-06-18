@@ -1,5 +1,5 @@
 <script>
-import new_center from './../../assets/images/new_center.png'
+import new_center from './../../assets/images/new_center.webp'
 
 export default {
   data() {
@@ -50,7 +50,8 @@ export default {
         </div>
         </div>
       </div>
-      <div class="about-the-builder-image-container" :style="{ backgroundImage: `url(${new_center_img})` }" @click="openFullSizeImg">
+      <div class="about-the-builder-image-container" @click="openFullSizeImg">
+        <img :src="new_center_img"/>
         <div class="size-icon-container">
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
@@ -76,7 +77,6 @@ export default {
   .about-the-builder-container {
     width: 60%;
     min-width: calc(var(--ui-col) * 33);
-    
   }
 
   .about-the-builder-content {
@@ -88,6 +88,7 @@ export default {
     justify-content: space-between;
     gap: 3rem;
   }
+
   .about-the-builder-text {
     display: flex;
     flex-direction: column;
@@ -136,20 +137,25 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
-    border-radius: 30px;
-    background-position: center;
-    background-size: cover;
-  
+    position: relative;
     height: 100%;
     min-width: 39rem;
     min-height: 35rem;
   
   }
+    .about-the-builder-image-container img{
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 2rem;
+    height: 100%;
+    position: absolute;
+  }
 
   .about-the-builder-image-container:hover .size-icon-container {
     display: flex;
     opacity: 1;
+    z-index: 1;
     transform: all 0.5 easy;
   }
 

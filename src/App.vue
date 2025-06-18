@@ -5,7 +5,7 @@ import Footer from './components/Footer.vue'
 import AdsCarousel from './components/HomeView/PromoCarousel.vue'
 import CookieAgree from './components/CookieAgree.vue'
 import ConsultationRequest from './components/ConsultationRequest.vue'
-import logo from './assets/images/logo.png'
+import logo from './assets/images/logo.webp'
 import { computed } from 'vue'
 
 
@@ -53,8 +53,6 @@ export default {
     </div>
   </div>
   <Footer/>
-  
-  
 </template>
 
 <style scoped>

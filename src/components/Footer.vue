@@ -1,7 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import eventBus from '@/scripts/event-bus'
-import logo from './../assets/images/logo.png'
+import logo from './../assets/images/logo.webp'
 export default {
     data() {
         return {

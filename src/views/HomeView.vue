@@ -12,6 +12,7 @@ import AboutTheBuilder from '@/components/HomeView/AboutTheBuilder.vue'
 import AnyQuestions from '@/components/HomeView/AnyQuestions.vue'
 import Features from '@/components/HomeView/Features.vue'
 import PromoBlock from '@/components/HomeView/PromoBlock.vue'
+import IpotecaVariants from '@/components/HomeView/IpotecaVariants.vue'
 
 import architecture from './../assets/images/slider-images/architecture.png'
 import bulvar from './../assets/images/slider-images/bulvar.png'
@@ -143,7 +144,8 @@ export default {
     AboutTheBuilder,
     Features,
     AnyQuestions,
-    PromoBlock
+    PromoBlock,
+    IpotecaVariants
   }
 }
 </script>
@@ -151,15 +153,16 @@ export default {
 <template>
   <main class="main">
     <MainImageTitle @scroll-to="scrollTo"/>
-    <GolosInfo ref="golos-info"/>
+    <GolosInfo ref="golos-info" id="golos-info"/>
     <OrderCall ref="order-call"/>
     <Slider class="slider" :title="sliderFeaturesTitle" :content="sliderFeaturesContent" :maxVisibleItems="sliderMaxVisibleItems" 
                   :minVisibleItems="sliderMinVisibleItems"  :canOpenConsultationDrawer="true"/>
     <Advanteges/>
-    <PreFinishing ref="pre-finishing"/>
+    <PreFinishing ref="pre-finishing" id="pre-finishing"/>
    
     <Slider class="slider"  :title="sliderProjectsTitle" :content="sliderProjectsContent" :maxVisibleItems="sliderMaxVisibleItems"
                  :minVisibleItems="sliderMinVisibleItems"/>
+    <IpotecaVariants id="ipoteca-variants"/>
     <PromoBlock :title="discountPromoBlockContent.title" :description="discountPromoBlockContent.description" 
               :icon="discountPromoBlockContent.icon" :buttonTitle="discountPromoBlockContent.buttonTitle"/>
     <Features class="features"/>

@@ -1,10 +1,13 @@
 <script>
-import info from './../../assets/images/info.png'
+import info from './../../assets/images/info.webp'
+import infoBlur from './../../assets/images/info-blur.webp'
+import LazyImage from '../LazyImage.vue'
 
 export default {
   data() {
     return{
       info_img: info,
+      infoBlurImg: infoBlur,
       fullImgSizeDisplay: false
     }
   },
@@ -24,6 +27,9 @@ export default {
       }
       document.removeEventListener('keydown', this.handleKeyDown)
     }
+  },
+  components: {
+    LazyImage
   }
 }
 </script>
@@ -42,7 +48,8 @@ export default {
           </p>
         </div>
       </div>
-      <div class="info-image-container" :style="{ backgroundImage: `url(${info_img})` }" @click="openFullSizeImg">
+      <div class="info-image-container" @click="openFullSizeImg">
+        <LazyImage :src="infoBlurImg" :lazy-src="info_img"/>
         <div class="size-icon-container">
           <font-awesome-icon class="size-icon" icon="fa-solid fa-arrows-alt" size="2xl"/> 
         </div>
@@ -67,8 +74,7 @@ export default {
 
   .golos-info-container {
     width: 60%;
-    min-width: calc(var(--ui-col) * 33);
-    
+    min-width: calc(var(--ui-col) * 33); 
   }
 
   .golos-info-content {
@@ -110,18 +116,25 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
-    border-radius: 30px;
-    background-size: cover;
-  
+    position: relative;
     height: 100%;
-     min-width: 40rem;
+    min-width: 40rem;
     min-height: 34rem;
   
   }
 
+  .info-image-container img{
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 2rem;
+    height: 100%;
+    position: absolute;
+  }
+
   .info-image-container:hover .size-icon-container {
     display: flex;
+    z-index: 1;
     opacity: 1;
     transform: all 0.5 easy;
   }

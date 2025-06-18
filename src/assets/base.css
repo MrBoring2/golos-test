@@ -53,6 +53,7 @@
   --font-size-normal4:  calc(var(--font-size-normal) * 1.6);
   --font-size-normal-mini: calc(var(--font-size-normal) * 0.9);
   --font-size-mini: calc(var(--font-size-normal) * 0.8);
+  --font-size-mini3: calc(var(--font-size-normal) * 0.75);
   --font-size-mini2: calc(var(--font-size-normal) * 0.7);
   --font-size-min3: calc(var(--font-size-normal) * 0.6);
   --font-size-micro: calc(var(--font-size-normal) * 0.5);

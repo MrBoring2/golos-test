@@ -1,7 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import eventBus from '@/scripts/event-bus'
-import logo from './../assets/images/logo.png'
+import logo from './../assets/images/logo.webp'
 export default {
     data() {
         return {
@@ -44,6 +44,9 @@ export default {
         },
         openMobileMenuDrawer(){
           this.mobileDrawerOpen = !this.mobileDrawerOpen;
+        },
+        closeMobileMenu() {
+          this.mobileDrawerOpen = false;
         },
           scrollToElement(sectionId) {
              eventBus.$emit('scroll-to', sectionId)
@@ -89,26 +92,25 @@ export default {
                         </RouterLink>
                       </div>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="">
+                        <RouterLink to="/">
                           Способы получения
                        </RouterLink>
                         </div>
                       <div class="mobile-menu-nav-item">
-                           <RouterLink to="">
+                           <RouterLink to="/">
                           Ход строительства
                       </RouterLink>
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="/"  @click="scrollToElement('about-the-builder')">
+                        <RouterLink :to="{ path: '/', hash: '#about-the-builder' }" @click="closeMobileMenu">
                           О застройщике
                       </RouterLink>  
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="">
+                        <RouterLink to="/">
                           Контакты
                       </RouterLink>
-                       </div>
-                          
+                       </div>       
                 </nav>
               </div>
               <div class="mobile-menu-footer">
@@ -151,16 +153,16 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to=""  @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0}">
+                    <RouterLink to="/" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0}">
                           Выбор квартир
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'sposobi'}" @mousedown="setLinkActive('sposobi')">
+                      <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'sposobi'}" @mousedown="setLinkActive('sposobi')">
                           Способы получения
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == 'building-plan'}" @mousedown="setLinkActive('building-plan')">
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == 'building-plan'}" @mousedown="setLinkActive('building-plan')">
                           Ход строительства
                       </RouterLink>
-                      <RouterLink to=""  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3}">
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3}">
                           Ещё
                       </RouterLink>
                 </nav> 
@@ -193,7 +195,7 @@ export default {
                 <div class="wraper-sub-menu"  v-if="activeMenuIndex === 3" >
                     <nav class="sub-menu" @mouseenter="keepSubMenuOpen(3)"
                         @mouseleave="closeSubMenu">
-                    <RouterLink to="/" @click="scrollToElement('about-the-builder')" @mousedown="setLinkActive('about-the-builder')" :class="{ 'active': activeLink == 'about-the-builder'}">О застройщике</RouterLink>
+                    <RouterLink  :to="{ path: '/', hash: '#about-the-builder' }" @mousedown="setLinkActive('about-the-builder')" :class="{ 'active': activeLink == 'about-the-builder'}">О застройщике</RouterLink>
                     <RouterLink to="/" :class="{ 'active': activeLink == 'contacts'}" >Контакты</RouterLink>
                     </nav> 
                 </div>
@@ -231,7 +233,7 @@ header {
   padding: 12px 12px 12px 12px;
   display: flex;
 
-  gap: 2rem;
+ 
   align-items: center;
   justify-content: space-between;
   

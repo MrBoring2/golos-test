@@ -261,7 +261,7 @@ export default {
    position: absolute;
    right: 0;
    top: 45%;
-   z-index: 1000;
+   z-index: 100;
    display: flex;
    flex-direction: column;
    align-items: center;
