@@ -9,7 +9,7 @@ import Advanteges from "@/components/HomeView/Advanteges.vue"
 import Slider from "@/components/Slider.vue"
 import PreFinishing from '@/components/HomeView/PreFinishing.vue'
 import AboutTheBuilder from '@/components/HomeView/AboutTheBuilder.vue'
-import AnyQuestions from '@/components/HomeView/AnyQuestions.vue'
+import AnyQuestions from '@/components/AnyQuestions.vue'
 import Features from '@/components/HomeView/Features.vue'
 import PromoBlock from '@/components/HomeView/PromoBlock.vue'
 import IpotecaVariants from '@/components/HomeView/IpotecaVariants.vue'
@@ -168,9 +168,9 @@ export default {
     <Features class="features"/>
     <PromoBlock :title="likedPlanningPromoBlockContent.title" :description="likedPlanningPromoBlockContent.description" 
               :icon="likedPlanningPromoBlockContent.icon" :buttonTitle="likedPlanningPromoBlockContent.buttonTitle"/>
-     <AboutTheBuilder id="about-the-builder" ref="about-the-builder"/>
-    <AnyQuestions/>
-  </main>
+     <AboutTheBuilder id="about-the-builder" ref="about-the-builder"/>   
+      <AnyQuestions class="questions"/>
+ </main>
   
 </template>
 

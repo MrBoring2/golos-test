@@ -76,7 +76,7 @@ export default {
                     <img class="logo" :src="logo" height="30px"></img>
                 </div>
                 <div class="moblie-menu-header-icons">
-                  <font-awesome-icon class="icon" icon="heart" size="2xl"/>  
+                  <font-awesome-icon class="icon" icon="fa-regular fa-heart" size="2xl"/>  
                   <font-awesome-icon class="icon" icon="close" size="2xl" @click="openMobileMenuDrawer"/>  
                 </div>
               </div>
@@ -87,27 +87,27 @@ export default {
                 </div>
                 <nav>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="/rooms" :class="{ 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')" @click="closeMobileMenu">
                           Выбор квартир
                         </RouterLink>
                       </div>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink :to="{ path: '/', hash: '#ipoteca-variants' }" :class="{ 'active': activeLink == 'ipoteca-variants'}" @mousedown="setLinkActive('ipoteca-variants')" @click="closeMobileMenu">
                           Способы получения
                        </RouterLink>
                         </div>
                       <div class="mobile-menu-nav-item">
-                           <RouterLink to="/">
+                           <RouterLink to="/" @click="closeMobileMenu">
                           Ход строительства
                       </RouterLink>
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink :to="{ path: '/', hash: '#about-the-builder' }" @click="closeMobileMenu">
+                        <RouterLink :to="{ path: '/', hash: '#about-the-builder' }" :class="{ 'active': activeLink == 'about-the-builder'}" @mousedown="setLinkActive('about-the-builder')" @click="closeMobileMenu">
                           О застройщике
                       </RouterLink>  
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink to="/">
+                        <RouterLink to="/" @click="closeMobileMenu">
                           Контакты
                       </RouterLink>
                        </div>       
@@ -153,10 +153,10 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to="/" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0}">
+                    <RouterLink to="/rooms" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0, 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')">
                           Выбор квартир
                       </RouterLink>
-                      <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'sposobi'}" @mousedown="setLinkActive('sposobi')">
+                      <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'ipoteca-variants'}" @mousedown="setLinkActive('ipoteca-variants')">
                           Способы получения
                       </RouterLink>
                       <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == 'building-plan'}" @mousedown="setLinkActive('building-plan')">
@@ -172,7 +172,7 @@ export default {
                   </div>
                   <div class="icons">     
                     <font-awesome-icon class="icon" icon="phone" size="xl"/>
-                    <font-awesome-icon class="icon" icon="heart" size="xl"/>  
+                    <font-awesome-icon class="icon" icon="fa-regular fa-heart" size="xl"/>  
                     <font-awesome-icon class="icon-humberger" icon="bars" size="2xl" @click="openMobileMenuDrawer"/>
                   </div>   
                 </div>   
@@ -186,7 +186,7 @@ export default {
             <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub-menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="closeSubMenu">
-                            <RouterLink to="/">Выбор по параметрам</RouterLink>
+                            <RouterLink to="/rooms" :class="{ 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')">Выбор по параметрам</RouterLink>
                             <RouterLink to="/">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  

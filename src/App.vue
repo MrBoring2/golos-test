@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import AdsCarousel from './components/HomeView/PromoCarousel.vue'
+import AnyQuestions from './components/AnyQuestions.vue'
 import CookieAgree from './components/CookieAgree.vue'
 import ConsultationRequest from './components/ConsultationRequest.vue'
 import logo from './assets/images/logo.webp'
@@ -25,6 +26,7 @@ export default {
       RouterView,
       CookieAgree,
       ConsultationRequest,
+      AnyQuestions
     },
     methods: {
       proceedCookies() {
@@ -75,6 +77,7 @@ export default {
   flex-direction: column;
   min-height: 100vh;
 }
+
 
 @media (max-width: 900px) {
 

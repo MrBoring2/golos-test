@@ -3,14 +3,18 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPhone, faHeart, faArrowDown, faChevronRight, faChevronLeft, faPercent, faArrowsAlt, faArrowsH, faClose, faCheck, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faPhone, faArrowDown, faChevronRight, faChevronLeft, faPercent, faArrowsAlt, faArrowsH, faClose,
+   faCheck, faBars, faEllipsis, faBuilding, faArrowUpLong, faArrowDownLong, faList, faHeart as faHeartBold,
+   faTable} from '@fortawesome/free-solid-svg-icons'
 import { faYoutube, faVk, faTelegram } from '@fortawesome/free-brands-svg-icons'
+import { faHeart as faHaertHollow } from '@fortawesome/free-regular-svg-icons'
 import App from './App.vue'
 import router from './router'
 import { VueWrapper } from '@vue/test-utils'
 
 
-library.add(faPhone, faHeart, faArrowDown, faTelegram, faVk, faYoutube, faChevronRight, faChevronLeft, faPercent, faArrowsAlt, faClose, faCheck, faBars, faArrowsH)
+library.add(faPhone, faHeartBold, faHaertHollow, faArrowDown, faTelegram, faVk, faYoutube, faChevronRight, faChevronLeft, 
+  faPercent, faArrowsAlt, faClose, faCheck, faBars, faArrowsH, faEllipsis, faBuilding, faArrowDownLong, faArrowUpLong, faList, faTable)
 
 const lazyLoad = {
    mounted(el, binding) {

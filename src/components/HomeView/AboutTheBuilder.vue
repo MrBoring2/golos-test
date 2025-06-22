@@ -62,8 +62,7 @@ export default {
     </div>
     <Transition>
         <div class="img-full-size"  v-if="fullImgSizeDisplay == true" >
-            <img :src="new_center_img">   
-            </img>
+            <img :src="new_center_img"/>
             <div class="icon-bold"  @click="closeFullSizeImg">
                 <font-awesome-icon class="close-icon" icon="fa-solid fa-close" size="2xl"/> 
             </div>

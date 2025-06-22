@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/HomeView.vue'
+import RoomsCatalogView from '@/views/RoomsCatalogView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,13 +10,18 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/rooms',
+      name: 'rooms',
+      component: RoomsCatalogView
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
   if (to.hash) {
     return {
       el: to.hash,
       behavior: 'smooth',
-      top: 100 // ваш отступ
+      top: 100 
     };
   }
   if (savedPosition) {
@@ -25,7 +31,7 @@ const router = createRouter({
   }
   }
   
-  return false;
+  return { behavior: 'smooth', top: 0};
   },
 })
 
