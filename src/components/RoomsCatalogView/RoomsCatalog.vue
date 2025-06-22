@@ -178,7 +178,7 @@ export default {
             </ul> 
             <ul class="flats-catalog-inner-list" v-else-if="displayVariant == 1">
                 <li v-if="!loading" v-for="(flat, index) in flats.data.flats" :key="index"  class="flats-catalog-item-list">
-                    <RouterLink to="/" class="flat-link-link">
+                    <RouterLink to="/" class="flat-link-list">
                         <div class="flat-number-list">
                                     <p>№ {{flat.Number}}</p>
                         </div>
@@ -211,6 +211,30 @@ export default {
                                 </div>
                                 <div class="flat-ipoteca-list">
                                     <p>В ипотеку от {{Math.round(getIpoteca(flat.Price)).toLocaleString("ru-RU")}} руб/мес</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flats-catalog-item-list-content-mobile">
+                            <div class="flat-catalog-item-list-header-mobile">
+                                    <div class="flat-number-list-mobile">
+                                        <p>№ {{flat.Number}}</p>
+                                    </div>
+                                    <div class="flat-item-controls">
+                                        <font-awesome-icon class="icon" icon="fa-regular fa-heart" size="xl" />
+                                        <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" size="xl" />
+                                    </div>
+                            </div>
+                            <div class="flat-catalog-item-list-middle-mobile">
+                                <p>{{flat.Roominess}}-комнатная, {{flat.Area}}  м<sup>2</sup></p>
+                            </div>
+                            <div class="flat-catalog-item-list-footer-mobile">
+                                <div class="flats-catalog-item-list-price-container">
+                                    <div class="flat-price-list">
+                                        <p>{{flat.Price.toLocaleString("ru-RU")}} руб</p>
+                                    </div>
+                                    <div class="flat-ipoteca-list">
+                                        <p>В ипотеку от {{Math.round(getIpoteca(flat.Price)).toLocaleString("ru-RU")}} руб/мес</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -580,7 +604,7 @@ export default {
      padding-left: 0;
 }
 
-.flat-link-link {
+.flat-link-list {
     padding: 20px;
     position: relative;
     display: flex;
@@ -716,6 +740,15 @@ export default {
     align-items: end;
 }
 
+.flats-catalog-item-list-content-mobile {
+    display: none;
+}
+
+
+.flat-catalog-item-list-header-mobile {
+    display: flex;
+    justify-content: space-between;
+}
 
 .v-enter-active{
     transition: all 0.2s ease-out;
@@ -755,6 +788,10 @@ export default {
         
     }
 
+    .flat-link-list {
+        gap: 10px;
+    }
+
     .flats-display-sort-controls {
         display: none;
     }
@@ -762,6 +799,47 @@ export default {
     .flats-catalog-main-inner {
         min-width: 100%;
     }
+
+    .flats-catalog-item-list-content, .flat-number-list, .flat-item-controls-list {
+        display: none;
+    }
+
+    .flats-catalog-item-list-content-mobile {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .flat-item-controls {
+        font-size: var(--font-size-mini);
+        color: var(--vt-c-gray)
+    }
+
+    .flat-number-list-mobile {
+        background: var(--vt-c-light-gray);
+        padding: 5px;
+        color: var(--vt-c-gray);
+        font-size: var(--font-size-mini);
+        border-radius: 5px;
+    }
+
+    .flat-catalog-item-list-middle-mobile {
+        font-weight: 500;
+    }
+
+    .banner-list-inner, .banner-list-buttons {
+        flex-direction: column;
+    }
+    .banner-list-title {
+        font-size: var(--font-size-normal3);
+    }
+
+    .banner-list-button {
+        flex-direction: row;
+        padding-top: 80px;
+    }
+
 }
 
 </style>
