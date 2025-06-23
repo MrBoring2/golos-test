@@ -328,7 +328,7 @@ export default {
     background-color: var(--vt-c-white-blue2);
     border-radius: 2rem;
     
-    position: relative; /* Добавьте это */
+    position: relative; 
 
 }
 
@@ -487,8 +487,8 @@ export default {
         font-size: var(--font-size-normal3);
     }
 .ipoteca-variatns-controls-container {
-    scroll-padding-left: 15px; /* Защитный отступ */
-    scroll-behavior: smooth; /* Плавный скролл для ручного перетаскивания */
+    scroll-padding-left: 15px; 
+    scroll-behavior: smooth;
   }
     .ipoteca-variants-container-inner{
         flex-direction: column;
@@ -516,7 +516,6 @@ export default {
   }
 
 
-/* 2. Исправляем позиционирование анимации */
   .ipoteca-variatns-controls-button {
     position: relative;
     scroll-snap-align: start;

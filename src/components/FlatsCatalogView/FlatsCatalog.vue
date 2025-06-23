@@ -7,20 +7,19 @@ import cleaningAdsFull from '@/assets/images/cleaning-ads-full.webp'
 export default {
     data() {
         return {
-            flats: [],
             loading: false,
             cleaningAdsImg: cleaningAds,
             cleaningAdsImgFull: cleaningAdsFull,
             priceSort: 0,
             areaSort: 0,
-            displayVariant: 0
+            displayMode: 0
         }
     },
     async created() {    
         this.loading = true;
         try{ 
             
-        this.flats = await flatsApiService.getFlats()
+        //this.flats = await flatsApiService.getFlats()
         }
         catch(err){
             console.log(err)
@@ -29,6 +28,7 @@ export default {
             this.loading = false
         }
     },
+    props: ['sort', 'displayMode', 'flats'],
     inject: ['openConsultationRequestDrawer'],
     methods: {
         getImage(path) {
@@ -40,22 +40,24 @@ export default {
         openDrawer(){
             this.openConsultationRequestDrawer();
         },
-        changePriceSort() {
-            if(this.areaSort > 0) this.areaSort = 0;
-
-            this.priceSort += 1;
-            if(this.priceSort > 2) this.priceSort = 0;
-        },
-        changeAreaSort() {
-             if(this.priceSort > 0) this.priceSort = 0;
-
-            this.areaSort += 1;
-            if(this.areaSort > 2) this.areaSort = 0;
-        },
-        changeDisplayVariant(variant) {
-            if(variant == 0 || variant == 1){
-                this.displayVariant = variant;
+        changeSort(type) {
+            let direction = 'asc';
+            if(this.sort.type == type) {
+                if(this.sort.direction == 'asc')
+                    direction = 'desc';
+                else if(this.sort.direction == 'desc'){
+                    direction = null;
+                    type = null;
+                }     
+                else direction = 'asc';
             }
+
+            this.$emit('update-sort', {type, direction})
+        },
+        changeDisplayMode(mode) {
+            console.log(mode)
+            if(this.displayMode != mode)
+                this.$emit('update-display-mode', mode)
         }
     }
 }
@@ -70,19 +72,19 @@ export default {
                     <p>Сортировать по</p>
                 </div>
                 <div class="sort-direction">
-                    <div class="sort-price" @click="changePriceSort">
-                        <p class="sort-price-title" :class="{'active': priceSort > 0}">Стоимости</p>
+                    <div class="sort-price" @click="changeSort('price')">
+                        <p class="sort-price-title" :class="{'active': sort.type == 'price'}">Стоимости</p>
                         <div class="sort-icons-container">
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': priceSort == 1}"/>
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': priceSort == 2}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': sort.type == 'price' && sort.direction == 'asc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': sort.type == 'price' && sort.direction == 'desc'}"/>
                         </div>
 
                     </div>
-                    <div class="sort-area" @click="changeAreaSort">
-                        <p class="sort-area-title" :class="{'active': areaSort > 0}">Площади</p>
+                    <div class="sort-area" @click="changeSort('area')">
+                        <p class="sort-area-title" :class="{'active': sort.type == 'area'}">Площади</p>
                            <div class="sort-icons-container">
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': areaSort == 1}"/>
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': areaSort == 2}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': sort.type == 'area' && sort.direction == 'asc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': sort.type == 'area' && sort.direction == 'desc'}"/>
                         </div>
                     </div>
                 </div>
@@ -92,21 +94,21 @@ export default {
                     <p>Вид отображения</p>
                 </div>
                 <div class="display-variant">
-                    <div class="display-grid"  @click="changeDisplayVariant(0)">
-                        <p class="display-grid-title"  :class="{'active': displayVariant == 0}">Карточки</p>
-                        <font-awesome-icon class="display-icon" icon="fa-solid fa-table" :class="{'active': displayVariant == 0}"/>
+                    <div class="display-grid"  @click="changeDisplayMode('grid')">
+                        <p class="display-grid-title"  :class="{'active': displayMode == 'grid'}">Карточки</p>
+                        <font-awesome-icon class="display-icon" icon="fa-solid fa-table" :class="{'active': displayMode == 'grid'}"/>
                     </div>
-                    <div class="display-list" @click="changeDisplayVariant(1)">
-                        <p class="display-list-title"  :class="{'active': displayVariant == 1}">Список</p>
-                        <font-awesome-icon class="display-icon" icon="fa-solid fa-list" :class="{'active': displayVariant == 1}"/>
+                    <div class="display-list" @click="changeDisplayMode('list')">
+                        <p class="display-list-title"  :class="{'active': displayMode == 'list'}">Список</p>
+                        <font-awesome-icon class="display-icon" icon="fa-solid fa-list" :class="{'active': displayMode == 'list'}"/>
                     </div>
                 </div>
             </div>
         </div>
         <Transition mode="out-in">
-        <div class="flats-catalog-container" :key="displayVariant">          
-            <ul class="flats-catalog-inner-grid" v-if="displayVariant == 0">
-                <li v-if="!loading" v-for="(flat, index) in flats.data.flats" :key="index"  class="flats-catalog-item-grid" >
+        <div class="flats-catalog-container" :key="displayMode">          
+            <ul class="flats-catalog-inner-grid" v-if="displayMode == 'grid'">
+                <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-grid" >
                     <RouterLink to="/" class="flat-link-grid">
                         <div class="flats-catalog-item-grid-header">
                             <div class="flats-catalog-item-grid-header-top"> 
@@ -145,7 +147,7 @@ export default {
                         </div>
                     </RouterLink>
                 </li>
-                <li class="flats-catalog-item-grid static" v-if="!loading && flats.data.flats.length > 3" :style="{order: 4}" @click="openDrawer">
+                <li class="flats-catalog-item-grid static" v-if="!loading && flats.length > 3" :style="{order: 4}" @click="openDrawer">
                     <div class="banner-grid">
                         <div class="banner-grid-inner">
                             <div class="banner-grid-title-container">
@@ -176,15 +178,23 @@ export default {
                     </div>
                 </li>
             </ul> 
-            <ul class="flats-catalog-inner-list" v-else-if="displayVariant == 1">
-                <li v-if="!loading" v-for="(flat, index) in flats.data.flats" :key="index"  class="flats-catalog-item-list">
+            <ul class="flats-catalog-inner-list" v-else-if="displayMode == 'list'">
+                <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-list">
                     <RouterLink to="/" class="flat-link-list">
                         <div class="flat-number-list">
                                     <p>№ {{flat.Number}}</p>
                         </div>
                         <div class="flats-catalog-item-list-image">
                             <img :src="getImage(flat.Images[0].Path)"/>
+                            <div class="flat-catalog-item-list-size-icon">
+                                <font-awesome-icon icon="fa-solid fa-arrows-alt" size="xl" />                            
+                            </div>
+                            <div class="flat-catallg-item-list-image-preview">
+                                <img :src="getImage(flat.Images[0].Path)"/>
+                             </div>
                         </div>
+
+                      
                         <div class="flats-catalog-item-list-content">
                             <div class="flat-rooms-list">
                             <p>{{flat.Roominess}}-комнатная</p>
@@ -243,7 +253,7 @@ export default {
                         </div>
                     </RouterLink>
                 </li>
-                <li class="flats-catalog-item-list static-list" v-if="!loading && flats.data.flats.length > 3" @click="openDrawer">
+                <li class="flats-catalog-item-list static-list" v-if="!loading && flats.length > 3" @click="openDrawer">
                     <div class="banner-list">              
                         <div class="banner-list-inner">
                             <div class="banner-list-title-container">
@@ -310,6 +320,69 @@ export default {
     display: flex;
     width: 100%;
     justify-content: space-between;
+}
+
+.flat-catalog-item-list-size-icon {
+    position: absolute;
+    color: var(--vt-c-blue);
+    background-color: var(--vt-c-white-blue2);
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    display: flex;
+    opacity: 0;
+    transition: 0.3s;
+}
+.flats-catalog-item-list-image {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    
+}
+.flats-catalog-item-list-image:hover .flat-catallg-item-list-image-preview {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+}
+.flat-link-list:hover .flat-catalog-item-list-size-icon{
+    display: flex;
+    transform: all 0.3 ease;
+    opacity: 1;
+}
+.flat-catalog-item-list-size-icon:hover .flat-catallg-item-list-image-preview{
+    display: flex;
+}
+
+
+.flat-catallg-item-list-image-preview {
+  position: absolute;
+  visibility: hidden;
+  display: flex;
+  left: 9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  justify-content: center;
+  background-color: var(--vt-c-white);
+  align-items: center;
+
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+ 
+}
+
+
+
+.flat-catallg-item-list-image-preview img{
+  min-width: 14rem;
+  /* Сохраняет пропорции */
 }
 
 
@@ -617,6 +690,7 @@ export default {
     width: 7rem;
     object-fit: cover;
 }
+
 
 .flats-catalog-item-list-content {
     display: flex;

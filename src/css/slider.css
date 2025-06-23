@@ -1,0 +1,72 @@
+/* custom-slider-theme.css */
+
+/* Основные стили слайдера */
+.vue-slider {
+  margin: -0.5rem 2rem;
+}
+
+/* Фоновая дорожка */
+.vue-slider-rail {
+  background-color: #f0f0f0;
+  height: 2px !important;
+  border-radius: 1px !important;;
+}
+
+/* Заполненная часть */
+.vue-slider-process {
+  background: var(--vt-c-black);
+  border-radius: 1px;
+  height: 2px;
+}
+
+/* Бегунок (ползунок) */
+.vue-slider-dot-handle {
+  width: 0.8rem;
+  height: 0.8rem;
+  background: var(--vt-c-black);
+  border: 1px solid var(--vt-c-black);
+  box-shadow: none;
+  transition: 0.3s; 
+  cursor: pointer;
+  position: absolute;
+  
+  top: 50%;
+  transform: translateY(-50%);
+  will-change: box-shadow, transform;
+  
+}
+
+.vue-slider-dot-handle:hover {
+  scale: 1.2;
+  cursor: grab;
+  transform: all 0.5 ease;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.15);
+
+}
+
+/* Подсказка (tooltip) */
+.vue-slider-dot-tooltip {
+  background-color: #ff7e5f;
+  border-color: #ff7e5f;
+  font-size: 14px;
+  padding: 2px 6px;
+  min-width: 20px;
+}
+
+/* Метки на слайдере */
+.vue-slider-mark-step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
+.vue-slider-mark-step-active {
+  background-color: #ff7e5f;
+}
+
+.vue-slider-mark-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
