@@ -12,7 +12,6 @@ export default {
             cleaningAdsImgFull: cleaningAdsFull,
             priceSort: 0,
             areaSort: 0,
-            displayMode: 0
         }
     },
     async created() {    
@@ -301,6 +300,7 @@ export default {
     justify-content: center;
     height: 100%;
     width: 100%;
+
 }
 
 .flats-catalog-main-inner {

@@ -14,8 +14,9 @@ export const initializeApiClient = async () => {
             baseURL: config.apiUrl,
             timeout: 10000,
             headers: {
-                'Content-Type': 'applictaion/json'
-            }
+                'Content-Type': 'application/json'
+            },
+            
         })
          
         return apiClient;
@@ -26,7 +27,7 @@ export const initializeApiClient = async () => {
 }
 
 export const getApiClient = async () => {
-    if(!apiClient) await initializeApiClient();
+    if(!apiClient) apiClient = await initializeApiClient();
      console.log('dasdasdasdapiClient')
     return apiClient
 }

@@ -87,7 +87,7 @@ export default {
                 </div>
                 <nav>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/rooms" :class="{ 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')" @click="closeMobileMenu">
+                        <RouterLink to="/flats" :class="{ 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')" @click="closeMobileMenu">
                           Выбор квартир
                         </RouterLink>
                       </div>
@@ -153,7 +153,7 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to="/rooms" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0, 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')">
+                    <RouterLink to="/flats" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0, 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')">
                           Выбор квартир
                       </RouterLink>
                       <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'ipoteca-variants'}" @mousedown="setLinkActive('ipoteca-variants')">
@@ -186,7 +186,7 @@ export default {
             <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub-menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="closeSubMenu">
-                            <RouterLink to="/rooms" :class="{ 'active': activeLink == 'rooms'}" @mousedown="setLinkActive('rooms')">Выбор по параметрам</RouterLink>
+                            <RouterLink to="/flats" :class="{ 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')">Выбор по параметрам</RouterLink>
                             <RouterLink to="/">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  

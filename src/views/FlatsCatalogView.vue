@@ -6,10 +6,12 @@ import flatsApiService from '@/services/flatsApiService';
 export default {
     data() {
         return {
-            acvtiveFilters: {},
+            activeFilters: {},
             activeSort: {type: null, direction: null},
             activeDisplayMode: 'grid',
-            flatsData: []
+            flatsData: [],
+            startBoundaryValues: [],
+            filteredBoundaryValues: { }
         }
     },
 
@@ -18,33 +20,52 @@ export default {
         FlatsFilter
     },
     methods: {
-        handleSortUpdate(newSort){        
+        async handleSortUpdate(newSort){        
             this.activeSort = {...this.activeSort, ...newSort}
+            await this.loadData()
         },
         handleDisplayModeUpdate(mode) {
-            console.log(mode);
             this.activeDisplayMode = mode;
         },
         async loadData(){
-            const params = {};
-            this.flatsData = await flatsApiService.getFlats()
-            console.log(this.flatsData)
-        }
-    },
-    computed: {
-        getBoundaryValues() {
-            return {
+            this.activeFilters.orderBy = this.activeSort
+            const response = await flatsApiService.getFlats(this.activeFilters);
+            //нужно реактивно обновить полностью объект
+            this.flatsData = {
+                ...response,
+                data: {
+                ...response.data,
+                flats: [...response.data.flats] 
+                }
+            };
+            this.filteredBoundaryValues = {
                 maxPrice: this.flatsData.data.maxPrice,
                 minPrice: this.flatsData.data.minPrice,
                 maxFloor: this.flatsData.data.maxFloor,
                 minFloor: this.flatsData.data.minFloor,
-                maxArea: this.flatsData.data.maxArea,
-                minArea: this.flatsData.data.minArea
+                maxArea: Math.ceil(this.flatsData.data.maxArea),
+                minArea: Math.floor(this.flatsData.data.minArea),
+                rooms: this.flatsData.data.rooms,
+                totalItems: this.flatsData.data.totalItems
             }
+            console.log('filter')
+            console.log(this.filteredBoundaryValues)
+        },
+        async loadStartBoundaryValues() {
+            this.startBoundaryValues = await flatsApiService.getStartBoundaryValues();
+            console.log(this.startBoundaryValues)
+        },
+        async update(filter) {
+            this.activeFilters = filter;
+            await this.loadData()         
         }
     },
+    computed: {
+  
+    },
     async created() {
-        await this.loadData()
+        await this.loadStartBoundaryValues();
+        await this.loadData(this.activeFilters)
     }
 }
 
@@ -52,8 +73,11 @@ export default {
 
 <template>
     <main class="main">
-        <FlatsFilter  v-if="flatsData && flatsData.data" :boundaryValues="getBoundaryValues" :sort="activeSort" @update-sort="handleSortUpdate" :displayMode="activeDisplayMode" @update-display-mode="handleDisplayModeUpdate"/>
-        <FlatsCatalog v-if="flatsData && flatsData.data" :flats="flatsData.data.flats" :sort="activeSort" @update-sort="handleSortUpdate" :displayMode="activeDisplayMode" @update-display-mode="handleDisplayModeUpdate"/>
+        <FlatsFilter  v-if="flatsData && flatsData.data && startBoundaryValues && startBoundaryValues.data" :boundaryValues="startBoundaryValues.data" 
+        :filteredBoundaryValues="filteredBoundaryValues" :sort="activeSort" @update-sort="handleSortUpdate" :displayMode="activeDisplayMode" 
+        @update-display-mode="handleDisplayModeUpdate" @update-filter="update"/>
+        <FlatsCatalog  id="flats-catalog" v-if="flatsData && flatsData.data" :flats="flatsData.data.flats" :sort="activeSort" @update-sort="handleSortUpdate" 
+        :displayMode="activeDisplayMode" @update-display-mode="handleDisplayModeUpdate" />
     </main>
 </template>
 
@@ -64,7 +88,9 @@ export default {
     flex-direction: column;
     justify-content: start;
     align-items: center;   
-    gap: 80px; 
+    gap: 3rem; 
+    margin-top: 2rem;
+  
     
 }
 

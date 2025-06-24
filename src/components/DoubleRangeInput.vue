@@ -1,28 +1,40 @@
 <template>
   <div class="content">
+    <div class="range-input-title">
+      <p>{{this.title}}</p>
+    </div>
     <div class="input-content">
       <input
-        type="number"
-        :value="currentValue[0]"
-        @input="handleInputChange($event, 0)"
+        type="text"
+        pattern="[0-9 ]*"
+        :value="displayValue[0]"
+        @input="handleInput($event, 0)"
+        @blur="applyValue(0)"
+        @keyup.enter="applyValue(0)"
+        @keydown="filterNumericInput"
         :min="min"
+        inputmode="numeric"
         :max="currentValue[1]"
         class="number-input-left"
       />
       <input
-        type="number"
-        :value="currentValue[1]"
-        @input="handleInputChange($event, 1)"
+        type="text"
+        pattern="[0-9 ]*"
+        :value="displayValue[1]"
+        @input="handleInput($event, 1)"
+        @keydown="filterNumericInput"  
+        @keyup.enter="applyValue(1)"
+        @blur="applyValue(1)"
         :min="currentValue[0]"
         :max="max"
+        inputmode="numeric"
         class="number-input-right"
       />
     </div>
-    <VueSlider
+    <VueSlider @drag-end="dragEnd"
       v-model="currentValue"
-      :min="min"
+      :min="min" :enable-cross="true"
       :max="max" :tooltip="'none'"
-      :enable-cross="false"
       @change="handleSliderChange"
     />
   </div>
@@ -43,28 +55,78 @@ export default {
       type: Array,
       required: true,
       validator: value => value.length === 2
+    },
+    title: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
-      currentValue: [...this.value]
+      currentValue: [...this.value],
+      displayValue: this.value.map(num => this.formatNumber(num)),
+      tempValue: [...this.value]
     }
   },
   watch: {
     value(newVal) {
       if (newVal[0] !== this.currentValue[0] || newVal[1] !== this.currentValue[1]) {
         this.currentValue = [...newVal];
+        this.displayValue = [...newVal];
       }
     },
     currentValue(newVal) {
-      this.$emit('input', [...newVal]);
+      //this.$emit('input', [...newVal]);
+      this.displayValue = newVal.map(num => this.formatNumber(num));
     }
   },
   methods: {
-    handleInputChange(event, index) {
-      let newValue = Number(event.target.value);
+    formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    },
+    filterNumericInput(event) {
+      const allowedKeys = [
+        'Backspace', 'Delete', 'Tab', 'Enter',
+        'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'
+      ];
+
+      if (event.ctrlKey && ['a', 'c', 'x', 'v'].includes(event.key.toLowerCase())) {
+        return true;
+      }
       
-      if (isNaN(newValue)) return;
+      if (!/\d/.test(event.key) && !allowedKeys.includes(event.key)) {
+        event.preventDefault();
+        return false;
+      }
+    },
+    dragEnd(index) {
+      this.$emit('drag-end')
+    },
+    handleInput(event, index) {
+      const cursorPosition = event.target.selectionStart;
+      const originalLength = event.target.value.length;
+
+      const rawValue = event.target.value.replace(/[^\d]/g, '');
+      this.tempValue[index] = rawValue ? parseInt(rawValue) : 0;
+      this.displayValue[index] = this.formatNumber(this.tempValue[index]);
+       this.$nextTick(() => {
+        const newLength = event.target.value.length;
+        let newCursorPosition = cursorPosition;
+        const cursorPos = event.target.selectionStart;
+        
+        if (newLength > originalLength) {
+          newCursorPosition += 1;
+        } else if (newLength < originalLength) {
+          newCursorPosition -= 1;
+        }
+    
+        newCursorPosition = Math.max(0, Math.min(newCursorPosition, event.target.value.length));
+    
+        event.target.setSelectionRange(newCursorPosition, newCursorPosition);
+      });
+    },
+    applyValue(index) {
+      let newValue = this.tempValue[index];
       
       if (index === 0) {
         newValue = Math.max(this.min, Math.min(newValue, this.currentValue[1]));
@@ -75,9 +137,14 @@ export default {
       const newValues = [...this.currentValue];
       newValues[index] = newValue;
       this.currentValue = newValues;
+    
+      this.$emit('input', [...this.currentValue]); // Отправляем актуальные данные
+      this.$emit('update-input')
     },
     handleSliderChange(newValues) {
+      this.displayValue = newValues.map(num => this.formatNumber(num));
       this.currentValue = [...newValues];
+      this.$emit('input', [...newValues]);
     }
   }
 }
@@ -89,13 +156,16 @@ export default {
   flex-direction: column;
 }
 
-.dot-style {
-    background-color: red;
+.range-input-title {
+  color: var(--vt-c-gray);
+  font-size: var(--font-size-mini);
+  padding-bottom: 0.5rem;
 }
 
 .input-content {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   background-color: var(--vt-c-light-gray);
   height: 2.5rem;
   align-items: center;
@@ -121,67 +191,13 @@ input[type="number"] {
 .number-input-right, .number-input-left {
   border: 0;
   background: transparent;
+  width: 5rem;
   outline: none;
+  font-size: var(--font-size-normal-mini);
 }
 
 .number-input-right {
     text-align: end;
 }
 
-.slider {
-  display: block;
-  position: relative;
-  height: 36px;
-  width: 100%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-.slider .slider-touch-left,
-.slider .slider-touch-right {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  z-index: 2;
-  width: 24px;
-  height: 24px;
-  margin: 0;
-  padding: 4px;
-  z-index: 2;
-  top: 50%; 
-}
-
-.slider .slider-touch-left span,
-.slider .slider-touch-right span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: #f0f0f0;
-  border: 1px solid #a4a4a4;
-  border-radius: 50%;
-}
-.slider .slider-line {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  position: absolute;
-  width: calc(100% - 36px);
-  left: 18px;
-  top: 16px;
-  height: 4px;
-  border-radius: 4px;
-  background: #f0f0f0;
-  z-index: 0;
-  overflow: hidden;
-}
-.slider .slider-line span {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: orange;
-}
 </style>
