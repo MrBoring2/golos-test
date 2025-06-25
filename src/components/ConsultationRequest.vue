@@ -42,7 +42,7 @@ export default {
             this.validateName();
         },
         validateName() {
-            console.log(this.name == '')
+
             this.isValidName = this.name.length > 0 && this.name != '';
         },
         checkConfirm(){
@@ -53,7 +53,7 @@ export default {
             else{
                 this.isConfirm = !this.isConfirm;
             }
-              console.log(this.isConfirm);
+             
         },
         orderConsultation(){
             if(this.isValidPhone == true && this.isValidName == true && this.isConfirm == true){
@@ -67,7 +67,7 @@ export default {
     },
     created() {
 
-        console.log(this.constultationRequestDrawerOpend)
+      
     }
 }
 </script>

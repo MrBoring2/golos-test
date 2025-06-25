@@ -26,7 +26,7 @@ export default {
         }
     },
     mounted() {
-         console.log('Available refs:', Object.keys(this.$refs));
+       
     },
     methods: {
         setActiveSubMenu(index) {
@@ -54,7 +54,7 @@ export default {
 
         },
         closeSubMenu(){
-          console.log('act')
+        
           this.activeMenuIndex = null
         },
         

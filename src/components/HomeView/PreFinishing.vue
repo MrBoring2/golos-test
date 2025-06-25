@@ -28,7 +28,7 @@ export default {
       this.openConsultationRequestDrawer();
     },
     load() {
-      console.log('ss')
+     
     }
   }
 }

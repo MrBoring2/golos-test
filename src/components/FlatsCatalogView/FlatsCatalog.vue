@@ -54,7 +54,7 @@ export default {
             this.$emit('update-sort', {type, direction})
         },
         changeDisplayMode(mode) {
-            console.log(mode)
+
             if(this.displayMode != mode)
                 this.$emit('update-display-mode', mode)
         }
@@ -109,6 +109,17 @@ export default {
             <ul class="flats-catalog-inner-grid" v-if="displayMode == 'grid'">
                 <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-grid" >
                     <RouterLink to="/" class="flat-link-grid">
+                        <div class="sales" v-if="flat.Sales.length > 0">
+                            <div class="sales-content">
+                                <font-awesome-icon icon="fa-solid fa-gift" size="xl" />
+                                <p>+{{flat.Sales.length}} акция</p>
+                            </div>            
+                            <div class="sales-list-container">
+                                <div v-for="(sale, index) in flat.Sales" :key="index" class="sale-item">
+                                    <p>{{sale.Title}}</p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="flats-catalog-item-grid-header">
                             <div class="flats-catalog-item-grid-header-top"> 
                                 <div class="flat-number-grid">
@@ -378,7 +389,44 @@ export default {
  
 }
 
+.sales {
+    position: absolute;
+    flex-direction: column;
+    top: 0.1rem;
+    gap: 0.5rem;
+    background-color: var(--vt-c-blue);
+    color: var(--vt-c-white);
+    font-size: var(--font-size-mini);
+    padding: 0.2rem 0.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 0 0 0.3rem 0.3rem;
+}
 
+.sales-content {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.sales:hover .sales-list-container {
+    display: flex;
+     opacity: 1;
+  transform: translateY(0.5rem);
+}
+
+.sales-list-container {
+    opacity: 0;
+   
+    position: absolute;
+    top: 2rem;
+    background-color: var(--vt-c-blue);
+    width:max-content;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.5rem;
+    font-size: var(--font-size-mini);
+    transform: translateY(0);
+   transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
 .flat-catallg-item-list-image-preview img{
   min-width: 14rem;

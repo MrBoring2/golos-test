@@ -32,7 +32,7 @@
       />
     </div>
     <VueSlider @drag-end="dragEnd"
-      v-model="currentValue"
+      v-model="currentValue" :clickable=false
       :min="min" :enable-cross="true"
       :max="max" :tooltip="'none'"
       @change="handleSliderChange"
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      return num != undefined ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '';
     },
     filterNumericInput(event) {
       const allowedKeys = [
@@ -100,7 +100,9 @@ export default {
       }
     },
     dragEnd(index) {
-      this.$emit('drag-end')
+      if(index == 0)
+        this.$emit('drag-end', 'min')
+      else this.$emit('drag-end', 'max')
     },
     handleInput(event, index) {
       const cursorPosition = event.target.selectionStart;

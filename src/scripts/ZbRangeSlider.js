@@ -5,7 +5,7 @@ var ZBRangeSlider = function(id) {
 
   // retrieve touch button
   var slider     = document.getElementById(id)
-  console.log(slider)
+
   var touchLeft  = slider.querySelector('.slider-touch-left');
   var touchRight = slider.querySelector('.slider-touch-right');
   var lineSpan   = slider.querySelector('.slider-line span');
@@ -213,7 +213,7 @@ var ZBRangeSlider = function(id) {
     var minValue = minValue * (max - min) + min;
     var maxValue = maxValue * (max - min) + min;
     
-    console.log(step);
+
     if (step !== 0.0)
     {
       var multi = Math.floor((minValue / step));

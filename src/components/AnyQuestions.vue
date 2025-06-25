@@ -36,7 +36,6 @@ export default{
             else{
                 this.isConfirm = !this.isConfirm;
             }
-              console.log(this.isConfirm);
         },
         orderPhone(){
             if(this.isValid == true && this.isConfirm == true){

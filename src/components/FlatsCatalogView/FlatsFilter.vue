@@ -4,27 +4,53 @@ import DoubleRangeInput from '../DoubleRangeInput.vue';
 export default {
     data() {
         return {
+            values: {
             minPrice: this.filteredBoundaryValues.minPrice,
             maxPrice: this.filteredBoundaryValues.maxPrice,
             minArea: this.filteredBoundaryValues.minArea,
             maxArea: this.filteredBoundaryValues.maxArea,
             minFloor: this.filteredBoundaryValues.minFloor,
             maxFloor: this.filteredBoundaryValues.maxFloor,
+            selectedRooms: [],
             rooms: this.filteredBoundaryValues.rooms,
+            activePrice: false,
+            activeFloor: false,
+            activeArea: false,
+            },
+            selectedSale: null,
             totalItems: this.filteredBoundaryValues.totalItems,
-            selectedRooms: []
+            currentFilter: {},
+            
         }
     },
     watch: {
         filteredBoundaryValues(newVal) {
-              this.totalItems = newVal.totalItems
-        //    this.minPrice = newVal.minPrice;
-        //    this.maxPrice=newVal.maxPrice,
-        //    this.minArea=newVal.minArea,
-        //    this.maxArea=newVal.maxArea,
-        //    this.minFloor=newVal.minFloor,
-        //    this.maxFloor = newVal.maxFloor,
-        //    this.rooms= newVal.rooms
+            console.log('currentfilter')
+            console.log(this.currentFilter)
+
+     
+            console.log('newVal')
+            console.log(newVal)
+             this.totalItems = newVal.totalItems
+             this.values.minPrice = this.currentFilter.minPrice == undefined && newVal.minPrice != undefined ? newVal.minPrice : this.values.minPrice;
+             this.values.maxPrice = this.currentFilter.maxPrice == undefined && newVal.maxPrice != undefined ? newVal.maxPrice : this.values.maxPrice;
+             this.values.minArea = this.currentFilter.minArea == undefined && newVal.minArea != undefined ? newVal.minArea  : this.values.minArea;
+             this.values.maxArea = this.currentFilter.maxArea == undefined && newVal.maxArea != undefined ? newVal.maxArea : this.values.maxArea;
+             this.values.minFloor =this.currentFilter.minFloor == undefined && newVal.minFloor != undefined ? newVal.minFloor : this.values.minFloor;
+             this.values.maxFloor = this.currentFilter.maxFloor == undefined && newVal.maxFloor != undefined ? newVal.maxFloor : this.values.maxFloor;
+             if(isNaN(this.values.minArea)) this.values.minArea = Math.floor(this.boundaryValues.minArea);
+             if(isNaN(this.values.maxArea))  this.values.maxArea = Math.ceil(this.boundaryValues.maxArea);
+   // console.log(this.currentFilter)
+
+        },
+        selectedSale(newVal, oldVal) {
+            if (oldVal !== null && newVal === null) {
+                if (this.currentFilter.sales.includes(oldVal)) {
+                this.currentFilter.sales = this.currentFilter.sales.filter(r => r !== oldVal);
+               
+                this.updateFilter('', '')
+                }
+            }
         }
     },
     computed: {
@@ -62,33 +88,53 @@ export default {
          updatePriceRange(newValues) {
             console.log('updated')
             if (Array.isArray(newValues)) {
-                this.minPrice = newValues[0];
-                this.maxPrice = newValues[1];
+                this.values.minPrice = newValues[0];
+                this.values.maxPrice = newValues[1];
         }
         },
         updateAreaRange(newValues) {
             if (Array.isArray(newValues)) {
-                this.minArea = newValues[0];
-                this.maxArea = newValues[1];
+                this.values.minArea = newValues[0];
+                this.values.maxArea = newValues[1];
             }
         },
         updateFloorRange(newValues) {
             if (Array.isArray(newValues)) {
-                this.minFloor = newValues[0];
-                this.maxFloor = newValues[1];
+                this.values.minFloor = newValues[0];
+                this.values.maxFloor = newValues[1];
             }
         },
-        updateFilter(){
-            const filter = {
-                minPrice: this.minPrice,
-                maxPrice: this.maxPrice,
-                minArea: this.minArea,
-                maxArea: this.maxArea,
-                minFloor: this.minFloor,
-                maxFloor: this.maxFloor,
-                rooms: this.selectedRooms
+        updateFilter(index, type){
+
+            if(type == 'price') {this.activePrice = true; this.activeFloor = false; this.activeArea = false}
+            if(type == 'floor') {this.activePrice = false; this.activeFloor = true; this.activeArea = false}
+            if(type == 'area') {this.activePrice = false; this.activeFloor = false; this.activeArea = true}
+
+           
+            this.currentFilter[`${index}${type.charAt(0).toUpperCase() + type.slice(1)}`] = this.values[`${index}${type.charAt(0).toUpperCase() + type.slice(1)}`]
+          
+         
+            console.log('sales')
+            console.log(this.currentFilter)
+            this.$emit('update-filter', this.currentFilter)
+        },
+        deselect(value) {
+               console.log('Выбор очищен крестиком');
+            if (value === null || value.length === 0) {
+            console.log('Выбор очищен крестиком');
             }
-            this.$emit('update-filter', filter)
+        },
+        handleSelectSale(value) {
+            console.log('sssselecte')
+            if(this.currentFilter.sales == undefined)
+                this.currentFilter.sales = []
+            if (this.currentFilter.sales.includes(this.selectedSale)) {
+                this.currentFilter.sales = this.currentFilter.sales.filter(r => r !== this.selectedSale);
+            } else {
+                this.currentFilter.sales.push(this.selectedSale);
+            }
+            console.log(this.currentFilter)
+            this.updateFilter('', '');
         },
         declineObject(count) {
             const lastTwo = count % 100;
@@ -106,30 +152,33 @@ export default {
         },
         dropFilters() {
             console.log('drop')
-            this.minPrice = this.boundaryValues.minPrice,
-            this.maxPrice = this.boundaryValues.maxPrice,
-            this.minFloor = this.boundaryValues.minFloor,
-            this.maxFloor = this.boundaryValues.maxFloor,
-            this.minArea = Math.floor(this.boundaryValues.minArea),
-            this.maxArea = Math.ceil(this.boundaryValues.maxArea)
-            this.selectedRooms = []
-            this.updateFilter()
+            this.values.minPrice = this.boundaryValues.minPrice,
+            this.values.maxPrice = this.boundaryValues.maxPrice,
+            this.values.minFloor = this.boundaryValues.minFloor,
+            this.values.maxFloor = this.boundaryValues.maxFloor,
+            this.values.minArea = Math.floor(this.boundaryValues.minArea),
+            this.values.maxArea = Math.ceil(this.boundaryValues.maxArea)
+            this.values.selectedRooms = []
+            this.currentFilter = {}
+            this.selectedSale = null
+            this.updateFilter('', '')
         },
         toggleRoom(room) {
-        if (this.selectedRooms.includes(room)) {
-            this.selectedRooms = this.selectedRooms.filter(r => r !== room);
+        if (this.values.selectedRooms.includes(room)) {
+            this.values.selectedRooms = this.values.selectedRooms.filter(r => r !== room);
         } else {
-            this.selectedRooms.push(room);
+            this.values.selectedRooms.push(room);
         }
-        this.updateFilter();
+          this.currentFilter['rooms'] = this.values.selectedRooms;
+          this.updateFilter("", "")
     }
     },
-    props: ['sort', 'displayMode', 'boundaryValues', 'filteredBoundaryValues'],
+    props: ['sort', 'displayMode', 'boundaryValues', 'filteredBoundaryValues', 'sales'],
     components: {
         DoubleRangeInput
     },
     mounted() {
-      
+      console.log(this.sales)
     }
 }
 
@@ -146,42 +195,49 @@ export default {
                     <p>Комнатность</p>
                 </div>
                 <div class="rooms-select-inner">
-                    <button class="rooms-select" :disabled="!rooms.includes(1)" @click="toggleRoom(1)" :class="{'active': selectedRooms.includes(1)}">
+                    <button class="rooms-select" :disabled="!values.rooms.includes(1)" @click="toggleRoom(1)" :class="{'active': values.selectedRooms.includes(1)}">
                         <p>1</p>
                     </button>
-                    <button class="rooms-select" :disabled="!rooms.includes(2)" @click="toggleRoom(2)" :class="{'active': selectedRooms.includes(2)}">
+                    <button class="rooms-select" :disabled="!values.rooms.includes(2)" @click="toggleRoom(2)" :class="{'active': values.selectedRooms.includes(2)}">
                         <p>2</p>
                     </button>
-                    <button class="rooms-select" :disabled="!rooms.includes(3)" @click="toggleRoom(3)" :class="{'active': selectedRooms.includes(3)}">
+                    <button class="rooms-select" :disabled="!values.rooms.includes(3)" @click="toggleRoom(3)" :class="{'active': values.selectedRooms.includes(3)}">
                         <p>3</p>
                     </button>
-                    <button class="rooms-select" :disabled="!rooms.includes(4)" @click="toggleRoom(4)" :class="{'active': selectedRooms.includes(4)}">
+                    <button class="rooms-select" :disabled="!values.rooms.includes(4)" @click="toggleRoom(4)" :class="{'active': values.selectedRooms.includes(4)}">
                         <p>4+</p>
                     </button>
                 </div>
-                
             </div>
-            <DoubleRangeInput  class="range-input" @drag-end="updateFilter"
-                :min="boundaryValues.minPrice"
+            <DoubleRangeInput  class="range-input" @drag-end="updateFilter($event, 'price')"
+                :min="boundaryValues.minPrice" 
                 :max="boundaryValues.maxPrice"
-                :value="[minPrice, maxPrice]"
+                :value="[values.minPrice, values.maxPrice]"
                 @input="updatePriceRange" title="Стоимость, ₽" @update-input="updateFilter"
             />
-            <DoubleRangeInput class="range-input" @drag-end="updateFilter"
+            <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'area')"
                 :min="Math.floor(boundaryValues.minArea)"
-                :max="Math.ceil(boundaryValues.maxArea)"
-                :value="[minArea, maxArea]"
+                :max="Math.ceil(boundaryValues.maxArea)" 
+                :value="[values.minArea, values.maxArea]"
                 @input="updateAreaRange" title="Площадь, м²" @update-input="updateFilter"
             />
-            <DoubleRangeInput class="range-input" @drag-end="updateFilter"
-                :min="boundaryValues.minFloor"
+            <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'floor')"
+                :min="boundaryValues.minFloor" clickable="false"  
                 :max="boundaryValues.maxFloor"
-                :value="[minFloor, maxFloor]"
+                :value="[values.minFloor, values.maxFloor]"
                 @input="updateFloorRange" title="Этаж" @update-input="updateFilter"
             />
         </div>
         <div class="sub-filter-info-container">
-            <p>Расширенный фильтр</p>
+                  <details class="custom-details">
+                      <summary class="custom-details-summary">
+                        <span class="summary-text">Расширенный фильтр</span>
+                       <font-awesome-icon icon="fa-solid fa-chevron-down" class="details-icon"></font-awesome-icon>
+                       </summary>
+                      <div class="details-content">
+                        <v-select class="custom-multiselect" v-model="selectedSale" @input="deselect" @option:selected="handleSelectSale" @option:deselected="deselect" :options="sales.map(sale => sale.Title)"/>
+                    </div>
+                </details>
             <RouterLink :to="{path: '/flats', hash: '#flats-catalog'}" class="watch-flats-href">Смотреть {{totalItems}} объект{{declineObject(totalItems)}}</RouterLink>
             <button class="drop-filters-button" @click="dropFilters">
                 <p>Сбросить фильтры</p>
@@ -256,12 +312,110 @@ export default {
     justify-content: space-between;
 }
 
+.custom-details {
+    position: relative; 
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0;
+  margin: 12px 0;
+  
+  transition: all 0.3s ease;
+  width: 18rem;
+}
+
+.custom-multiselect {
+  position: absolute;
+  top:2rem;
+  margin-top: 10px;
+  left: 1rem;
+  width: 90%;
+  z-index: 1000;
+  height: 2rem;
+  font-size: var(--font-size-normal);
+}
+
+
+
+/* Элемент, который уже выбран, но можно отменить */
+.multiselect__option--selected {
+  background: #EFF6FF;  /* Голубой фон */
+  color: #1E40AF;       /* Тёмно-синий текст */
+}
+
+/* При наведении на выбранный элемент */
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #DBEAFE;  /* Светло-голубой при наведении */
+  color: #1E3A8A;       /* Ещё темнее синий */
+}
+
+.custom-multiselect .multiselect__content-wrapper {
+  
+  width: 100%;
+  z-index: 1001; /* Выше, чем сам Multiselect */
+}
+
+.custom-details-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  background-color: transparent;
+  border-width: 0;
+   width: 100%;
+  box-sizing: border-box; /* Важно для правильного расчета ширины */
+}
+
+.summary-text {
+  flex-grow: 1;
+}
+
+.details-icon {
+  transition: transform 0.3s ease;
+  margin-left: 12px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Анимация иконки при открытии */
+.custom-details[open] .details-icon {
+  transform: rotate(180deg);
+}
+
+/* Анимация содержимого */
+.details-content {
+    padding: 0 16px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    border-width: 0;
+    transition: 
+        max-height 0.3s ease, 
+        opacity 0.3s ease,
+        padding 0.3s ease;
+}
+
+.custom-details[open] .details-content {
+    max-height: 1000px; /* Достаточно большое значение */
+    opacity: 1;
+    height: 3rem;
+    padding: 16px;
+    padding-top: 8px;
+}
+
+
 .watch-flats-href {
     text-decoration: none;
     color: var(--vt-c-blue);
     font-weight: 500;
     font-size: var(--font-size-normal-mini);
     transition: 0.3s;
+    display: flex;
+    align-items: center;
 }
 
 .watch-flats-href:hover {

@@ -40,7 +40,7 @@ export default {
         const dragX = e.clientX || e.touches[0].clientX;
         this.offsetX = dragX - this.dragStartX;
        // console.log(this.offsetX)
-         console.log(this.getCarouselItemWidth)
+  
         const slidesMoved = this.offsetX / this.getCarouselItemWidth;
 
         this.currentTranslateX = (this.startTranslateX - (slidesMoved * 100 / 1));

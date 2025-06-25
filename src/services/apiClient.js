@@ -7,7 +7,7 @@ export const initializeApiClient = async () => {
 
     try {
         const response = await fetch('/config.json');
-        console.log('dsadasdadasdasd123123123213')
+   
         const config = await response.json();
       
         apiClient = axios.create({
@@ -28,6 +28,6 @@ export const initializeApiClient = async () => {
 
 export const getApiClient = async () => {
     if(!apiClient) apiClient = await initializeApiClient();
-     console.log('dasdasdasdapiClient')
+
     return apiClient
 }

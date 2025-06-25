@@ -106,14 +106,14 @@ export default {
   },
   mounted() {
      eventBus.$on('scroll-to', this.scrollTo)
-     console.log('Available refs:', Object.keys(this.$refs));
+ 
   },
   beforeUnmount() {
      eventBus.$off('scroll-to', this.scrollTo)
   },
   methods: {
     scrollTo(refName){
-      console.log(refName)
+
       const element = this.$refs[refName];
     
     // Для компонентов Vue
@@ -131,7 +131,7 @@ export default {
     } else {
       console.error(`Элемент с ref="${refName}" не найден`);
     }
-      console.log(this.$refs[refName].$el)
+  
     }
   },
   components: {

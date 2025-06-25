@@ -33,9 +33,12 @@ export default {
             if (filter.rooms && filter.rooms.length) {
                 params.rooms = filter.rooms;
             }
+
+            if(filter.sales && filter.sales.length) {
+                params.sales = filter.sales;
+            }
         }
-        console.log('params')
-        console.log(params)
+  
         return api.get('/flats', {
             params: params,
             paramsSerializer: {

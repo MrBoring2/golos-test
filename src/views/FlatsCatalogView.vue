@@ -2,6 +2,7 @@
 import FlatsCatalog from '@/components/FlatsCatalogView/FlatsCatalog.vue'
 import FlatsFilter from '@/components/FlatsCatalogView/FlatsFilter.vue'
 import flatsApiService from '@/services/flatsApiService'; 
+import salesApiService from '@/services/salesApiService'
 
 export default {
     data() {
@@ -9,6 +10,7 @@ export default {
             activeFilters: {},
             activeSort: {type: null, direction: null},
             activeDisplayMode: 'grid',
+            sales: [],
             flatsData: [],
             startBoundaryValues: [],
             filteredBoundaryValues: { }
@@ -28,6 +30,8 @@ export default {
             this.activeDisplayMode = mode;
         },
         async loadData(){
+            console.log('Фильтры')
+            console.log(this.activeFilters)
             this.activeFilters.orderBy = this.activeSort
             const response = await flatsApiService.getFlats(this.activeFilters);
             //нужно реактивно обновить полностью объект
@@ -48,22 +52,26 @@ export default {
                 rooms: this.flatsData.data.rooms,
                 totalItems: this.flatsData.data.totalItems
             }
-            console.log('filter')
             console.log(this.filteredBoundaryValues)
+        
         },
         async loadStartBoundaryValues() {
             this.startBoundaryValues = await flatsApiService.getStartBoundaryValues();
-            console.log(this.startBoundaryValues)
+     
         },
         async update(filter) {
             this.activeFilters = filter;
             await this.loadData()         
+        },
+        async loadSales() {
+            this.sales = await salesApiService.getSales()
         }
     },
     computed: {
   
     },
     async created() {
+        await this.loadSales();
         await this.loadStartBoundaryValues();
         await this.loadData(this.activeFilters)
     }
@@ -74,7 +82,7 @@ export default {
 <template>
     <main class="main">
         <FlatsFilter  v-if="flatsData && flatsData.data && startBoundaryValues && startBoundaryValues.data" :boundaryValues="startBoundaryValues.data" 
-        :filteredBoundaryValues="filteredBoundaryValues" :sort="activeSort" @update-sort="handleSortUpdate" :displayMode="activeDisplayMode" 
+        :filteredBoundaryValues="filteredBoundaryValues" :sort="activeSort" @update-sort="handleSortUpdate" :displayMode="activeDisplayMode" :sales="sales.data"
         @update-display-mode="handleDisplayModeUpdate" @update-filter="update"/>
         <FlatsCatalog  id="flats-catalog" v-if="flatsData && flatsData.data" :flats="flatsData.data.flats" :sort="activeSort" @update-sort="handleSortUpdate" 
         :displayMode="activeDisplayMode" @update-display-mode="handleDisplayModeUpdate" />
