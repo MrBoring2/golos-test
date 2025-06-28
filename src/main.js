@@ -15,7 +15,7 @@ import VueSlider from 'vue-slider-component';
 import VueSelect from "vue-select";
 import 'vue-slider-component/theme/default.css'
 import '@/css/slider.css'
-import "vue-select/dist/vue-select.css"
+
 
 library.add(faPhone, faHeartBold, faHaertHollow, faArrowDown, faTelegram, faVk, faYoutube, faChevronRight, faChevronLeft, faChevronDown,
   faPercent, faArrowsAlt, faClose, faCheck, faBars, faArrowsH, faEllipsis, faBuilding, faArrowDownLong, faArrowUpLong, faList, faTable, faFilter, faGift)

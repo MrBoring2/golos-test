@@ -10,6 +10,7 @@ import logo from './assets/images/logo.webp'
 import { computed } from 'vue'
 
 
+
 export default {
     data() {
       return{
@@ -77,6 +78,55 @@ export default {
   flex-direction: column;
   min-height: 100vh;
 }
+:deep(.vs__dropdown-toggle) {
+  border: none !important;
+  padding-right: 1rem;
+  align-items: center;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: var(--vt-c-light-gray) !important;
+}
+
+:deep(.custom-multiselect .vs__search) {
+  font-size: var(--font-size-normal-mini);
+  padding-left: 1.1rem;
+}
+
+:deep(.vs__search::placeholder) {
+  padding-left: 1.25rem;
+  font-size: var(--font-size-mini);
+}
+
+:deep(.vs__search), 
+:deep(.vs__search:focus) {
+  border: none !important;
+  padding: 0 !important;
+}
+:deep(.vs__dropdown-menu) {
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Можно добавить тень вместо границы */
+}
+
+:deep(.vs__actions) {
+  padding: 0 !important;
+}
+
+:deep(.custom-multiselect .vs__selected) {
+    padding-left: 1.1rem;
+  font-weight: bold;
+   font-size: var(--font-size-normal-mini);
+}
+
+:deep(.vs__dropdown-option) {
+  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+:deep(.vs__dropdown-option--highlight) {
+   background: var(--vt-c-blue);
+   color: white; 
+}
+
 
 
 @media (max-width: 900px) {
@@ -86,7 +136,5 @@ export default {
   }
 
 }
-
-
 
 </style>

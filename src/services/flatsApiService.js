@@ -30,12 +30,12 @@ export default {
                 params.orderBy = `${direction}${type}`
             }
 
-            if (filter.rooms && filter.rooms.length) {
-                params.rooms = filter.rooms;
+            if (filter.selectedRooms && filter.selectedRooms.length) {
+                params.rooms = filter.selectedRooms;
             }
 
-            if(filter.sales && filter.sales.length) {
-                params.sales = filter.sales;
+            if(filter.selectedSales && filter.selectedSales.length) {
+                params.sales = filter.selectedSales;
             }
         }
   

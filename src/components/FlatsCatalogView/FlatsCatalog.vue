@@ -41,12 +41,12 @@ export default {
         },
         changeSort(type) {
             let direction = 'asc';
-            if(this.sort.type == type) {
+            if(this.sort != undefined && this.sort.type == type) {
                 if(this.sort.direction == 'asc')
                     direction = 'desc';
                 else if(this.sort.direction == 'desc'){
-                    direction = null;
-                    type = null;
+                    direction = undefined;
+                    type = undefined;
                 }     
                 else direction = 'asc';
             }
@@ -72,18 +72,18 @@ export default {
                 </div>
                 <div class="sort-direction">
                     <div class="sort-price" @click="changeSort('price')">
-                        <p class="sort-price-title" :class="{'active': sort.type == 'price'}">Стоимости</p>
+                        <p class="sort-price-title" :class="{'active': sort != undefined && sort.type == 'price'}">Стоимости</p>
                         <div class="sort-icons-container">
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': sort.type == 'price' && sort.direction == 'asc'}"/>
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': sort.type == 'price' && sort.direction == 'desc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': sort != undefined && sort.type == 'price' && sort.direction == 'asc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active':sort != undefined && sort.type == 'price' && sort.direction == 'desc'}"/>
                         </div>
 
                     </div>
                     <div class="sort-area" @click="changeSort('area')">
-                        <p class="sort-area-title" :class="{'active': sort.type == 'area'}">Площади</p>
+                        <p class="sort-area-title" :class="{'active': sort != undefined && sort.type == 'area'}">Площади</p>
                            <div class="sort-icons-container">
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active': sort.type == 'area' && sort.direction == 'asc'}"/>
-                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active': sort.type == 'area' && sort.direction == 'desc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-up-long" :class="{'active':sort != undefined && sort.type == 'area' && sort.direction == 'asc'}"/>
+                            <font-awesome-icon class="sort-icon" icon="fa-solid fa-arrow-down-long" :class="{'active':sort != undefined && sort.type == 'area' && sort.direction == 'desc'}"/>
                         </div>
                     </div>
                 </div>
@@ -191,6 +191,17 @@ export default {
             <ul class="flats-catalog-inner-list" v-else-if="displayMode == 'list'">
                 <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-list">
                     <RouterLink to="/" class="flat-link-list">
+                        <div class="sales-list" v-if="flat.Sales.length > 0">
+                            <div class="sales-content">
+                                <font-awesome-icon icon="fa-solid fa-gift" size="xl" />
+                                <p>+{{flat.Sales.length}} акция</p>
+                            </div>            
+                            <div class="sales-list-container">
+                                <div v-for="(sale, index) in flat.Sales" :key="index" class="sale-item">
+                                    <p>{{sale.Title}}</p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="flat-number-list">
                                     <p>№ {{flat.Number}}</p>
                         </div>
@@ -304,18 +315,20 @@ export default {
 
 .flats-catalog-main {
     background: var(--vt-c-white-blue2);
-    position: relative;
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
     width: 100%;
-
+    min-width: 100%; /* На всякий случай */
+    max-width: 100%; /* Запрещаем сужаться */
 }
 
 .flats-catalog-main-inner {
     width: 60%;
+    position: relative;
     display: flex;
     flex-direction: column;
     padding-left: 10px;
@@ -329,7 +342,7 @@ export default {
     font-size: var(--font-size-normal-mini);
     color: var(--vt-c-gray);
     display: flex;
-    width: 100%;
+    min-width: 100%;
     justify-content: space-between;
 }
 
@@ -349,6 +362,7 @@ export default {
 }
 .flats-catalog-item-list-image {
     display: flex;
+    padding-top: 1rem;
     position: relative;
     justify-content: center;
     align-items: center;
@@ -401,6 +415,24 @@ export default {
     display: flex;
     align-items: center;
     border-radius: 0 0 0.3rem 0.3rem;
+    transition: 0.3s;
+}
+
+.sales-list {
+    position: absolute;
+    flex-direction: column;
+    top: 0.1rem;
+    
+    gap: 0.5rem;
+    background-color: var(--vt-c-blue);
+    color: var(--vt-c-white);
+    font-size: var(--font-size-mini);
+    padding: 0.2rem 0.5rem;
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    border-radius: 0 0 0.3rem 0.3rem;
+    transition: 0.3s;
 }
 
 .sales-content {
@@ -408,9 +440,15 @@ export default {
     gap: 0.5rem;
 }
 
-.sales:hover .sales-list-container {
+.sales:hover {
+    background-color: var(--vt-c-light-blue);
+    transform: all 0.5 ease;
+}
+
+.sales:hover .sales-list-container, .sales-list:hover .sales-list-container {
     display: flex;
      opacity: 1;
+     z-index: 10002;
   transform: translateY(0.5rem);
 }
 
@@ -492,6 +530,7 @@ export default {
 
 .flats-catalog-container {
    width: 100%;
+   min-width: 100%;
 }
 
 .flats-catalog-inner-grid {
@@ -718,21 +757,23 @@ export default {
 
 
 .flats-catalog-inner-list {
-    display: grid;
-    grid-template-columns: 100%;
-     gap: 20px;
-     padding-bottom: 10px;
-     padding-left: 0;
+      display: grid;
+    grid-template-columns: 1fr; /* вместо 100% */
+    gap: 20px;
+    width: 100%;
+    padding-bottom: 10px;
+    padding-left: 0;
 }
 
 .flat-link-list {
+    width: 100%; /* Занимает всю ширину списка */
     padding: 20px;
-    position: relative;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: var(--vt-c-dark-indigo);
     gap: 2.5rem;
+     box-sizing: border-box;
 }
 .flats-catalog-item-list-image img {
     width: 7rem;
@@ -807,7 +848,6 @@ export default {
 
 .banner-list {
     display: flex;
-    position: relative;
     height: 100%;
     width: 100%;
     justify-content: space-between;
@@ -903,6 +943,19 @@ export default {
         grid-column: 1;
     }
 
+    .flats-catalog-main {
+        width: 100%;
+    }
+
+    .flats-catalog-inner-list {
+        width: 100%;
+    }
+
+    .flats-catalog-main-inner {
+        
+        margin: 0;
+    }
+
     .flats-catalog-item-grid-image img{
         
     }
@@ -960,6 +1013,10 @@ export default {
     .banner-list-button {
         flex-direction: row;
         padding-top: 80px;
+    }
+
+    .sales-list {
+        margin-left: 0;
     }
 
 }

@@ -431,7 +431,6 @@ nav a:hover, .phone-number:hover, .icon:hover, .icon-humberger:hover {
 
 .mobile-menu-drawer {
   position: fixed;
- ;
   width: 100%;
   height: 100%;
   z-index: 1000;

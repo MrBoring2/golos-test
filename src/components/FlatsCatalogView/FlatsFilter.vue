@@ -1,4 +1,5 @@
 <script>
+import 'vue-select/dist/vue-select.css';
 import { RouterLink } from 'vue-router';
 import DoubleRangeInput from '../DoubleRangeInput.vue';
 export default {
@@ -12,25 +13,20 @@ export default {
             minFloor: this.filteredBoundaryValues.minFloor,
             maxFloor: this.filteredBoundaryValues.maxFloor,
             selectedRooms: [],
+            selectedSales: [],
             rooms: this.filteredBoundaryValues.rooms,
-            activePrice: false,
-            activeFloor: false,
-            activeArea: false,
             },
+            mobileDrawerOpen: false,
             selectedSale: null,
             totalItems: this.filteredBoundaryValues.totalItems,
             currentFilter: {},
-            
+            displaySearch: {},
+            showChildren: false,
+            isLoading: true      
         }
     },
     watch: {
         filteredBoundaryValues(newVal) {
-            console.log('currentfilter')
-            console.log(this.currentFilter)
-
-     
-            console.log('newVal')
-            console.log(newVal)
              this.totalItems = newVal.totalItems
              this.values.minPrice = this.currentFilter.minPrice == undefined && newVal.minPrice != undefined ? newVal.minPrice : this.values.minPrice;
              this.values.maxPrice = this.currentFilter.maxPrice == undefined && newVal.maxPrice != undefined ? newVal.maxPrice : this.values.maxPrice;
@@ -40,34 +36,65 @@ export default {
              this.values.maxFloor = this.currentFilter.maxFloor == undefined && newVal.maxFloor != undefined ? newVal.maxFloor : this.values.maxFloor;
              if(isNaN(this.values.minArea)) this.values.minArea = Math.floor(this.boundaryValues.minArea);
              if(isNaN(this.values.maxArea))  this.values.maxArea = Math.ceil(this.boundaryValues.maxArea);
-   // console.log(this.currentFilter)
-
+        },
+        sort(newVal) {
+            this.updateDisplaySearch('orderBy', '')
+            if(newVal == undefined){
+                delete this.currentFilter.orderBy
+                delete this.displaySearch.orderBy
+            }
         },
         selectedSale(newVal, oldVal) {
-            if (oldVal !== null && newVal === null) {
-                if (this.currentFilter.sales.includes(oldVal)) {
-                this.currentFilter.sales = this.currentFilter.sales.filter(r => r !== oldVal);
-               
-                this.updateFilter('', '')
+
+            if(newVal != null || Array.isArray(this.values.selectedSales)){
+            if (!this.values.selectedSales) {
+                this.values.selectedSales = []
+            }
+            if (oldVal !== null && this.values.selectedSales.includes(oldVal)) {
+                this.values.selectedSales = this.values.selectedSales.filter(r => r !== oldVal)
+                if(this.values.selectedSales.length == 0){
+                    delete this.currentFilter.selectedSales
+                    delete this.displaySearch.selectedSales
                 }
             }
-        }
+            if (newVal !== null && !this.values.selectedSales.includes(newVal)) {
+                this.values.selectedSales.push(newVal)
+            }
+            if(this.currentFilter.selectedSales == undefined || this.values.selectedSales.length > 0)
+                this.updateFilter('', 'selectedSales')
+            }
+        },
+        currentFilter: {
+            handler(newFilter) {
+            this.updateUrlFilters();
+        },
+    deep: true 
+  }
+                
+            
+            
+        
     },
+
     computed: {
         
         selectedSort: {
                 get() {
-                    if(!this.sort.type) return 'null';
+                    if(this.sort == undefined) return 'undefined';
                     return `${this.sort.type}_${this.sort.direction}`;
                 },
                 set(value) {
+       
                     if(this.sort != value) {
-                        if(value == 'null') {
-                            this.$emit('update-sort', {type: null, direction: null})
+                        if(value == undefined || value == 'undefined') {
+  
+                            this.$emit('update-sort', undefined)
                         }
+                        else{
                       
                         const [type, direction] = value.split('_');
                         this.$emit('update-sort', {type, direction})
+                        }
                     }
                 }
             },
@@ -81,12 +108,36 @@ export default {
                         this.$emit('update-display-mode', value)
                     }
                 }
+        },
+        activeDisplayedFilters() {
+            return Object.fromEntries(
+                Object.entries(this.displaySearch)
+                .filter(([_, value]) => Boolean(value))
+            );
         }
     },
     
     methods: {
+        initDefaultFilters() {
+        this.values = {
+            minPrice: this.boundaryValues?.minPrice || 0,
+            maxPrice: this.boundaryValues?.maxPrice || 10000000,
+            minArea: Math.floor(this.boundaryValues?.minArea || 0),
+            maxArea: Math.ceil(this.boundaryValues?.maxArea || 100),
+            minFloor: this.boundaryValues?.minFloor || 1,
+            maxFloor: this.boundaryValues?.maxFloor || 8,
+            selectedRooms: [],
+            selectedSales: [],
+            rooms: this.boundaryValues?.rooms || [1, 2, 3, 4]
+        };
+        
+        this.currentFilter = {};
+        this.displaySearch = {};
+        },
+        openMobileFilterDrawer() {
+            this.mobileDrawerOpen = !this.mobileDrawerOpen;
+        },
          updatePriceRange(newValues) {
-            console.log('updated')
             if (Array.isArray(newValues)) {
                 this.values.minPrice = newValues[0];
                 this.values.maxPrice = newValues[1];
@@ -104,37 +155,171 @@ export default {
                 this.values.maxFloor = newValues[1];
             }
         },
+        updateUrlFilters() {
+            const query = {};
+
+            if (this.currentFilter.minPrice) query.min_price = this.currentFilter.minPrice;
+            if (this.currentFilter.maxPrice) query.max_price = this.currentFilter.maxPrice;
+
+            if (this.currentFilter.minArea) query.min_area = this.currentFilter.minArea;
+            if (this.currentFilter.maxArea) query.max_area = this.currentFilter.maxArea;
+
+            if (this.currentFilter.minFloor) query.min_floor = this.currentFilter.minFloor;
+            if (this.currentFilter.maxFloor) query.max_floor = this.currentFilter.maxFloor;
+
+            if (this.currentFilter.orderBy) {
+                let prefix = ''
+                if(this.currentFilter.orderBy.direction == 'desc'){
+                    prefix = '-'
+                }
+                query.order_by = `${prefix}${this.currentFilter.orderBy.type}`
+            };
+
+            if (this.currentFilter.selectedRooms?.length) {
+            query.rooms = this.currentFilter.selectedRooms.join(',');
+            }
+
+            if (this.currentFilter.selectedSales?.length) {
+                query.sales = this.currentFilter.selectedSales.join(',');
+            }
+
+
+            this.$router.replace({
+                path: this.$route.path,
+                query,
+     
+    });
+  },
+  parseUrlFilters(query) {
+    this.isLoading = true
+    const oldFilter = {...this.currentFilter};
+    if (query.min_price) {
+        this.values.minPrice = Number(query.min_price);
+        this.currentFilter.minPrice = this.values.minPrice;
+        this.updateDisplaySearch('price', 'min');
+    }
+    if(query.max_price){
+        this.values.maxPrice = Number(query.max_price);
+        this.currentFilter.maxPrice = this.values.maxPrice;
+        this.updateDisplaySearch('price', 'max');
+    }
+    if(query.min_area){
+        this.values.minArea = Number(query.min_area);
+        this.currentFilter.minArea = this.values.minArea;
+        this.updateDisplaySearch('area', 'min');
+    }
+    if(query.max_area){
+        this.values.maxArea = Number(query.max_area);
+        this.currentFilter.maxArea = this.values.maxArea;
+        this.updateDisplaySearch('area', 'max');
+    }
+    if(query.min_floor){
+        this.values.minFloor = Number(query.min_floor);
+        this.currentFilter.minFloor = this.values.minFloor;
+        this.updateDisplaySearch('floor', 'min');
+    }
+    if(query.max_floor){
+        this.values.maxFloor = Number(query.max_floor);
+        this.currentFilter.maxFloor = this.values.maxFloor;
+        this.updateDisplaySearch('floor', 'max');
+    }
+
+    if(query.order_by) {
+     
+        let direction = '';
+           console.log('parsing')
+        console.log(query.order_by)
+        if(query.order_by.charAt(0) == '-'){
+            direction = query.order_by[0]
+            query.order_by = query.order_by.slice(1);
+        }
+        this.selectedSort = direction == '-' ? `${query.order_by}_desc` : `${query.order_by}_asc`
+        console.log(this.selectedSort)
+        this.currentFilter.orderBy = this.selectedSort;
+        this.updateDisplaySearch('orderBy', '');
+    }
+
+    if (query.rooms) {
+      this.values.selectedRooms = query.rooms.split(',').map(Number);
+      this.currentFilter.selectedRooms = this.values.selectedRooms;
+      this.updateDisplaySearch('selectedRooms', '');
+    }
+    if (query.sales) {
+      this.values.selectedSales = query.sales.split(',');
+      this.currentFilter.selectedSales = this.values.selectedSales;
+      this.selectedSale = this.currentFilter.selectedSales[0]
+      this.updateDisplaySearch('selectedSales', '');
+    }
+      if (!this.isInitializing || JSON.stringify(oldFilter) !== JSON.stringify(this.currentFilter)) {
+        this.$emit('update-filter', this.currentFilter);
+    }
+    
+    this.isLoading = false;
+  },
+
+         getFilterKey(index, type) {
+                return index ? `${index}${type.charAt(0).toUpperCase() + type.slice(1)}`  :    type;
+            },
         updateFilter(index, type){
-
-            if(type == 'price') {this.activePrice = true; this.activeFloor = false; this.activeArea = false}
-            if(type == 'floor') {this.activePrice = false; this.activeFloor = true; this.activeArea = false}
-            if(type == 'area') {this.activePrice = false; this.activeFloor = false; this.activeArea = true}
-
-           
-            this.currentFilter[`${index}${type.charAt(0).toUpperCase() + type.slice(1)}`] = this.values[`${index}${type.charAt(0).toUpperCase() + type.slice(1)}`]
-          
-         
-            console.log('sales')
-            console.log(this.currentFilter)
-            this.$emit('update-filter', this.currentFilter)
+            if(type == '') return;
+            const filterKey = this.getFilterKey(index, type);
+            this.updateCurrentFilterKey(filterKey, type);
+            this.updateDisplaySearch(filterKey, index);
+            this.$emit('update-filter', this.currentFilter);
         },
-        deselect(value) {
-               console.log('Выбор очищен крестиком');
-            if (value === null || value.length === 0) {
-            console.log('Выбор очищен крестиком');
+        updateCurrentFilterKey(filterKey, type){
+            const value = this.values[filterKey];
+        
+            if (Array.isArray(value)) {
+                if (value.length > 0) {
+                    this.currentFilter[filterKey] = value;
+                } else {
+                    delete this.currentFilter[filterKey];
+            }   
+            } else if (value !== undefined && value !== null) {
+                this.currentFilter[filterKey] = value;
             }
         },
-        handleSelectSale(value) {
-            console.log('sssselecte')
-            if(this.currentFilter.sales == undefined)
-                this.currentFilter.sales = []
-            if (this.currentFilter.sales.includes(this.selectedSale)) {
-                this.currentFilter.sales = this.currentFilter.sales.filter(r => r !== this.selectedSale);
-            } else {
-                this.currentFilter.sales.push(this.selectedSale);
+        updateDisplaySearch(filterKey, index) {
+        if (!index) {
+       
+            if (filterKey === 'selectedRooms' && this.currentFilter[filterKey] != undefined) {
+                this.displaySearch[filterKey] = this.currentFilter[filterKey]?.map(item => `${item}-комнатная`).join(", ") || '';
             }
-            console.log(this.currentFilter)
-            this.updateFilter('', '');
+            if (filterKey === 'selectedSales' && this.currentFilter[filterKey] != undefined) {
+                
+                this.displaySearch[filterKey] = this.currentFilter[filterKey]?.map(item => `${item}`).join(", ") || '';
+            }
+            if (filterKey === 'orderBy' && this.currentFilter[filterKey] != undefined) {
+                const type = this.currentFilter[filterKey].type;
+                let typeString ='цены'
+                const direction = this.currentFilter[filterKey].direction;
+                let directionString = 'по возрастанию'
+                if(direction == 'desc')
+                    directionString = 'по убыванию'
+                if(type == 'area')
+                    typeString = 'площади'
+                this.displaySearch[filterKey] = `${directionString} ${typeString}`
+            }
+            return;
+        }
+        
+        const rangeType = filterKey.replace(/^(min|max)/, '').toLowerCase();
+
+        const minVal = this.currentFilter[`min${rangeType.charAt(0).toUpperCase() + rangeType.slice(1)}`];
+        const maxVal = this.currentFilter[`max${rangeType.charAt(0).toUpperCase() + rangeType.slice(1)}`];
+        const units = {
+            price: ' руб.',
+            area: ' м²',
+            floor: ''
+        };
+        if (minVal && maxVal) {
+            this.displaySearch[rangeType] = `от ${minVal} до ${maxVal} ${units[rangeType]}`;
+        } else if (minVal) {
+            this.displaySearch[rangeType] = `от ${minVal} ${units[rangeType]}`;
+        } else if (maxVal) {
+            this.displaySearch[rangeType] = `до ${maxVal} ${units[rangeType]}`;
+        }
         },
         declineObject(count) {
             const lastTwo = count % 100;
@@ -150,35 +335,86 @@ export default {
             }
             else return 'ов'
         },
+        removeFilter(key){
+            console.log(this.displaySearch)
+           if (['price', 'area', 'floor'].includes(key)) {
+    const prefix = key.charAt(0).toUpperCase() + key.slice(1);
+    this.values[`min${prefix}`] = null;
+    this.values[`max${prefix}`] = null;
+    delete this.currentFilter[`min${prefix}`];
+    delete this.currentFilter[`max${prefix}`];
+  } 
+  else if (key === 'selectedRooms') {
+    this.values.selectedRooms = [];
+    delete this.currentFilter.selectedRooms;
+  }
+  else if (key === 'selectedSales') {
+    this.values.selectedSales = [];
+    this.selectedSale = null;
+    delete this.currentFilter.selectedSales;
+  }
+  else if(key == 'orderBy') {
+    this.selectedSort = undefined
+     delete this.currentFilter.orderBy;
+  }
+
+  // Удаляем из отображения (вариант с иммутабельным обновлением)
+  const newDisplaySearch = {...this.displaySearch};
+  delete newDisplaySearch[key];
+  this.displaySearch = newDisplaySearch;
+
+  this.$emit('update-filter', this.currentFilter);
+           // console.log(this.displaySearch[key])
+        },
         dropFilters() {
-            console.log('drop')
             this.values.minPrice = this.boundaryValues.minPrice,
             this.values.maxPrice = this.boundaryValues.maxPrice,
             this.values.minFloor = this.boundaryValues.minFloor,
             this.values.maxFloor = this.boundaryValues.maxFloor,
             this.values.minArea = Math.floor(this.boundaryValues.minArea),
             this.values.maxArea = Math.ceil(this.boundaryValues.maxArea)
-            this.values.selectedRooms = []
-            this.currentFilter = {}
-            this.selectedSale = null
-            this.updateFilter('', '')
+            this.values.selectedRooms = undefined
+            this.values.selectedSales = undefined
+            this.selectedSort = undefined
+            this.currentFilter = {};
+            this.displaySearch = {}; 
+            this.selectedSale = null 
+            this.$emit('update-filter', this.currentFilter)
+            if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false
+        },
+        watchCatalog() {
+            console.log('ssss')
+            this.$emit('show-catalog')
+            if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false
         },
         toggleRoom(room) {
-        if (this.values.selectedRooms.includes(room)) {
-            this.values.selectedRooms = this.values.selectedRooms.filter(r => r !== room);
-        } else {
-            this.values.selectedRooms.push(room);
+            if(this.values.selectedRooms == undefined)
+                    this.values.selectedRooms = []
+            if (this.values.selectedRooms.includes(room)) {
+                this.values.selectedRooms = this.values.selectedRooms.filter(r => r !== room);
+                if(this.values.selectedRooms.length == 0){
+                    delete this.currentFilter.selectedRooms
+                    delete this.displaySearch.selectedRooms
+                }
+            } else {
+                this.values.selectedRooms.push(room);
+            }
+
+            this.updateFilter("", "selectedRooms")
         }
-          this.currentFilter['rooms'] = this.values.selectedRooms;
-          this.updateFilter("", "")
-    }
     },
     props: ['sort', 'displayMode', 'boundaryValues', 'filteredBoundaryValues', 'sales'],
     components: {
         DoubleRangeInput
     },
     mounted() {
-      console.log(this.sales)
+        console.log('sss')
+            console.log(this.sales?.map(sale => sale.Title))
+                console.log('sss')
+        this.parseUrlFilters(this.$route.query);
+        if (Object.keys(this.$route.query).length === 0) {
+            this.initDefaultFilters();
+        }
     }
 }
 
@@ -195,16 +431,16 @@ export default {
                     <p>Комнатность</p>
                 </div>
                 <div class="rooms-select-inner">
-                    <button class="rooms-select" :disabled="!values.rooms.includes(1)" @click="toggleRoom(1)" :class="{'active': values.selectedRooms.includes(1)}">
+                    <button class="rooms-select" :disabled="values.rooms != undefined && !values.rooms.includes(1)" @click="toggleRoom(1)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(1) : false}">
                         <p>1</p>
                     </button>
-                    <button class="rooms-select" :disabled="!values.rooms.includes(2)" @click="toggleRoom(2)" :class="{'active': values.selectedRooms.includes(2)}">
+                    <button class="rooms-select" :disabled="values.rooms != undefined &&!values.rooms.includes(2)" @click="toggleRoom(2)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(2) : false}">
                         <p>2</p>
                     </button>
-                    <button class="rooms-select" :disabled="!values.rooms.includes(3)" @click="toggleRoom(3)" :class="{'active': values.selectedRooms.includes(3)}">
+                    <button class="rooms-select" :disabled="values.rooms != undefined &&!values.rooms.includes(3)" @click="toggleRoom(3)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(3) : false}">
                         <p>3</p>
                     </button>
-                    <button class="rooms-select" :disabled="!values.rooms.includes(4)" @click="toggleRoom(4)" :class="{'active': values.selectedRooms.includes(4)}">
+                    <button class="rooms-select" :disabled="values.rooms != undefined &&!values.rooms.includes(4)" @click="toggleRoom(4)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(4) : false}">
                         <p>4+</p>
                     </button>
                 </div>
@@ -213,39 +449,96 @@ export default {
                 :min="boundaryValues.minPrice" 
                 :max="boundaryValues.maxPrice"
                 :value="[values.minPrice, values.maxPrice]"
-                @input="updatePriceRange" title="Стоимость, ₽" @update-input="updateFilter"
+                @input="updatePriceRange" title="Стоимость, ₽" @update-input="updateFilter($event, 'price')"
             />
             <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'area')"
                 :min="Math.floor(boundaryValues.minArea)"
                 :max="Math.ceil(boundaryValues.maxArea)" 
                 :value="[values.minArea, values.maxArea]"
-                @input="updateAreaRange" title="Площадь, м²" @update-input="updateFilter"
+                @input="updateAreaRange" title="Площадь, м²" @update-input="updateFilter($event, 'area')"
             />
             <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'floor')"
                 :min="boundaryValues.minFloor" clickable="false"  
                 :max="boundaryValues.maxFloor"
                 :value="[values.minFloor, values.maxFloor]"
-                @input="updateFloorRange" title="Этаж" @update-input="updateFilter"
+                @input="updateFloorRange" title="Этаж" @update-input="updateFilter($event, 'floor')"
             />
         </div>
-        <div class="sub-filter-info-container">
-                  <details class="custom-details">
+
+
+        <Transition name="drawer">
+            <div class="flats-filter-mobile-wrapper" v-if="mobileDrawerOpen">
+                <div class="flats-filter-mobile-wrapper-header">
+                    <p class="flats-filter-mobile-wrapper-header-title">Фильтр</p>
+                    <button class="flats-filter-moblie-wrapper-header-button" @click="openMobileFilterDrawer">
+                        <font-awesome-icon icon="fa-solid fa-close"/>
+                    </button>
+                </div>
+                <div class="flats-filter-mobile-wrapper-middle">
+                    <div class="rooms-select-container">
+                <div class="rooms-select-title">
+                    <p>Комнатность</p>
+                </div>
+                <div class="rooms-select-inner">
+                    <button class="rooms-select" :disabled="!values.rooms.includes(1)" @click="toggleRoom(1)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(1) : false}">
+                        <p>1</p>
+                    </button>
+                    <button class="rooms-select" :disabled="!values.rooms.includes(2)" @click="toggleRoom(2)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(2) : false}">
+                        <p>2</p>
+                    </button>
+                    <button class="rooms-select" :disabled="!values.rooms.includes(3)" @click="toggleRoom(3)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(3) : false}">
+                        <p>3</p>
+                    </button>
+                    <button class="rooms-select" :disabled="!values.rooms.includes(4)" @click="toggleRoom(4)" :class="{'active': currentFilter.selectedRooms != undefined ? currentFilter.selectedRooms.includes(4) : false}">
+                        <p>4+</p>
+                    </button>
+                </div>
+            </div>
+            <DoubleRangeInput  class="range-input" @drag-end="updateFilter($event, 'price')"
+                :min="boundaryValues.minPrice" 
+                :max="boundaryValues.maxPrice"
+                :value="[values.minPrice, values.maxPrice]"
+                @input="updatePriceRange" title="Стоимость, ₽" @update-input="updateFilter($event, 'price')"
+            />
+            <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'area')"
+                :min="Math.floor(boundaryValues.minArea)"
+                :max="Math.ceil(boundaryValues.maxArea)" 
+                :value="[values.minArea, values.maxArea]"
+                @input="updateAreaRange" title="Площадь, м²" @update-input="updateFilter($event, 'area')"
+            />
+            <DoubleRangeInput class="range-input" @drag-end="updateFilter($event, 'floor')"
+                :min="boundaryValues.minFloor" clickable="false"  
+                :max="boundaryValues.maxFloor"
+                :value="[values.minFloor, values.maxFloor]"
+                @input="updateFloorRange" title="Этаж" @update-input="updateFilter($event, 'floor')"
+            />
+            <details class="custom-details">
                       <summary class="custom-details-summary">
-                        <span class="summary-text">Расширенный фильтр</span>
+                       <span class="summary-text">Расширенный фильтр</span>
                        <font-awesome-icon icon="fa-solid fa-chevron-down" class="details-icon"></font-awesome-icon>
                        </summary>
                       <div class="details-content">
-                        <v-select class="custom-multiselect" v-model="selectedSale" @input="deselect" @option:selected="handleSelectSale" @option:deselected="deselect" :options="sales.map(sale => sale.Title)"/>
+                        <p class="details-content-title">Акции</p>
+                        <div class="details-content-inner">
+                            <v-select class="custom-multiselect" :searchable=false placeholder="Выберите параметр" v-model="selectedSale" :options="sales.map(sale => sale.Title)"/>
+                        </div>
                     </div>
                 </details>
-            <RouterLink :to="{path: '/flats', hash: '#flats-catalog'}" class="watch-flats-href">Смотреть {{totalItems}} объект{{declineObject(totalItems)}}</RouterLink>
-            <button class="drop-filters-button" @click="dropFilters">
-                <p>Сбросить фильтры</p>
-                <font-awesome-icon class="drop-filter-icon" icon="fa-solid fa-close" size="xl"/> 
-            </button>
+                </div>
+                <div class="flats-filter-mobile-wrapper-footer">
+                    <button class="watch-flats-button" @click="watchCatalog">Смотреть {{totalItems}} объект{{declineObject(totalItems)}}</button>
+                    <button class="drop-filters-button" @click="dropFilters">
+                        <p>Сбросить фильтры</p>
+                        <font-awesome-icon class="drop-filter-icon" icon="fa-solid fa-close" size="xl"/> 
+                    </button>
+                </div>
+            
         </div>
+        </Transition>
+        
+        
         <div class="flats-filter-mobile">
-            <button class="flats-filter-mobile-button">
+            <button class="flats-filter-mobile-button" @click="openMobileFilterDrawer">
                 <font-awesome-icon icon="fa-solid fa-filter" />
                 <p>Фильтр</p>
             </button>
@@ -253,12 +546,12 @@ export default {
                 <div class="flats-filter-mobile-control-inner">
                     <button class="flats-filter-mobile-control-icon">
                          <div class="sort-icons-container">
-                            <font-awesome-icon class="icon" icon="fa-solid fa-arrow-up-long" :class="{'active': this.sort.direction == 'asc'}"/>
-                            <font-awesome-icon class="icon" icon="fa-solid fa-arrow-down-long" :class="{'active': this.sort.direction == 'desc'}"/>
+                            <font-awesome-icon class="icon" icon="fa-solid fa-arrow-up-long" :class="{'active': this.sort != undefined && this.sort.direction == 'asc'}"/>
+                            <font-awesome-icon class="icon" icon="fa-solid fa-arrow-down-long" :class="{'active': this.sort != undefined && this.sort.direction == 'desc'}"/>
                         </div>
                     </button>
                     <select v-model="selectedSort" class="flats-filter-moblie-select">
-                        <option value="null">По умолчанию</option>
+                        <option value="undefined">По умолчанию</option>
                         <option value="price_asc">По увеличению цены</option>
                         <option value="price_desc">По убыванию цены</option>
                         <option value="area_asc">По увеличению площади</option>
@@ -279,10 +572,53 @@ export default {
                 <!--<select class="flats-filter-mobile-display-variant"></select>-->
             </div>
         </div>
+        <div class="sub-filter-info-container">
+                  <details class="custom-details">
+                      <summary class="custom-details-summary">
+                       <span class="summary-text">Расширенный фильтр</span>
+                       <font-awesome-icon icon="fa-solid fa-chevron-down" class="details-icon"></font-awesome-icon>
+                       </summary>
+                      <div class="details-content">
+                        <p class="details-content-title">Акции</p>
+                        <div class="details-content-inner">
+                            <v-select class="custom-multiselect" :searchable=false placeholder="Выберите параметр" v-model="selectedSale" :options="sales?.map(sale => sale.Title) || []"/>
+                        </div>
+                    </div>
+                </details>
+                <div class="watch-flats-container">
+                    <button  class="watch-flats-button" @click="watchCatalog">Смотреть {{totalItems}} объект{{declineObject(totalItems)}}</button>
+                </div>
+                <div class="drop-filters-container">
+                    <button class="drop-filters-button" @click="dropFilters">
+                    <p>Сбросить фильтры</p>
+                    <font-awesome-icon class="drop-filter-icon" icon="fa-solid fa-close" size="xl"/> 
+                    </button>
+                </div>
+           
+        </div>
+        <transition
+            name="fade"
+            @after-enter="showChildren = true"
+            @before-leave="showChildren = false"
+        >
+        <div class="display-filter-container" v-if="Object.keys(currentFilter) != 0">
+            <p>Ваш поиск: </p>
+            <transition-group name="slide-fade">
+            <div class="display-filter-item" v-for="(filter, index) in displaySearch"  :key="index" v-if="showChildren">
+                <p class="display-filter-item-text">{{ filter }}</p>
+                <button class="display-filter-item-button" @click="removeFilter(index)">
+                    <font-awesome-icon icon="fa-solid fa-close" />
+                </button>
+            </div>
+            </transition-group>
+        </div>
+        </transition>
     </div>
 </template>
 
 <style scoped>
+
+
 
 .flats-filter-container {
     width: 60%;
@@ -299,6 +635,10 @@ export default {
     padding-bottom: 2rem;
 }
 
+.flats-filter-mobile-wrapper {
+    display: none;
+}
+
 .flats-filter-desktop {
     display: grid;
     grid-template-columns: repeat(4, 24%);
@@ -308,70 +648,103 @@ export default {
 
 .sub-filter-info-container {
     padding-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    align-items: center;
 }
 
 .custom-details {
-    position: relative; 
+  position: relative; 
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 0;
   margin: 12px 0;
-  
+  border-width: 0;
   transition: all 0.3s ease;
-  width: 18rem;
+  width: 72%;
+
 }
 
 .custom-multiselect {
   position: absolute;
-  top:2rem;
-  margin-top: 10px;
-  left: 1rem;
-  width: 90%;
-  z-index: 1000;
+  top:2.5rem;
+  width: 100%;
+  z-index: 10;
   height: 2rem;
-  font-size: var(--font-size-normal);
+  background: var(--vt-c-light-gray);
+  border-color: var(--vt-c-light-gray);
+  border-width: 0 !important;
+  font-size: var(--font-size-normal-mini);
 }
 
-
-
-/* Элемент, который уже выбран, но можно отменить */
-.multiselect__option--selected {
-  background: #EFF6FF;  /* Голубой фон */
-  color: #1E40AF;       /* Тёмно-синий текст */
+.display-filter-container {
+    display: flex;
+    gap: 1rem;
+    background: var(--vt-c-light-gray);
+    height: 2.5rem;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: max-content;
+    font-size: var(--font-size-normal-mini);
+    font-weight: 500;
+    border-radius: 0.5rem;
 }
 
-/* При наведении на выбранный элемент */
-.multiselect__option--selected.multiselect__option--highlight {
-  background: #DBEAFE;  /* Светло-голубой при наведении */
-  color: #1E3A8A;       /* Ещё темнее синий */
+.display-filter-item {
+    background: var(--vt-c-white);
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-size: var(--font-size-mini);
+    font-weight: 500;
+    display: flex;
+
+}
+
+.display-filter-item-text {
+    padding-right: 0.5rem;
+    border-right: solid 1px var(--vt-c-gray);
+}
+
+.display-filter-item-button {
+    padding-left: 0.5rem;
+    background: transparent;
+    border-width: 0;
+    transition: 0.3s;
+        align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.display-filter-item-button:hover {
+    transform: rotate(90deg);
 }
 
 .custom-multiselect .multiselect__content-wrapper {
   
   width: 100%;
-  z-index: 1001; /* Выше, чем сам Multiselect */
+  z-index: 10; 
 }
 
 .custom-details-summary {
   list-style: none;
   cursor: pointer;
-  padding: 12px 16px;
   position: relative;
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
   font-weight: 600;
-  color: #333;
+    
   background-color: transparent;
   border-width: 0;
    width: 100%;
-  box-sizing: border-box; /* Важно для правильного расчета ширины */
+  box-sizing: border-box; 
 }
 
 .summary-text {
-  flex-grow: 1;
+  width: max-content;
 }
 
 .details-icon {
@@ -388,8 +761,8 @@ export default {
 
 /* Анимация содержимого */
 .details-content {
-    padding: 0 16px;
-    max-height: 0;
+   
+    padding: 0 !important;
     overflow: hidden;
     opacity: 0;
     border-width: 0;
@@ -399,17 +772,34 @@ export default {
         padding 0.3s ease;
 }
 
+.details-content-title {
+    font-size: var(--font-size-mini);
+    color: var(--vt-c-gray);
+}
+
+.details-content-inner {
+    left: 0;
+    padding: 0;
+}
+
 .custom-details[open] .details-content {
     max-height: 1000px; /* Достаточно большое значение */
     opacity: 1;
     height: 3rem;
-    padding: 16px;
-    padding-top: 8px;
+
+}
+.watch-flats-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-
-.watch-flats-href {
+.watch-flats-button {
     text-decoration: none;
+    background: transparent;
+    border-width: 0;
+    height: max-content;
     color: var(--vt-c-blue);
     font-weight: 500;
     font-size: var(--font-size-normal-mini);
@@ -418,13 +808,19 @@ export default {
     align-items: center;
 }
 
-.watch-flats-href:hover {
+.watch-flats-button:hover {
     color: var(--vt-c-light-blue);
     transform: all 0.5 ease;
 }
 
 .drop-filter-icon {
     font-size: var(--font-size-mini);
+}
+
+.drop-filters-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }
 
 .drop-filters-button {
@@ -463,10 +859,16 @@ export default {
 }
 
 
-.rooms-select:hover, .rooms-select.active {
+.rooms-select:hover {
     background-color: var(--vt-c-blue);
     color: var(--vt-c-white);
     transform: all 0.5 ease;
+}
+
+.rooms-select.active {
+   background-color: var(--vt-c-dark-indigo);
+    color: var(--vt-c-white);
+    transform: all 0.5 ease; 
 }
 
 .rooms-select:disabled {
@@ -554,6 +956,41 @@ export default {
     outline: none;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: transform 0.3s ease;
+}
+.drawer-enter-from,
+.drawer-leave-to {
+  transform: translateY(100%);
+}
+
+
+
 @media (max-width: 900px) {
     .flats-filter-mobile {
         display: flex;
@@ -565,6 +1002,93 @@ export default {
 
     .flats-filter-desktop, .sub-filter-info-container {
         display: none;
+    }
+
+    .flats-filter-title {
+        font-size: var(--font-size-normal3);
+    }
+    .display-filter-container {
+        margin-top: 1rem;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        min-width: 100%;
+        width: 100%;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .flats-filter-mobile-wrapper {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background: var(--vt-c-white);
+        z-index: 10000;
+    }
+
+    .flats-filter-mobile-wrapper-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+    }
+    
+    .flats-filter-mobile-wrapper-header-title {
+        font-weight: 500;
+        font-size: var(--font-size-normal2);
+    }
+
+    .flats-filter-moblie-wrapper-header-button {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 0.5rem;
+        border-width: 0;
+        background: var(--vt-c-blue);
+        color: var(--vt-c-white);
+        font-size: var(--font-size-normal);
+    }
+
+    .flats-filter-mobile-wrapper-middle {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: 100%;
+    }
+
+    .custom-details {
+        width: 100%;
+    }
+
+    .flats-filter-mobile-wrapper-footer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .watch-flats-button {
+        background: var(--vt-c-blue);
+        color: var(--vt-c-white);
+    } 
+
+    .watch-flats-button, .drop-filters-button {
+        min-width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        align-items: center;
+        text-align: center;
     }
 }
 

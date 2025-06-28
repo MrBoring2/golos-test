@@ -9,8 +9,8 @@
         pattern="[0-9 ]*"
         :value="displayValue[0]"
         @input="handleInput($event, 0)"
-        @blur="applyValue(0)"
-        @keyup.enter="applyValue(0)"
+        @blur="applyValue(0, 'min')"
+        @keyup.enter="applyValue(0, 'min')"
         @keydown="filterNumericInput"
         :min="min"
         inputmode="numeric"
@@ -23,8 +23,8 @@
         :value="displayValue[1]"
         @input="handleInput($event, 1)"
         @keydown="filterNumericInput"  
-        @keyup.enter="applyValue(1)"
-        @blur="applyValue(1)"
+        @keyup.enter="applyValue(1, 'max')"
+        @blur="applyValue(1, 'max')"
         :min="currentValue[0]"
         :max="max"
         inputmode="numeric"
@@ -127,7 +127,7 @@ export default {
         event.target.setSelectionRange(newCursorPosition, newCursorPosition);
       });
     },
-    applyValue(index) {
+    applyValue(index, direction) {
       let newValue = this.tempValue[index];
       
       if (index === 0) {
@@ -140,8 +140,8 @@ export default {
       newValues[index] = newValue;
       this.currentValue = newValues;
     
-      this.$emit('input', [...this.currentValue]); // Отправляем актуальные данные
-      this.$emit('update-input')
+      this.$emit('input', [...this.currentValue]);
+      this.$emit('update-input', direction)
     },
     handleSliderChange(newValues) {
       this.displayValue = newValues.map(num => this.formatNumber(num));
