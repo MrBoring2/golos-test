@@ -7,6 +7,10 @@ export default {
         }
         return api
     },
+    async getFlat(id) {
+        const api = await this.getApi();
+        return api.get(`/flats/${id}`)
+    },
     async getFlats(filter) {
         const api = await this.getApi();
         const params = {};

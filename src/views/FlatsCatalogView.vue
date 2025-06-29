@@ -45,7 +45,7 @@ export default {
                 delete this.activeFilters.orderBy
             }
             const response = await flatsApiService.getFlats(this.activeFilters);
-
+            
             this.flatsData = {
                 ...response,
                 data: {

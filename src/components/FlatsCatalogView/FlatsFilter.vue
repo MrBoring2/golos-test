@@ -47,21 +47,21 @@ export default {
         selectedSale(newVal, oldVal) {
 
             if(newVal != null || Array.isArray(this.values.selectedSales)){
-            if (!this.values.selectedSales) {
-                this.values.selectedSales = []
-            }
-            if (oldVal !== null && this.values.selectedSales.includes(oldVal)) {
-                this.values.selectedSales = this.values.selectedSales.filter(r => r !== oldVal)
-                if(this.values.selectedSales.length == 0){
-                    delete this.currentFilter.selectedSales
-                    delete this.displaySearch.selectedSales
+                if (!this.values.selectedSales) {
+                    this.values.selectedSales = []
                 }
-            }
-            if (newVal !== null && !this.values.selectedSales.includes(newVal)) {
-                this.values.selectedSales.push(newVal)
-            }
-            if(this.currentFilter.selectedSales == undefined || this.values.selectedSales.length > 0)
-                this.updateFilter('', 'selectedSales')
+                if (oldVal !== null && this.values.selectedSales.includes(oldVal)) {
+                    this.values.selectedSales = this.values.selectedSales.filter(r => r !== oldVal)
+                    if(this.values.selectedSales.length == 0){
+                        delete this.currentFilter.selectedSales
+                        delete this.displaySearch.selectedSales
+                    }
+                }   
+                if (newVal !== null && !this.values.selectedSales.includes(newVal)) {
+                    this.values.selectedSales.push(newVal)
+                }
+                if(this.currentFilter.selectedSales == undefined || this.values.selectedSales.length > 0)
+                    this.updateFilter('', 'selectedSales')
             }
         },
         currentFilter: {
@@ -119,7 +119,7 @@ export default {
     
     methods: {
         initDefaultFilters() {
-        this.values = {
+            this.values = {
             minPrice: this.boundaryValues?.minPrice || 0,
             maxPrice: this.boundaryValues?.maxPrice || 10000000,
             minArea: Math.floor(this.boundaryValues?.minArea || 0),
@@ -130,9 +130,10 @@ export default {
             selectedSales: [],
             rooms: this.boundaryValues?.rooms || [1, 2, 3, 4]
         };
-        
-        this.currentFilter = {};
-        this.displaySearch = {};
+        if(this.currentFilter == undefined)
+            this.currentFilter = {};
+        if(this.displaySearch == undefined)
+            this.displaySearch = {};
         },
         openMobileFilterDrawer() {
             this.mobileDrawerOpen = !this.mobileDrawerOpen;
@@ -227,15 +228,11 @@ export default {
     if(query.order_by) {
      
         let direction = '';
-           console.log('parsing')
-        console.log(query.order_by)
         if(query.order_by.charAt(0) == '-'){
             direction = query.order_by[0]
             query.order_by = query.order_by.slice(1);
         }
-        this.selectedSort = direction == '-' ? `${query.order_by}_desc` : `${query.order_by}_asc`
-        console.log(this.selectedSort)
-        this.currentFilter.orderBy = this.selectedSort;
+        this.selectedSort = direction =        this.currentFilter.orderBy = this.selectedSort;
         this.updateDisplaySearch('orderBy', '');
     }
 
@@ -336,7 +333,6 @@ export default {
             else return 'ов'
         },
         removeFilter(key){
-            console.log(this.displaySearch)
            if (['price', 'area', 'floor'].includes(key)) {
     const prefix = key.charAt(0).toUpperCase() + key.slice(1);
     this.values[`min${prefix}`] = null;
@@ -358,13 +354,11 @@ export default {
      delete this.currentFilter.orderBy;
   }
 
-  // Удаляем из отображения (вариант с иммутабельным обновлением)
   const newDisplaySearch = {...this.displaySearch};
   delete newDisplaySearch[key];
   this.displaySearch = newDisplaySearch;
 
   this.$emit('update-filter', this.currentFilter);
-           // console.log(this.displaySearch[key])
         },
         dropFilters() {
             this.values.minPrice = this.boundaryValues.minPrice,
@@ -383,7 +377,6 @@ export default {
             if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false
         },
         watchCatalog() {
-            console.log('ssss')
             this.$emit('show-catalog')
             if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false
         },
@@ -408,11 +401,9 @@ export default {
         DoubleRangeInput
     },
     mounted() {
-        console.log('sss')
-            console.log(this.sales?.map(sale => sale.Title))
-                console.log('sss')
         this.parseUrlFilters(this.$route.query);
-        if (Object.keys(this.$route.query).length === 0) {
+        //когда перезагружаем страницу, и если у нас был пустой список квартир, то обновляем фильтры (2 условие)
+        if (Object.keys(this.$route.query).length === 0 || this.filteredBoundaryValues.totalItems == undefined) {
             this.initDefaultFilters();
         }
     }

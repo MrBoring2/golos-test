@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import FlatsCatalogView from '@/views/FlatsCatalogView.vue';
+import FlatView from '@/views/FlatView.vue';
 
 
 const getCssVarInPx = (varName) => {
@@ -23,6 +24,12 @@ const router = createRouter({
       path: '/flats',
       name: 'flats',
       component: FlatsCatalogView
+    },
+    {
+      path: '/flats/:flatId',
+      name: 'flat',
+      component: FlatView,
+      props: true
     }
   ],
   scrollBehavior(to, from, savedPosition) {
