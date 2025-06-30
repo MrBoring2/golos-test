@@ -56,13 +56,14 @@ export default {
         closeSubMenu(){
         
           this.activeMenuIndex = null
-        },
-        
-        
-        setLinkActive(link){
-          this.activeLink = link
         }
+    },
+    watch: {
+    '$route'(to) {
+      console.log(`${to.path}${to.hash}`)
+      this.activeLink =`${to.path}${to.hash}`;
     }
+  }
 }
 </script>
 
@@ -87,12 +88,12 @@ export default {
                 </div>
                 <nav>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink to="/flats" :class="{ 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')" @click="closeMobileMenu">
+                        <RouterLink to="/flats" :class="{ 'active': activeLink?.startsWith('/flats')}" @click="closeMobileMenu">
                           Выбор квартир
                         </RouterLink>
                       </div>
                       <div class="mobile-menu-nav-item">
-                        <RouterLink :to="{ path: '/', hash: '#ipoteca-variants' }" :class="{ 'active': activeLink == 'ipoteca-variants'}" @mousedown="setLinkActive('ipoteca-variants')" @click="closeMobileMenu">
+                        <RouterLink :to="{ path: '/', hash: '#ipoteca-variants' }" :class="{ 'active': activeLink == '/#ipoteca-variants'}" @click="closeMobileMenu">
                           Способы получения
                        </RouterLink>
                         </div>
@@ -102,7 +103,7 @@ export default {
                       </RouterLink>
                       </div>
                      <div class="mobile-menu-nav-item">
-                        <RouterLink :to="{ path: '/', hash: '#about-the-builder' }" :class="{ 'active': activeLink == 'about-the-builder'}" @mousedown="setLinkActive('about-the-builder')" @click="closeMobileMenu">
+                        <RouterLink :to="{ path: '/', hash: '#about-the-builder' }" :class="{ 'active': activeLink == '/#about-the-builder'}" @click="closeMobileMenu">
                           О застройщике
                       </RouterLink>  
                       </div>
@@ -153,13 +154,13 @@ export default {
                         <font-awesome-icon icon="percent" size="xs"/>
                         <p>Семейная ипотека 3.5%</p>
                     </div>
-                    <RouterLink to="/flats" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0, 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')">
+                    <RouterLink to="/flats" @mouseenter="setActiveSubMenu(0)" :class="{ 'nav-active': activeMenuIndex == 0, 'active': activeLink?.startsWith('/flats')}">
                           Выбор квартир
                       </RouterLink>
-                      <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == 'ipoteca-variants'}" @mousedown="setLinkActive('ipoteca-variants')">
+                      <RouterLink :to="{path: '/', hash: '#ipoteca-variants'}"  @mouseenter="setActiveSubMenu(1)" :class="{ 'active': activeLink == '/#ipoteca-variants'}">
                           Способы получения
                       </RouterLink>
-                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == 'building-plan'}" @mousedown="setLinkActive('building-plan')">
+                      <RouterLink to="/"  @mouseenter="setActiveSubMenu(2)" :class="{ 'active': activeLink == '/#building-plan'}">
                           Ход строительства
                       </RouterLink>
                       <RouterLink to="/"  @mouseenter="setActiveSubMenu(3)" :class="{ 'nav-active': activeMenuIndex == 3}">
@@ -186,7 +187,7 @@ export default {
             <div class="wraper-sub-menu"   v-if="activeMenuIndex === 0">
                     <nav class="sub-menu" @mouseenter="keepSubMenuOpen(0)"
                         @mouseleave="closeSubMenu">
-                            <RouterLink to="/flats" :class="{ 'active': activeLink == 'flats'}" @mousedown="setLinkActive('flats')">Выбор по параметрам</RouterLink>
+                            <RouterLink to="/flats" :class="{ 'active': activeLink?.startsWith('/flats')}">Выбор по параметрам</RouterLink>
                             <RouterLink to="/">Выбор с генплана</RouterLink>
                     </nav>    
                 </div>  
@@ -195,8 +196,8 @@ export default {
                 <div class="wraper-sub-menu"  v-if="activeMenuIndex === 3" >
                     <nav class="sub-menu" @mouseenter="keepSubMenuOpen(3)"
                         @mouseleave="closeSubMenu">
-                    <RouterLink  :to="{ path: '/', hash: '#about-the-builder' }" @mousedown="setLinkActive('about-the-builder')" :class="{ 'active': activeLink == 'about-the-builder'}">О застройщике</RouterLink>
-                    <RouterLink to="/" :class="{ 'active': activeLink == 'contacts'}" >Контакты</RouterLink>
+                    <RouterLink  :to="{ path: '/', hash: '#about-the-builder' }" @mousedown="setLinkActive('about-the-builder')" :class="{ 'active': activeLink == '/#about-the-builder'}">О застройщике</RouterLink>
+                    <RouterLink to="/" :class="{ 'active': activeLink == '/#contacts'}" >Контакты</RouterLink>
                     </nav> 
                 </div>
             </Transition>

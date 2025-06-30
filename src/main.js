@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPhone, faArrowDown, faChevronRight, faChevronLeft, faPercent, faArrowsAlt, faArrowsH, faClose,
    faCheck, faBars, faEllipsis, faBuilding, faArrowUpLong, faArrowDownLong, faList, faHeart as faHeartBold, faFilter, faGift, faChevronDown,
-   faTable} from '@fortawesome/free-solid-svg-icons'
+   faTable, faPrint, faShare} from '@fortawesome/free-solid-svg-icons'
 import { faYoutube, faVk, faTelegram } from '@fortawesome/free-brands-svg-icons'
 import { faHeart as faHaertHollow } from '@fortawesome/free-regular-svg-icons'
 import App from './App.vue'
@@ -18,7 +18,8 @@ import '@/css/slider.css'
 
 
 library.add(faPhone, faHeartBold, faHaertHollow, faArrowDown, faTelegram, faVk, faYoutube, faChevronRight, faChevronLeft, faChevronDown,
-  faPercent, faArrowsAlt, faClose, faCheck, faBars, faArrowsH, faEllipsis, faBuilding, faArrowDownLong, faArrowUpLong, faList, faTable, faFilter, faGift)
+  faPercent, faArrowsAlt, faClose, faCheck, faBars, faArrowsH, faEllipsis, faBuilding, faArrowDownLong, faArrowUpLong, faList, faTable, faFilter, faGift, 
+  faPrint, faShare)
 
 const lazyLoad = {
    mounted(el, binding) {

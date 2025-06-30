@@ -82,7 +82,7 @@ export default {
   border: none !important;
   padding-right: 1rem;
   align-items: center;
-  height: 2.5rem;
+  min-height: 2.5rem;
   border-radius: 0.5rem;
   background: var(--vt-c-light-gray) !important;
 }
@@ -96,7 +96,11 @@ export default {
   padding-left: 1.25rem;
   font-size: var(--font-size-mini);
 }
-
+:deep(.vs__selected-options) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100vw;
+}
 :deep(.vs__search), 
 :deep(.vs__search:focus) {
   border: none !important;
@@ -113,8 +117,27 @@ export default {
 
 :deep(.custom-multiselect .vs__selected) {
     padding-left: 1.1rem;
-  font-weight: bold;
-   font-size: var(--font-size-normal-mini);
+    font-weight: bold;
+    font-size: var(--font-size-normal-mini);
+    background: var(--vt-c-blue);
+    color: var(--vt-c-white);
+    display: flex;
+    gap:1rem;
+    transition: 0.3s;
+}
+
+:deep(.custom-multiselect .vs__selected:hover) {
+    background: var(--vt-c-light-blue-lighter);
+    transform: all 0.5s ease;
+}
+
+:deep(.custom-multiselect .vs__deselect) {
+  fill: white !important;
+}
+
+:deep(.custom-multiselect .vs__selected-option) {
+   
+ display: flex;
 }
 
 :deep(.vs__dropdown-option) {

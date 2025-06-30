@@ -57,6 +57,28 @@ export default {
 
             if(this.displayMode != mode)
                 this.$emit('update-display-mode', mode)
+        },
+         declineSales(number) {
+        const lastTwo = number % 100;
+        const lastOne = number % 10;
+
+        if (lastTwo >= 11 && lastTwo <= 19) {
+            return 'акций';
+        }
+        if (lastOne === 1) {
+            return 'акция';
+        }
+        if (lastOne >= 2 && lastOne <= 4) {
+            return 'акции';
+        }
+        return 'акций';
+    }
+    },
+    computed: {
+        getFlatLink(id) {
+            console.log('id')
+            console.log(id)
+            return `/flats/${id}`
         }
     }
 }
@@ -108,11 +130,11 @@ export default {
         <div class="flats-catalog-container" :key="displayMode">          
             <ul class="flats-catalog-inner-grid" v-if="displayMode == 'grid'">
                 <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-grid" >
-                    <RouterLink to="/" class="flat-link-grid">
+                    <RouterLink :to="'/flats/' + flat.Id" class="flat-link-grid">
                         <div class="sales" v-if="flat.Sales.length > 0">
                             <div class="sales-content">
                                 <font-awesome-icon icon="fa-solid fa-gift" size="xl" />
-                                <p>+{{flat.Sales.length}} акция</p>
+                                <p>+{{flat.Sales.length}} {{declineSales(flat.Sales.length)}}</p>
                             </div>            
                             <div class="sales-list-container">
                                 <div v-for="(sale, index) in flat.Sales" :key="index" class="sale-item">
@@ -190,7 +212,7 @@ export default {
             </ul> 
             <ul class="flats-catalog-inner-list" v-else-if="displayMode == 'list'">
                 <li v-if="!loading" v-for="(flat, index) in flats" :key="index"  class="flats-catalog-item-list">
-                    <RouterLink to="/" class="flat-link-list">
+                    <RouterLink :to="'/flats/' + flat.Id"  class="flat-link-list">
                         <div class="sales-list" v-if="flat.Sales.length > 0">
                             <div class="sales-content">
                                 <font-awesome-icon icon="fa-solid fa-gift" size="xl" />
@@ -422,7 +444,6 @@ export default {
     position: absolute;
     flex-direction: column;
     top: 0.1rem;
-    
     gap: 0.5rem;
     background-color: var(--vt-c-blue);
     color: var(--vt-c-white);
@@ -446,15 +467,16 @@ export default {
 }
 
 .sales:hover .sales-list-container, .sales-list:hover .sales-list-container {
-    display: flex;
-     opacity: 1;
-     z-index: 10002;
-  transform: translateY(0.5rem);
+    opacity: 1;
+    z-index: 10002;
+    transform: translateY(0.5rem);
 }
 
 .sales-list-container {
+     display: flex;
+       flex-direction: column;
     opacity: 0;
-   
+    gap: 0.5rem;
     position: absolute;
     top: 2rem;
     background-color: var(--vt-c-blue);
@@ -463,7 +485,7 @@ export default {
     border-radius: 0.5rem;
     font-size: var(--font-size-mini);
     transform: translateY(0);
-   transition: opacity 0.5s ease, transform 0.5s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .flat-catallg-item-list-image-preview img{
@@ -757,7 +779,7 @@ export default {
 
 
 .flats-catalog-inner-list {
-      display: grid;
+    display: grid;
     grid-template-columns: 1fr; /* вместо 100% */
     gap: 20px;
     width: 100%;

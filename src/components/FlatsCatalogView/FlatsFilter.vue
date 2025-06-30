@@ -13,11 +13,10 @@ export default {
             minFloor: this.filteredBoundaryValues.minFloor,
             maxFloor: this.filteredBoundaryValues.maxFloor,
             selectedRooms: [],
-            selectedSales: [],
+            selectedSales: undefined,
             rooms: this.filteredBoundaryValues.rooms,
             },
             mobileDrawerOpen: false,
-            selectedSale: null,
             totalItems: this.filteredBoundaryValues.totalItems,
             currentFilter: {},
             displaySearch: {},
@@ -26,7 +25,18 @@ export default {
         }
     },
     watch: {
-        filteredBoundaryValues(newVal) {
+        filteredBoundaryValues: {
+            handler(newVal) {
+            console.log('filtered')
+            console.log(newVal)
+            const hasInvalidValue = Object.values(newVal).some(
+                val => val === undefined || (typeof val === 'number' && isNaN(val))
+            );
+      
+            if (hasInvalidValue) {
+                this.initDefaultFilters();
+                return;
+            }
              this.totalItems = newVal.totalItems
              this.values.minPrice = this.currentFilter.minPrice == undefined && newVal.minPrice != undefined ? newVal.minPrice : this.values.minPrice;
              this.values.maxPrice = this.currentFilter.maxPrice == undefined && newVal.maxPrice != undefined ? newVal.maxPrice : this.values.maxPrice;
@@ -36,6 +46,27 @@ export default {
              this.values.maxFloor = this.currentFilter.maxFloor == undefined && newVal.maxFloor != undefined ? newVal.maxFloor : this.values.maxFloor;
              if(isNaN(this.values.minArea)) this.values.minArea = Math.floor(this.boundaryValues.minArea);
              if(isNaN(this.values.maxArea))  this.values.maxArea = Math.ceil(this.boundaryValues.maxArea);
+            },
+            deep: true,
+            immediate: true
+        },
+        'values.selectedSales': {
+            handler(newVal, oldVal) {
+                console.log('test')
+            console.log(this.currentFilter.selectedSales)
+            console.log(newVal)
+            console.log(oldVal)
+            if(this.currentFilter.selectedSales === newVal) return;
+            console.log('Selected sales changed:', newVal);
+            if(newVal != undefined && newVal.length == 0){
+                    delete this.currentFilter.selectedSales
+                    delete this.displaySearch.selectedSales
+            }
+
+            if(this.currentFilter.selectedSales == undefined || this.values.selectedSales.length > 0)
+                this.updateFilter('', 'selectedSales')
+            },
+            deep: true
         },
         sort(newVal) {
             this.updateDisplaySearch('orderBy', '')
@@ -44,36 +75,12 @@ export default {
                 delete this.displaySearch.orderBy
             }
         },
-        selectedSale(newVal, oldVal) {
-
-            if(newVal != null || Array.isArray(this.values.selectedSales)){
-                if (!this.values.selectedSales) {
-                    this.values.selectedSales = []
-                }
-                if (oldVal !== null && this.values.selectedSales.includes(oldVal)) {
-                    this.values.selectedSales = this.values.selectedSales.filter(r => r !== oldVal)
-                    if(this.values.selectedSales.length == 0){
-                        delete this.currentFilter.selectedSales
-                        delete this.displaySearch.selectedSales
-                    }
-                }   
-                if (newVal !== null && !this.values.selectedSales.includes(newVal)) {
-                    this.values.selectedSales.push(newVal)
-                }
-                if(this.currentFilter.selectedSales == undefined || this.values.selectedSales.length > 0)
-                    this.updateFilter('', 'selectedSales')
-            }
-        },
         currentFilter: {
             handler(newFilter) {
             this.updateUrlFilters();
         },
     deep: true 
-  }
-                
-            
-            
-        
+  }     
     },
 
     computed: {
@@ -120,16 +127,17 @@ export default {
     methods: {
         initDefaultFilters() {
             this.values = {
-            minPrice: this.boundaryValues?.minPrice || 0,
-            maxPrice: this.boundaryValues?.maxPrice || 10000000,
-            minArea: Math.floor(this.boundaryValues?.minArea || 0),
-            maxArea: Math.ceil(this.boundaryValues?.maxArea || 100),
-            minFloor: this.boundaryValues?.minFloor || 1,
-            maxFloor: this.boundaryValues?.maxFloor || 8,
-            selectedRooms: [],
-            selectedSales: [],
+            minPrice: this.values.minPrice == undefined ? this.boundaryValues?.minPrice || 0 : this.values.minPrice,
+            maxPrice: this.values.maxPrice == undefined ? this.boundaryValues?.maxPrice || 10000000 : this.values.maxPrice,
+            minArea: this.values.minArea == undefined ? Math.floor(this.boundaryValues?.minArea || 0) : this.values.minArea,
+            maxArea: this.values.maxArea == undefined ? Math.ceil(this.boundaryValues?.maxArea || 100) : this.values.maxArea,
+            minFloor: this.values.minFloor == undefined ? this.boundaryValues?.minFloor || 1 : this.values.minFloor,
+            maxFloor: this.values.maxFloor == undefined ? this.boundaryValues?.maxFloor || 8 : this.values.maxFloor,
+            selectedRooms: this.values.selectedRooms,
+            selectedSales: this.values.selectedSales,
             rooms: this.boundaryValues?.rooms || [1, 2, 3, 4]
         };
+        this.totalItems = 0
         if(this.currentFilter == undefined)
             this.currentFilter = {};
         if(this.displaySearch == undefined)
@@ -169,11 +177,7 @@ export default {
             if (this.currentFilter.maxFloor) query.max_floor = this.currentFilter.maxFloor;
 
             if (this.currentFilter.orderBy) {
-                let prefix = ''
-                if(this.currentFilter.orderBy.direction == 'desc'){
-                    prefix = '-'
-                }
-                query.order_by = `${prefix}${this.currentFilter.orderBy.type}`
+                query.order_by = `${this.currentFilter.orderBy.type}_${this.currentFilter.orderBy.direction}`
             };
 
             if (this.currentFilter.selectedRooms?.length) {
@@ -226,14 +230,12 @@ export default {
     }
 
     if(query.order_by) {
-     
-        let direction = '';
-        if(query.order_by.charAt(0) == '-'){
-            direction = query.order_by[0]
-            query.order_by = query.order_by.slice(1);
-        }
-        this.selectedSort = direction =        this.currentFilter.orderBy = this.selectedSort;
+        
+        const [type, direction] = query.order_by.split('_')
+        this.selectedSort = `${type}_${direction}`   
+        this.currentFilter.orderBy = {type: type, direction: direction};
         this.updateDisplaySearch('orderBy', '');
+        console.log(this.selectedSort)
     }
 
     if (query.rooms) {
@@ -372,7 +374,6 @@ export default {
             this.selectedSort = undefined
             this.currentFilter = {};
             this.displaySearch = {}; 
-            this.selectedSale = null 
             this.$emit('update-filter', this.currentFilter)
             if(this.mobileDrawerOpen == true) this.mobileDrawerOpen = false
         },
@@ -404,6 +405,8 @@ export default {
         this.parseUrlFilters(this.$route.query);
         //когда перезагружаем страницу, и если у нас был пустой список квартир, то обновляем фильтры (2 условие)
         if (Object.keys(this.$route.query).length === 0 || this.filteredBoundaryValues.totalItems == undefined) {
+            console.log('loaded')
+            console.log(this.$route.query)
             this.initDefaultFilters();
         }
     }
@@ -511,7 +514,7 @@ export default {
                       <div class="details-content">
                         <p class="details-content-title">Акции</p>
                         <div class="details-content-inner">
-                            <v-select class="custom-multiselect" :searchable=false placeholder="Выберите параметр" v-model="selectedSale" :options="sales.map(sale => sale.Title)"/>
+                            <v-select class="custom-multiselect" multiple :searchable=false placeholder="Выберите параметр" v-model="values.selectedSales" :options="sales.map(sale => sale.Title)"/>
                         </div>
                     </div>
                 </details>
@@ -572,7 +575,7 @@ export default {
                       <div class="details-content">
                         <p class="details-content-title">Акции</p>
                         <div class="details-content-inner">
-                            <v-select class="custom-multiselect" :searchable=false placeholder="Выберите параметр" v-model="selectedSale" :options="sales?.map(sale => sale.Title) || []"/>
+                            <v-select class="custom-multiselect" multiple :searchable=false placeholder="Выберите параметр" v-model="values.selectedSales" :options="sales?.map(sale => sale.Title) || []"/>
                         </div>
                     </div>
                 </details>
@@ -638,6 +641,8 @@ export default {
 }
 
 .sub-filter-info-container {
+    position: relative;
+    min-height: auto;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     display: grid;
@@ -651,6 +656,7 @@ export default {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 0;
+  height: max-content;
   margin: 12px 0;
   border-width: 0;
   transition: all 0.3s ease;
@@ -659,11 +665,9 @@ export default {
 }
 
 .custom-multiselect {
-  position: absolute;
-  top:2.5rem;
-  width: 100%;
+  width: 19.5rem;
   z-index: 10;
-  height: 2rem;
+  border-radius: 0.5rem;
   background: var(--vt-c-light-gray);
   border-color: var(--vt-c-light-gray);
   border-width: 0 !important;
@@ -752,11 +756,13 @@ export default {
 
 /* Анимация содержимого */
 .details-content {
-   
+    display: flex;
+    flex-direction: column;
     padding: 0 !important;
-    overflow: hidden;
+
     opacity: 0;
     border-width: 0;
+
     transition: 
         max-height 0.3s ease, 
         opacity 0.3s ease,
@@ -770,13 +776,14 @@ export default {
 
 .details-content-inner {
     left: 0;
+  
     padding: 0;
 }
 
 .custom-details[open] .details-content {
     max-height: 1000px; /* Достаточно большое значение */
     opacity: 1;
-    height: 3rem;
+   
 
 }
 .watch-flats-container {

@@ -11,7 +11,7 @@ export default {
     methods: {
         async loadData(){
             const response = await flatsApiService.getFlat(this.flatId); 
-            this.flatData = response.data
+            this.flatData = response.data[0]
         },
         getFlatId() {
             console.log('quert')
@@ -46,6 +46,6 @@ export default {
     flex-direction: column;
     justify-content: start;
     align-items: center;    
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 </style>
